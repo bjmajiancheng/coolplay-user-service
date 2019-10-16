@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.com.coolplay.company.core.dao.AttachmentMapper">
-  <resultMap id="BaseResultMap" type="com.coolplay.company.core.model.Attachment">
+<mapper namespace="com.com.coolplay.user.core.dao.AttachmentMapper">
+  <resultMap id="BaseResultMap" type="com.coolplay.user.core.model.Attachment">
     <!--
       WARNING - @mbggenerated
     -->

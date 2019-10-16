@@ -16,28 +16,28 @@
     <http pattern="/favicon.ico" security="none"/>
 
     <beans:bean id="osHttpAuthenticationEntryPoint"
-                class="com.coolplay.company.security.security.HttpAuthenticationEntryPoint">
+                class="com.coolplay.user.security.security.HttpAuthenticationEntryPoint">
     </beans:bean>
 
 
     <!-- 自定义登录失败handler -->
     <beans:bean id="osHttpAuthenticationFailureHandler"
-                class="com.coolplay.company.security.security.HttpAuthenticationFailureHandler">
+                class="com.coolplay.user.security.security.HttpAuthenticationFailureHandler">
     </beans:bean>
 
     <beans:bean id="headerFilter"
-                class="com.coolplay.company.security.security.HttpHeaderFilter"/>
+                class="com.coolplay.user.security.security.HttpHeaderFilter"/>
 
-    <beans:bean id="tokenUtils" class="com.coolplay.company.security.utils.TokenUtils"/>
+    <beans:bean id="tokenUtils" class="com.coolplay.user.security.utils.TokenUtils"/>
 
     <beans:bean id="userCache"
-                class="com.coolplay.company.security.security.CoolplayUserCache">
+                class="com.coolplay.user.security.security.CoolplayUserCache">
         <beans:property name="cache" ref="redisCache"/>
         <beans:property name="userService" ref="userService"/>
     </beans:bean>
 
     <beans:bean id="osHttpAuthenticationTokenFilter"
-                class="com.coolplay.company.security.security.HttpAuthenticationTokenFilter">
+                class="com.coolplay.user.security.security.HttpAuthenticationTokenFilter">
         <beans:property name="authenticationManager" ref="authenticationManager"/>
         <beans:property name="tokenUtils" ref="tokenUtils"/>
         <beans:property name="authenticationFailureHandler"
@@ -46,7 +46,7 @@
     </beans:bean>
 
     <beans:bean id="osHttpAccessDeniedHandler"
-                class="com.coolplay.company.security.security.HttpAccessDeniedHandler"/>
+                class="com.coolplay.user.security.security.HttpAccessDeniedHandler"/>
 
     <http use-expressions="true"
           create-session="stateless"
@@ -75,7 +75,7 @@
 
     <!-- 加载用户相关 -->
     <beans:bean id="coolplayUserService"
-                class="com.coolplay.company.security.security.UserServiceImpl"/>
+                class="com.coolplay.user.security.security.UserServiceImpl"/>
 
     <beans:bean id="authenticationProvider"
                 class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
@@ -94,7 +94,7 @@
 
     <!-- 自定义验证成功后处理的拦截器 -->
     <beans:bean id="filterSecurityInterceptor"
-                class="com.coolplay.company.security.security.SecurityInterceptor">
+                class="com.coolplay.user.security.security.SecurityInterceptor">
         <beans:property name="securityMetadataSource" ref="davdianSecurityMetadataSource"/>
         <beans:property name="accessDecisionManager"
                         ref="davdianAccessDecisionManager"/>
@@ -102,10 +102,10 @@
     </beans:bean>
 
     <beans:bean id="davdianAccessDecisionManager"
-                class="com.coolplay.company.security.security.AccessDecisionManager"/>
+                class="com.coolplay.user.security.security.AccessDecisionManager"/>
 
     <beans:bean id="davdianSecurityMetadataSource"
-                class="com.coolplay.company.security.security.SecurityMetadataSourceImpl">
+                class="com.coolplay.user.security.security.SecurityMetadataSourceImpl">
         <beans:constructor-arg ref="securityService"/>
     </beans:bean>
 

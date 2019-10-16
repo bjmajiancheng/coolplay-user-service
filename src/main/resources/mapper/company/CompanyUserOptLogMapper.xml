@@ -3,9 +3,9 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.coolplay.company.company.dao.CompanyUserOptLogMapper">
+<mapper namespace="com.coolplay.user.user.dao.CompanyUserOptLogMapper">
 
-    <resultMap id="CompanyUserOptLog" type="com.coolplay.company.company.model.CompanyUserOptLogModel">
+    <resultMap id="CompanyUserOptLog" type="com.coolplay.user.user.model.CompanyUserOptLogModel">
         <result property="id" column="id"/>
         <result property="companyId" column="company_id"/>
         <result property="companyUserId" column="company_user_id"/>

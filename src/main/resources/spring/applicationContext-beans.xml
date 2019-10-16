@@ -31,7 +31,7 @@
     </bean>
 
     <!-- 获取bean工具注入 -->
-    <bean id="messageUtil" class="com.coolplay.company.common.utils.MessageUtil" init-method="loadProperty">
+    <bean id="messageUtil" class="com.coolplay.user.common.utils.MessageUtil" init-method="loadProperty">
         <property name="userId" value="${message.userId}" />
         <property name="account" value="${message.account}" />
         <property name="password" value="${message.password}" />

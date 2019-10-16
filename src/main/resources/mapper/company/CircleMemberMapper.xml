@@ -3,9 +3,9 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.coolplay.company.company.dao.CircleMemberMapper">
+<mapper namespace="com.coolplay.user.user.dao.CircleMemberMapper">
 
-    <resultMap id="CircleMember" type="com.coolplay.company.company.model.CircleMemberModel">
+    <resultMap id="CircleMember" type="com.coolplay.user.user.model.CircleMemberModel">
         <result property="id" column="id"/>
         <result property="circleId" column="circle_id"/>
         <result property="memberUserId" column="member_user_id"/>

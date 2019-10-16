@@ -3,9 +3,9 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.coolplay.company.company.dao.CoolplayBaseLabelMapper">
+<mapper namespace="com.coolplay.user.user.dao.CoolplayBaseLabelMapper">
 
-    <resultMap id="CoolplayBaseLabel" type="com.coolplay.company.company.model.CoolplayBaseLabelModel">
+    <resultMap id="CoolplayBaseLabel" type="com.coolplay.user.user.model.CoolplayBaseLabelModel">
         <result property="id" column="id"/>
         <result property="coolplayBaseId" column="coolplay_base_id"/>
         <result property="labelId" column="label_id"/>

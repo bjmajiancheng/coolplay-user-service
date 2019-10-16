@@ -62,7 +62,7 @@
 				<value>classpath*:mapper/**/*.xml</value>
 			</array>
 		</property>
-		<property name="typeAliasesPackage" value="com.coolplay.company.core.model"/>
+		<property name="typeAliasesPackage" value="com.coolplay.user.core.model"/>
 		<property name="plugins">
 			<array>
 				<bean class="com.github.pagehelper.PageHelper">
@@ -82,7 +82,7 @@
 	</bean>
 
 	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.coolplay.company.core.dao,com.coolplay.company.company.dao"/>
+		<property name="basePackage" value="com.coolplay.user.core.dao,com.coolplay.user.user.dao"/>
 		<property name="properties">
 			<value>
 				mappers=tk.mybatis.mapper.common.Mapper
@@ -94,7 +94,7 @@
 
 	<aop:aspectj-autoproxy/>
 	<aop:config>
-		<aop:pointcut id="appService" expression="execution(* com.coolplay.company.**.service.*.*(..))"/>
+		<aop:pointcut id="appService" expression="execution(* com.coolplay.user.**.service.*.*(..))"/>
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="appService"/>
 	</aop:config>
 
