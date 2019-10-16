@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.company.company.dao.AppUserMapper">
+
+    <resultMap id="User" type="com.coolplay.company.company.model.UserModel">
+        <result property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <result property="password" column="password"/>
+        <result property="mobilePhone" column="mobile_phone"/>
+        <result property="wechatId" column="wechat_id"/>
+        <result property="qqId" column="qq_id"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="realName" column="real_name"/>
+        <result property="idCard" column="id_card"/>
+        <result property="idCardImages" column="id_card_images"/>
+        <result property="userDesc" column="user_desc"/>
+        <result property="lastVerifyCode" column="last_verify_code"/>
+        <result property="lastVerifyTime" column="last_verify_time"/>
+        <result property="headImage" column="head_image"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,user_name ,password ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,last_verify_code ,last_verify_time ,head_image ,c_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="userName != null">
+				AND user_name = #{userName}
+			</if>
+			<if test="password != null">
+				AND password = #{password}
+			</if>
+			<if test="mobilePhone != null">
+				AND mobile_phone = #{mobilePhone}
+			</if>
+			<if test="wechatId != null">
+				AND wechat_id = #{wechatId}
+			</if>
+			<if test="qqId != null">
+				AND qq_id = #{qqId}
+			</if>
+			<if test="nickName != null">
+				AND nick_name = #{nickName}
+			</if>
+			<if test="realName != null">
+				AND real_name = #{realName}
+			</if>
+			<if test="idCard != null">
+				AND id_card = #{idCard}
+			</if>
+			<if test="idCardImages != null">
+				AND id_card_images = #{idCardImages}
+			</if>
+			<if test="userDesc != null">
+				AND user_desc = #{userDesc}
+			</if>
+			<if test="lastVerifyCode != null">
+				AND last_verify_code = #{lastVerifyCode}
+			</if>
+			<if test="headImage != null">
+				AND head_image = #{headImage}
+			</if>
+			<if test="userIds != null">
+				AND id IN
+				<foreach collection="userIds" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="User">
+	    SELECT <include refid="columns"/> FROM d_user 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="User" >
+	SELECT <include refid="columns"/>
+	<![CDATA[
+	        FROM d_user
+	        WHERE
+		        id = #{id} 
+	    ]]>
+	</select>
+	
+</mapper>
+

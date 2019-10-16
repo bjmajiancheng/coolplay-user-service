@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.company.core.dao.FunctionMapper">
+
+    <resultMap id="CompanyFunction" type="com.coolplay.company.core.model.FunctionModel">
+        <result property="id" column="id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="functionName" column="function_name"/>
+        <result property="display" column="display"/>
+        <result property="status" column="status"/>
+        <result property="action" column="action"/>
+		<result property="icon" column="icon"/>
+        <result property="sort" column="sort"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+	<resultMap id="TreeNodeMap" type="com.coolplay.company.common.utils.TreeNode">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result column="parent_id" property="pId" jdbcType="INTEGER"/>
+		<result column="function_name" property="name" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,parent_id ,function_name ,display ,status ,action , icon,sort ,c_time
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="functionName != null">
+				AND function_name = #{functionName}
+			</if>
+			<if test="action != null">
+				AND action = #{action}
+			</if>
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="CompanyFunction" parameterType="java.util.Map">
+	    SELECT <include refid="columns"/> FROM d_company_function 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="selectById" resultMap="CompanyFunction">
+		SELECT <include refid="columns"/> FROM d_company_function
+		WHERE id = #{id}
+	</select>
+
+	<select id="selectFunctionTreeNodes" resultMap="TreeNodeMap">
+		select id,parent_id,function_name from d_company_function
+		<where>
+			<if test="functionName!=null and functionName!=''">
+				function_name like concat('%',concat(#{functionName},'%'))
+			</if>
+			<if test="display!=null">
+				display = #{display}
+			</if>
+		</where>
+		order by sort
+	</select>
+	
+</mapper>
+

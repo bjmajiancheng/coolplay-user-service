@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.company.company.dao.CoolplayBaseMapper">
+
+    <resultMap id="CoolplayBase" type="com.coolplay.company.company.model.CoolplayBaseModel">
+        <result property="id" column="id"/>
+        <result property="baseName" column="base_name"/>
+        <result property="baseFullName" column="base_full_name"/>
+        <result property="baseDesc" column="base_desc"/>
+        <result property="baseType" column="base_type"/>
+        <result property="capacityCnt" column="capacity_cnt"/>
+        <result property="status" column="status"/>
+        <result property="posX" column="pos_x"/>
+        <result property="posY" column="pos_y"/>
+        <result property="companyId" column="company_id"/>
+        <result property="companyUserId" column="company_user_id"/>
+        <result property="departuresGps" column="departures_gps"/>
+        <result property="departuresHeight" column="departures_height"/>
+        <result property="landGps" column="land_gps"/>
+        <result property="landHeight" column="land_height"/>
+        <result property="flyDirection" column="fly_direction"/>
+        <result property="monitorVideoUrl" column="monitor_video_url"/>
+        <result property="height" column="height"/>
+        <result property="majorProject" column="major_project"/>
+        <result property="openTime" column="open_time"/>
+        <result property="contactName" column="contact_name"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="contactEmail" column="contact_email"/>
+        <result property="contactAddress" column="contact_address"/>
+        <result property="readCnt" column="read_cnt"/>
+        <result property="isClose" column="is_close"/>
+        <result property="isDel" column="is_del"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,base_name ,base_full_name ,base_desc ,base_type ,capacity_cnt ,status ,pos_x ,pos_y ,company_id ,company_user_id ,departures_gps ,departures_height ,land_gps ,land_height ,fly_direction ,monitor_video_url ,height ,major_project ,open_time ,contact_name ,contact_phone ,contact_email ,contact_address ,read_cnt ,is_close ,is_del ,c_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="baseName != null">
+				AND base_name = #{baseName}
+			</if>
+			<if test="baseFullName != null">
+				AND base_full_name = #{baseFullName}
+			</if>
+			<if test="baseDesc != null">
+				AND base_desc = #{baseDesc}
+			</if>
+			<if test="departuresGps != null">
+				AND departures_gps = #{departuresGps}
+			</if>
+			<if test="landGps != null">
+				AND land_gps = #{landGps}
+			</if>
+			<if test="flyDirection != null">
+				AND fly_direction = #{flyDirection}
+			</if>
+			<if test="monitorVideoUrl != null">
+				AND monitor_video_url = #{monitorVideoUrl}
+			</if>
+			<if test="majorProject != null">
+				AND major_project = #{majorProject}
+			</if>
+			<if test="contactName != null">
+				AND contact_name = #{contactName}
+			</if>
+			<if test="contactPhone != null">
+				AND contact_phone = #{contactPhone}
+			</if>
+			<if test="contactEmail != null">
+				AND contact_email = #{contactEmail}
+			</if>
+			<if test="contactAddress != null">
+				AND contact_address = #{contactAddress}
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="CoolplayBase">
+	    SELECT <include refid="columns"/> FROM d_coolplay_base 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="CoolplayBase" >
+		SELECT <include refid="columns"/>
+		FROM d_coolplay_base WHERE id = #{id}
+	</select>
+
+	
+</mapper>
+

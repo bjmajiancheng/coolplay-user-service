@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.company.company.dao.CircleMapper">
+
+    <resultMap id="Circle" type="com.coolplay.company.company.model.CircleModel">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="circleName" column="circle_name"/>
+        <result property="circleDesc" column="circle_desc"/>
+        <result property="circleType" column="circle_type"/>
+        <result property="reason" column="reason"/>
+        <result property="backgroudImg" column="backgroud_img"/>
+        <result property="memberCnt" column="member_cnt"/>
+        <result property="likeCnt" column="like_cnt"/>
+        <result property="shareCnt" column="share_cnt"/>
+        <result property="commentCnt" column="comment_cnt"/>
+        <result property="readCnt" column="read_cnt"/>
+        <result property="applicationTime" column="application_time"/>
+        <result property="reviewTime" column="review_time"/>
+        <result property="reviewStatus" column="review_status"/>
+        <result property="status" column="status"/>
+        <result property="rejectReason" column="reject_reason"/>
+        <result property="companyId" column="company_id"/>
+        <result property="disabled" column="disabled"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,user_id ,circle_name ,circle_desc ,circle_type ,reason ,backgroud_img ,member_cnt ,like_cnt ,share_cnt ,comment_cnt ,read_cnt ,application_time ,review_time ,review_status ,status ,reject_reason ,company_id ,disabled ,c_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="circleName != null">
+				AND circle_name = #{circleName}
+			</if>
+			<if test="circleDesc != null">
+				AND circle_desc = #{circleDesc}
+			</if>
+			<if test="reason != null">
+				AND reason = #{reason}
+			</if>
+			<if test="backgroudImg != null">
+				AND backgroud_img = #{backgroudImg}
+			</if>
+			<if test="rejectReason != null">
+				AND reject_reason = #{rejectReason}
+			</if>
+			<if test="ids != null">
+				AND id IN
+				<foreach collection="ids" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="Circle">
+	    SELECT <include refid="columns"/> FROM d_circle 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="Circle" >
+		SELECT <include refid="columns"/>
+		FROM d_circle WHERE id = #{id}
+	</select>
+
+	
+</mapper>
+

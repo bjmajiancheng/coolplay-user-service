@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.company.company.dao.CompanyUserOptLogMapper">
+
+    <resultMap id="CompanyUserOptLog" type="com.coolplay.company.company.model.CompanyUserOptLogModel">
+        <result property="id" column="id"/>
+        <result property="companyId" column="company_id"/>
+        <result property="companyUserId" column="company_user_id"/>
+        <result property="optPage" column="opt_page"/>
+        <result property="optType" column="opt_type"/>
+        <result property="optTypeDesc" column="opt_type_desc"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,company_id ,company_user_id ,opt_page ,opt_type ,opt_type_desc ,c_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="optPage != null">
+				AND opt_page = #{optPage}
+			</if>
+			<if test="optTypeDesc != null">
+				AND opt_type_desc = #{optTypeDesc}
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="CompanyUserOptLog">
+	    SELECT <include refid="columns"/> FROM d_company_user_opt_log 
+		<include refid="findWhere"/>
+    </select>
+
+	
+</mapper>
+

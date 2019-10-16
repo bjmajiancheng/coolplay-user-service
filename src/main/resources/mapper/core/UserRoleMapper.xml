@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.company.core.dao.UserRoleMapper">
+
+    <resultMap id="CompanyUserRole" type="com.coolplay.company.core.model.UserRoleModel">
+        <result property="userId" column="user_id"/>
+        <result property="roleId" column="role_id"/>
+    </resultMap>
+
+	<resultMap id="CompanyUserRoleAllInfo" type="com.coolplay.company.core.model.UserRoleModel">
+		<result property="userId" column="user_id"/>
+		<result property="roleId" column="role_id"/>
+		<result property="roleName" column="role_name"/>
+		<result property="status" column="status"/>
+	</resultMap>
+
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        user_id ,role_id 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="userId != null">
+				AND user_id = #{userId}
+			</if>
+			<if test="roleId != null">
+				AND role_id = #{roleId}
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="CompanyUserRole">
+	    SELECT <include refid="columns"/> FROM d_company_user_role 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findUserRoleByUserIds" resultMap="CompanyUserRoleAllInfo">
+		SELECT r.id AS role_id, r.role_name, r.status, ur.user_id
+		FROM d_company_role r
+		INNER JOIN d_company_user_role ur ON r.id = ur.role_id
+		WHERE r.status = 1 AND ur.user_id IN
+		<foreach collection="userIds" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="getUserIdsByRoleId" resultType="java.lang.Integer">
+		SELECT user_id FROM d_company_user_role WHERE role_id = #{roleId}
+	</select>
+
+	<update id="deleteByUserId">
+		DELETE FROM d_company_user_role where user_id = #{userId}
+	</update>
+	
+</mapper>
+

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.company.company.dao.CircleMemberReviewMapper">
+
+    <resultMap id="CircleMemberReview" type="com.coolplay.company.company.model.CircleMemberReviewModel">
+        <result property="id" column="id"/>
+        <result property="circleId" column="circle_id"/>
+        <result property="inviteUserId" column="invite_user_id"/>
+        <result property="memberUserId" column="member_user_id"/>
+        <result property="reviewStatus" column="review_status"/>
+        <result property="applicationReason" column="application_reason"/>
+        <result property="rejectReason" column="reject_reason"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,circle_id ,invite_user_id ,member_user_id ,review_status ,application_reason ,reject_reason ,c_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="applicationReason != null">
+				AND application_reason = #{applicationReason}
+			</if>
+			<if test="rejectReason != null">
+				AND reject_reason = #{rejectReason}
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="CircleMemberReview">
+	    SELECT <include refid="columns"/> FROM d_circle_member_review 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="CircleMemberReview" >
+		SELECT <include refid="columns"/>
+		FROM d_circle_member_review WHERE id = #{id}
+	</select>
+
+	
+</mapper>
+

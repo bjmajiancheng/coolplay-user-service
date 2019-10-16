@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.company.company.dao.CompanyCircleMapper">
+
+    <resultMap id="CompanyCircle" type="com.coolplay.company.company.model.CompanyCircleModel">
+        <result property="id" column="id"/>
+        <result property="circleId" column="circle_id"/>
+        <result property="companyId" column="company_id"/>
+        <result property="applicationTime" column="application_time"/>
+        <result property="applicationUserId" column="application_user_id"/>
+        <result property="reviewStatus" column="review_status"/>
+        <result property="status" column="status"/>
+        <result property="rejectReason" column="reject_reason"/>
+        <result property="isDisable" column="is_disable"/>
+        <result property="disableReason" column="disable_reason"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,circle_id ,company_id ,application_time ,application_user_id ,review_status ,status ,reject_reason ,is_disable ,disable_reason ,c_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="rejectReason != null">
+				AND reject_reason = #{rejectReason}
+			</if>
+			<if test="disableReason != null">
+				AND disable_reason = #{disableReason}
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="CompanyCircle">
+	    SELECT <include refid="columns"/> FROM d_company_circle 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="CompanyCircle">
+		SELECT <include refid="columns"/> FROM d_company_circle
+		WHERE id = #{id}
+	</select>
+
+</mapper>
+

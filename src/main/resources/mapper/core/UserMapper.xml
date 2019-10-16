@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.coolplay.company.core.dao.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.coolplay.company.core.model.UserModel">
+        <result property="id" column="id"/>
+        <result property="companyId" column="company_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="password" column="password"/>
+        <result property="displayName" column="display_name"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="accountNonLocked" column="account_non_locked"/>
+        <result property="accountNonExpired" column="account_non_expired"/>
+        <result property="credentialsNonExpired" column="credentials_non_expired"/>
+        <result property="lastLoginIp" column="last_login_ip"/>
+        <result property="lastLoginTime" column="last_login_time"/>
+        <result property="isAdmin" column="is_admin"/>
+        <result property="enabled" column="enabled"/>
+        <result property="lastPasswordReset" column="last_password_reset"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        <![CDATA[
+        id ,company_id ,user_name ,password ,display_name ,contact_phone ,dept_id ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,is_admin ,enabled ,last_password_reset ,c_time
+	    ]]>
+    </sql>
+
+    <sql id="findWhere">
+        <where>
+            <if test="userIds != null">
+                AND id IN
+                <foreach collection="userIds" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <select id="find" resultMap="BaseResultMap">
+        SELECT <include refid="columns"/> FROM d_company_user
+        <include refid="findWhere"/>
+    </select>
+
+    <select id="findUserByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM d_company_user
+        WHERE user_name = #{loginName,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findUserRoleByUserId" resultType="java.lang.Integer">
+        SELECT
+          role_id
+        FROM d_company_user_role ur
+        INNER JOIN d_company_role r ON ur.role_id = r.id
+        WHERE user_id = #{userId,jdbcType=INTEGER} AND r.status = 1
+    </select>
+
+    <select id="findUserFunctionByLoginName" resultType="com.coolplay.company.security.dto.FunctionDto">
+        SELECT
+          DISTINCT f.id AS id, f.parent_id AS parentId, f.function_name AS functionName, f.`action`, f.`sort`, f.`icon`
+        FROM d_company_user u
+        LEFT JOIN d_company_user_role ur ON u.id = ur.user_id
+        LEFT JOIN d_company_role_function rf ON ur.role_id=rf.role_id
+        LEFT JOIN d_company_function f ON rf.function_id = f.id
+        LEFT JOIN d_company_role r ON ur.role_id = r.id
+        WHERE u.user_name = #{loginName} AND f.display=1 AND f.status = 1 AND r.status = 1
+        ORDER BY f.sort
+    </select>
+
+    <select id="findLoginNameByUserId" resultType="java.lang.String">
+        select user_name from d_company_user where id=#{userId}
+    </select>
+
+    <update id="updateLastLoginInfoByUserName">
+        update d_company_user set last_login_time=#{lastLoginDate},last_login_ip=#{remoteAddr} where user_name=#{userName}
+    </update>
+
+    <select id="findUserByUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM d_company_user
+        WHERE id = #{userId}
+    </select>
+
+</mapper>

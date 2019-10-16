@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.company.company.dao.CoolplayBaseLabelMapper">
+
+    <resultMap id="CoolplayBaseLabel" type="com.coolplay.company.company.model.CoolplayBaseLabelModel">
+        <result property="id" column="id"/>
+        <result property="coolplayBaseId" column="coolplay_base_id"/>
+        <result property="labelId" column="label_id"/>
+        <result property="ctime" column="c_time"/>
+		<result property="labelName" column="label_name"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,coolplay_base_id ,label_id ,c_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="coolplayBaseIds != null">
+				AND coolplay_base_id IN
+				<foreach collection="coolplayBaseIds" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="CoolplayBaseLabel">
+	    SELECT bl.id ,bl.coolplay_base_id ,bl.label_id ,bl.c_time, dl.label_name FROM d_coolplay_base_label bl
+		INNER JOIN d_label dl ON bl.label_id = dl.id
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="CoolplayBaseLabel" >
+		SELECT <include refid="columns"/>
+	    FROM d_coolplay_base_label WHERE id = #{id}
+	</select>
+
+</mapper>
+

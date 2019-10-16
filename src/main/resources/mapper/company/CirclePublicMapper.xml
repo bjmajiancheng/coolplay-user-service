@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.company.company.dao.CirclePublicMapper">
+
+    <resultMap id="CirclePublic" type="com.coolplay.company.company.model.CirclePublicModel">
+        <result property="id" column="id"/>
+        <result property="circleId" column="circle_id"/>
+        <result property="publicContent" column="public_content"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,circle_id ,public_content ,c_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="publicContent != null">
+				AND public_content = #{publicContent}
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="CirclePublic">
+	    SELECT <include refid="columns"/> FROM d_circle_public 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="CirclePublic" >
+		SELECT <include refid="columns"/>
+		FROM d_circle_public WHERE id = #{id}
+	</select>
+
+	<select id="findLastPublicByCircleId" resultMap="CirclePublic">
+		SELECT <include refid="columns"/>
+		FROM d_circle_public
+		WHERE circle_id = #{circleId} ORDER BY id DESC LIMIT 1
+	</select>
+	
+</mapper>
+
