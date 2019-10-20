@@ -17,16 +17,24 @@
         <result property="idCard" column="id_card"/>
         <result property="idCardImages" column="id_card_images"/>
         <result property="userDesc" column="user_desc"/>
+        <result property="signature" column="signature"/>
         <result property="lastVerifyCode" column="last_verify_code"/>
         <result property="lastVerifyTime" column="last_verify_time"/>
         <result property="headImage" column="head_image"/>
+        <result property="accountNonLocked" column="account_non_locked"/>
+        <result property="accountNonExpired" column="account_non_expired"/>
+        <result property="credentialsNonExpired" column="credentials_non_expired"/>
+        <result property="lastLoginIp" column="last_login_ip"/>
+        <result property="lastLoginTime" column="last_login_time"/>
+        <result property="enabled" column="enabled"/>
+        <result property="lastPasswordReset" column="last_password_reset"/>
         <result property="ctime" column="c_time"/>
     </resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
 	    <![CDATA[
-        id ,user_name ,password ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,last_verify_code ,last_verify_time ,head_image ,c_time 
+        id ,user_name ,password ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,signature ,last_verify_code ,last_verify_time ,head_image ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,enabled ,last_password_reset ,c_time 
 	    ]]>
 	</sql>
 
@@ -62,17 +70,17 @@
 			<if test="userDesc != null">
 				AND user_desc = #{userDesc}
 			</if>
+			<if test="signature != null">
+				AND signature = #{signature}
+			</if>
 			<if test="lastVerifyCode != null">
 				AND last_verify_code = #{lastVerifyCode}
 			</if>
 			<if test="headImage != null">
 				AND head_image = #{headImage}
 			</if>
-			<if test="userIds != null">
-				AND id IN
-				<foreach collection="userIds" item="item" open="(" separator="," close=")">
-					#{item}
-				</foreach>
+			<if test="lastLoginIp != null">
+				AND last_login_ip = #{lastLoginIp}
 			</if>
 	    </where>
 	</sql>

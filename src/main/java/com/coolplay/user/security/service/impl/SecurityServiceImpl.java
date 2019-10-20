@@ -4,7 +4,6 @@ import com.coolplay.user.common.tools.RedisCache;
 import com.coolplay.user.core.model.UserModel;
 import com.coolplay.user.security.constants.SecurityConstant;
 import com.coolplay.user.security.security.SecurityUser;
-import com.coolplay.user.security.service.IRoleService;
 import com.coolplay.user.security.service.ISecurityService;
 import com.coolplay.user.security.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +25,6 @@ public class SecurityServiceImpl implements ISecurityService {
     private IUserService userService;
 
     @Autowired
-    private IRoleService roleService;
-
-    @Autowired
     private RedisCache redisCache;
 
     /**
@@ -43,13 +39,13 @@ public class SecurityServiceImpl implements ISecurityService {
             return null;
         }
         Collection<GrantedAuthority> userGrantedAuthorities = new ArrayList<GrantedAuthority>();
-        List<Integer> grantedAuthorities = userService.findUserRoleByUserId(user.getId());
+        /*List<Integer> grantedAuthorities = userService.findUserRoleByUserId(user.getId());
         if (grantedAuthorities != null && grantedAuthorities.size() > 0) {
             for (Integer grantedAuthority : grantedAuthorities) {
                 GrantedAuthority ga = new SimpleGrantedAuthority(String.valueOf(grantedAuthority));
                 userGrantedAuthorities.add(ga);
             }
-        }
+        }*/
         SecurityUser securityUser = new SecurityUser(user, userGrantedAuthorities);
         return securityUser;
     }
@@ -65,9 +61,10 @@ public class SecurityServiceImpl implements ISecurityService {
 
     @Override
     public Map<String, Collection<ConfigAttribute>> getDbResourceMap() {
-        List<Map> roleFunctions = roleService.findRoleMatchUpFunctions();
+        /*List<Map> roleFunctions = roleService.findRoleMatchUpFunctions();
         redisCache.set(SecurityConstant.RESOURCE_MAP, roleFunctions);
-        return getResourceMap(roleFunctions);
+        return getResourceMap(roleFunctions);*/
+        return Collections.emptyMap();
     }
 
     private Map<String, Collection<ConfigAttribute>> getResourceMap(List<Map> roleFunctions) {

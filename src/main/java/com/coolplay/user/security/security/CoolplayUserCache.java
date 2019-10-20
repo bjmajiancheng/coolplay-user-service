@@ -49,8 +49,6 @@ public class CoolplayUserCache implements org.springframework.security.core.user
     @Override
     public void putUserInCache(UserDetails user) {
         cache.set(SecurityConstant.USER_CACHE_PREFIX + user.getUsername(), user);
-        List<FunctionDto> functionList = userService.findUserFunctionByLoginName(user.getUsername());
-        cache.set(SecurityConstant.FUNCTION_CACHE_PREFIX + user.getUsername(), functionList);
     }
 
     @Override

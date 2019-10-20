@@ -5,11 +5,8 @@ import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
 import com.coolplay.user.user.model.CompanyDeptModel;
 import com.coolplay.user.user.model.CompanyModel;
-import com.coolplay.user.user.service.ICompanyDeptService;
 import com.coolplay.user.user.service.ICompanyService;
-import com.coolplay.user.core.model.RoleModel;
 import com.coolplay.user.security.security.SecurityUser;
-import com.coolplay.user.security.service.IRoleService;
 import com.coolplay.user.security.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,12 +27,6 @@ public class CompanyController {
     @Autowired
     private ICompanyService companyService;
 
-    @Autowired
-    private ICompanyDeptService companyDeptService;
-
-    @Autowired
-    private IRoleService roleService;
-
     @ResponseBody
     @RequestMapping(value="/companyInfo", method = RequestMethod.GET)
     public Result companyInfo(HttpServletRequest request) {
@@ -55,30 +46,6 @@ public class CompanyController {
         int cnt = companyService.updateNotNull(companyModel);
 
         return ResponseUtil.success();
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/getCurrUserCompanyRoles", method = RequestMethod.GET)
-    public Result getCurrUserCompanyRoles() {
-        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
-        RoleModel roleModel = new RoleModel();
-        roleModel.setCompanyId(securityUser.getCompanyId());
-        roleModel.setStatus(1);
-        List<RoleModel> roleModels = roleService.selectByFilter(roleModel);
-
-        return ResponseUtil.success(PageConvertUtil.grid(roleModels));
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/getCurrUserCompanyDepts", method = RequestMethod.GET)
-    public Result getCurrUserCompanyDepts() {
-        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
-        CompanyDeptModel companyDeptModel = new CompanyDeptModel();
-        companyDeptModel.setCompanyId(securityUser.getCompanyId());
-        companyDeptModel.setStatus(1);
-        List<CompanyDeptModel> companyDeptModels = companyDeptService.selectByFilter(companyDeptModel);
-
-        return ResponseUtil.success(PageConvertUtil.grid(companyDeptModels));
     }
 
 

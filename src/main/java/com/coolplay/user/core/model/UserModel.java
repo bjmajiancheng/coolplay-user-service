@@ -9,7 +9,11 @@ package com.coolplay.user.core.model;
 
 import com.coolplay.user.common.handler.Sortable;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.*;
 
 /**
@@ -22,8 +26,7 @@ public class UserModel extends Sortable {
 	private static final long serialVersionUID = 1L;
 
 	//columns START
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;//"主键"
 
 	@Column(name = "user_name")
@@ -56,6 +59,9 @@ public class UserModel extends Sortable {
 	@Column(name = "user_desc")
 	private String userDesc;//"个人简介"
 
+	@Column(name = "signature")
+	private String signature;//"个人签名"
+
 	@Column(name = "last_verify_code")
 	private String lastVerifyCode;//"最后一次验证码"
 
@@ -64,6 +70,27 @@ public class UserModel extends Sortable {
 
 	@Column(name = "head_image")
 	private String headImage;//"用户头像"
+
+	@Column(name = "account_non_locked")
+	private Boolean accountNonLocked;//"未锁定状态，0=正常，1=锁定"
+
+	@Column(name = "account_non_expired")
+	private Boolean accountNonExpired;//"账号过期状态，1=正常，0=过期"
+
+	@Column(name = "credentials_non_expired")
+	private Boolean credentialsNonExpired;//"密码失效状态：1：未失效 0：已失效"
+
+	@Column(name = "last_login_ip")
+	private String lastLoginIp;//"最后登录IP"
+
+	@Column(name = "last_login_time")
+	private Date lastLoginTime;//"最后登录时间"
+
+	@Column(name = "enabled")
+	private Boolean enabled;//"状态，0=冻结，1=正常"
+
+	@Column(name = "last_password_reset")
+	private Date lastPasswordReset;//"上次密码重置时间"
 
 	@Column(name = "c_time")
 	private Date ctime;//"创建时间"
@@ -158,6 +185,14 @@ public class UserModel extends Sortable {
 		return this.userDesc;
 	}
 		
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+
+	public String getSignature() {
+		return this.signature;
+	}
+		
 	public void setLastVerifyCode(String lastVerifyCode) {
 		this.lastVerifyCode = lastVerifyCode;
 	}
@@ -180,6 +215,62 @@ public class UserModel extends Sortable {
 
 	public String getHeadImage() {
 		return this.headImage;
+	}
+		
+	public void setAccountNonLocked(Boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+
+	public Boolean getAccountNonLocked() {
+		return this.accountNonLocked;
+	}
+		
+	public void setAccountNonExpired(Boolean accountNonExpired) {
+		this.accountNonExpired = accountNonExpired;
+	}
+
+	public Boolean getAccountNonExpired() {
+		return this.accountNonExpired;
+	}
+		
+	public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
+		this.credentialsNonExpired = credentialsNonExpired;
+	}
+
+	public Boolean getCredentialsNonExpired() {
+		return this.credentialsNonExpired;
+	}
+		
+	public void setLastLoginIp(String lastLoginIp) {
+		this.lastLoginIp = lastLoginIp;
+	}
+
+	public String getLastLoginIp() {
+		return this.lastLoginIp;
+	}
+		
+	public void setLastLoginTime(Date lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
+	}
+
+	public Date getLastLoginTime() {
+		return this.lastLoginTime;
+	}
+		
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public Boolean getEnabled() {
+		return this.enabled;
+	}
+		
+	public void setLastPasswordReset(Date lastPasswordReset) {
+		this.lastPasswordReset = lastPasswordReset;
+	}
+
+	public Date getLastPasswordReset() {
+		return this.lastPasswordReset;
 	}
 		
 	public void setCtime(Date ctime) {

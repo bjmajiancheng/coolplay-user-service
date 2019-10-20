@@ -9,7 +9,6 @@ import com.coolplay.user.security.exception.AuBzConstant;
 import com.coolplay.user.security.exception.AuthBusinessException;
 import com.coolplay.user.security.security.CoolplayUserCache;
 import com.coolplay.user.security.security.SecurityUser;
-import com.coolplay.user.security.service.IFunctionService;
 import com.coolplay.user.security.service.IUserService;
 import com.coolplay.user.security.utils.SecurityUtil;
 import org.apache.commons.lang.StringUtils;
@@ -40,84 +39,17 @@ public class IndexController {
     private IUserService userService;
 
     @Autowired
-    private IFunctionService functionService;
-
-    @Autowired
     private RedisCache redisCache;
 
     @Autowired
     private CoolplayUserCache coolplayUserCache;
 
-    @ResponseBody
-    @RequestMapping(value = "/index/current", method = RequestMethod.GET)
-    public Result myFunction() {
-        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
-        if (user == null || StringUtils.isEmpty(user.getUsername())) {
-            throw new AuthBusinessException(AuBzConstant.IS_NOT_LOGIN);
-        }
-
-        String currentLoginName = SecurityUtil.getCurrentUserName();
-        if (StringUtils.isEmpty(currentLoginName)) {
-            throw new AuthBusinessException(AuBzConstant.IS_NOT_LOGIN);
-        }
-        List<FunctionDto> functions = (List<FunctionDto>) redisCache
-                .get(SecurityConstant.FUNCTION_CACHE_PREFIX + currentLoginName);
-        if (functions == null) {
-            functions = userService.findUserFunctionByLoginName(currentLoginName);
-            redisCache.set(SecurityConstant.FUNCTION_CACHE_PREFIX + currentLoginName, functions);
-        }
-
-        Map<String, Object> data = new HashMap<String, Object>();
-        data.put("user", user);
-        data.put("functionList", functions);
-
-        return ResponseUtil.success(data);
-    }
 
     @ResponseBody
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public Result authenticationRequest() {
         Integer userId = SecurityUtil.getCurrentUserId();
         coolplayUserCache.removeUserFromCacheByUserId(userId);
-        return ResponseUtil.success();
-    }
-
-    /**
-     * 验证某用户是否有权限
-     *
-     * @param request
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/validate/**", method = RequestMethod.GET)
-    public Result htmlPage(HttpServletRequest request) {
-        String uri = request.getRequestURI();
-        String currentLoginName = SecurityUtil.getCurrentUserName();
-        List<FunctionDto> functions = (List<FunctionDto>) redisCache
-                .get(SecurityConstant.FUNCTION_CACHE_PREFIX + currentLoginName);
-        if (functions == null) {
-            functions = userService.findUserFunctionByLoginName(currentLoginName);
-            redisCache.set(SecurityConstant.FUNCTION_CACHE_PREFIX + currentLoginName, functions);
-        }
-
-        uri = uri.substring(uri.lastIndexOf("/api/validate/") + 14);
-
-        //md5文件替换成普通文件
-        String md5Regex = "\\-[a-zA-Z0-9]+\\.html$";
-        uri = uri.replaceAll(md5Regex, ".html");
-        boolean validateFlag = false;
-        for (FunctionDto functionDto : functions) {
-            if (functionDto.getAction().equals(uri)) {
-                validateFlag = true;
-            }
-        }
-
-        logger.info("验证用户菜单权限, uri:{}, result:{}.", uri, validateFlag);
-
-        if (!validateFlag) {
-            return ResponseUtil.error(HttpServletResponse.SC_UNAUTHORIZED, "未授权访问");
-        }
-
         return ResponseUtil.success();
     }
 
