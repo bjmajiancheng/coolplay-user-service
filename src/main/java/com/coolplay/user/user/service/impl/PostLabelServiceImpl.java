@@ -7,12 +7,17 @@
 
 package com.coolplay.user.user.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.coolplay.user.common.baseservice.impl.BaseService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.coolplay.user.user.model.CircleAdminModel;
+import org.springframework.transaction.annotation.Transactional;
+import com.coolplay.user.user.model.PostLabelModel;
 import tk.mybatis.mapper.entity.Example;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -28,45 +33,40 @@ import com.coolplay.user.user.service.*;
  * @since 1.0
  */
 
-@Service("circleAdminService")
-public class CircleAdminServiceImpl extends BaseService<CircleAdminModel> implements ICircleAdminService{
+@Service("postLabelService")
+public class PostLabelServiceImpl extends BaseService<PostLabelModel> implements IPostLabelService{
 	@Autowired
-	private CircleAdminMapper circleAdminMapper;
+	private PostLabelMapper postLabelMapper;
 	
 	@Override
-	public CircleAdminModel findById(Integer id) {
+	public PostLabelModel findById(Integer id) {
 		if(id == null) {
 			return null;
 		}
-		return circleAdminMapper.findById(id);
+		return postLabelMapper.findById(id);
 	}
 
 
-	public List<CircleAdminModel> find(Map<String, Object> param) {
-		return circleAdminMapper.find(param);
+	public List<PostLabelModel> find(Map<String, Object> param) {
+		return postLabelMapper.find(param);
 	}
 
 	@Override
-	public PageInfo<CircleAdminModel> selectByFilterAndPage(CircleAdminModel circleAdminModel, int pageNum,
+	public PageInfo<PostLabelModel> selectByFilterAndPage(PostLabelModel postLabelModel, int pageNum,
 		int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
-		List<CircleAdminModel> list = this.selectByFilter(circleAdminModel);
+		List<PostLabelModel> list = this.selectByFilter(postLabelModel);
 		return new PageInfo<>(list);
 	}
 
 	@Override
-	public List<CircleAdminModel> selectByFilter(CircleAdminModel circleAdminModel) {
-		Example example = new Example(CircleAdminModel.class);
+	public List<PostLabelModel> selectByFilter(PostLabelModel postLabelModel) {
+		Example example = new Example(PostLabelModel.class);
 		Example.Criteria criteria = example.createCriteria();
 
-		if(StringUtils.isNotEmpty(circleAdminModel.getSortWithOutOrderBy())) {
-			example.setOrderByClause(circleAdminModel.getSortWithOutOrderBy());
+		if(StringUtils.isNotEmpty(postLabelModel.getSortWithOutOrderBy())) {
+			example.setOrderByClause(postLabelModel.getSortWithOutOrderBy());
 		}
 		return getMapper().selectByExample(example);
-	}
-
-
-	public List<Integer> findByAdminUserId(Integer adminUserId) {
-		return circleAdminMapper.findByAdminUserId(adminUserId);
 	}
 }

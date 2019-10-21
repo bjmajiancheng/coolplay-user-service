@@ -10,6 +10,7 @@
         <result property="circleId" column="circle_id"/>
         <result property="memberUserId" column="member_user_id"/>
         <result property="reviewStatus" column="review_status"/>
+		<result property="status" column="status"/>
         <result property="reviewReason" column="review_reason"/>
         <result property="ctime" column="c_time"/>
     </resultMap>
@@ -17,7 +18,7 @@
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
 	    <![CDATA[
-        id ,circle_id ,member_user_id ,review_status ,review_reason ,c_time 
+        id ,circle_id ,member_user_id ,review_status , status, review_reason ,c_time
 	    ]]>
 	</sql>
 
@@ -40,6 +41,9 @@
 		FROM d_circle_member WHERE id = #{id}
 	</select>
 
-	
+	<select id="findByMemberUserId" resultType="java.lang.Integer">
+		SELECT circle_id FROM d_circle_member WHERE member_user_id = #{memberUserId} AND review_status = 1 AND status = 1
+	</select>
+
 </mapper>
 

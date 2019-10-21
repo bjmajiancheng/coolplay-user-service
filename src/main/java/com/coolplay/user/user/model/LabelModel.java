@@ -45,6 +45,9 @@ public class LabelModel extends Sortable {
 	private Date ctime;//"创建时间"
 
 	//columns END
+
+	@Transient
+	private Integer postId;
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -102,5 +105,12 @@ public class LabelModel extends Sortable {
 		return this.ctime;
 	}
 
+	public Integer getPostId() {
+		return postId;
+	}
+
+	public void setPostId(Integer postId) {
+		this.postId = postId;
+	}
 }
 

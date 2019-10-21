@@ -10,6 +10,7 @@ package com.coolplay.user.user.service.impl;
 import java.util.List;
 
 import com.coolplay.user.common.baseservice.impl.BaseService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.coolplay.user.user.model.LabelModel;
@@ -63,5 +64,31 @@ public class LabelServiceImpl extends BaseService<LabelModel> implements ILabelS
 			example.setOrderByClause(labelModel.getSortWithOutOrderBy());
 		}
 		return getMapper().selectByExample(example);
+	}
+
+	@Override
+	public Map<Integer, List<LabelModel>> findMapByPostIds(List<Integer> postIds) {
+		if(CollectionUtils.isEmpty(postIds)) {
+			return Collections.emptyMap();
+		}
+
+		List<LabelModel> labelModels = labelMapper.findByPostIds(postIds);
+		if(CollectionUtils.isEmpty(labelModels)) {
+			return Collections.emptyMap();
+		}
+
+		Map<Integer, List<LabelModel>> labelMap = new HashMap<Integer, List<LabelModel>>(postIds.size());
+
+		for(LabelModel labelModel : labelModels) {
+			List<LabelModel> tmpLabelModels = labelMap.get(labelModel.getPostId());
+			if(CollectionUtils.isEmpty(tmpLabelModels)) {
+				tmpLabelModels = new ArrayList<LabelModel>();
+			}
+			tmpLabelModels.add(labelModel);
+
+			labelMap.put(labelModel.getPostId(), tmpLabelModels);
+		}
+
+		return labelMap;
 	}
 }

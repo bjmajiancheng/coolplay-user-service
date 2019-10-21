@@ -7,17 +7,22 @@
 
 package com.coolplay.user.user.model;
 
-import java.util.Date;
-import javax.persistence.*;
 import com.coolplay.user.common.handler.Sortable;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import javax.persistence.*;
 
 /**
  * @author  shawn
  * @version 1.0
  * @since 1.0
  */
-@Table(name = "d_circle_post")
-public class CirclePostModel extends Sortable {
+@Table(name = "d_post_label")
+public class PostLabelModel extends Sortable {
 	private static final long serialVersionUID = 1L;
 
 	//columns START
@@ -25,11 +30,11 @@ public class CirclePostModel extends Sortable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;//"主键"
 
-	@Column(name = "circle_id")
-	private Integer circleId;//"酷玩圈ID"
-
 	@Column(name = "post_id")
 	private Integer postId;//"帖子ID"
+
+	@Column(name = "label_id")
+	private Integer labelId;//"标签ID"
 
 	@Column(name = "c_time")
 	private Date ctime;//"创建时间"
@@ -44,20 +49,20 @@ public class CirclePostModel extends Sortable {
 		return this.id;
 	}
 		
-	public void setCircleId(Integer circleId) {
-		this.circleId = circleId;
-	}
-
-	public Integer getCircleId() {
-		return this.circleId;
-	}
-		
 	public void setPostId(Integer postId) {
 		this.postId = postId;
 	}
 
 	public Integer getPostId() {
 		return this.postId;
+	}
+		
+	public void setLabelId(Integer labelId) {
+		this.labelId = labelId;
+	}
+
+	public Integer getLabelId() {
+		return this.labelId;
 	}
 		
 	public void setCtime(Date ctime) {
@@ -67,5 +72,6 @@ public class CirclePostModel extends Sortable {
 	public Date getCtime() {
 		return this.ctime;
 	}
+
 }
 

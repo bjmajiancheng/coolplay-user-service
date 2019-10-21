@@ -46,7 +46,7 @@ public class IndexController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public Result authenticationRequest() {
         Integer userId = SecurityUtil.getCurrentUserId();
         coolplayUserCache.removeUserFromCacheByUserId(userId);

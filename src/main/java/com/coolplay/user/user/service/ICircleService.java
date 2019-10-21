@@ -30,4 +30,6 @@ public interface ICircleService extends IBaseService<CircleModel> {
 	public List<CircleModel> selectByFilter(CircleModel circleModel);
 
 	public Map<Integer, CircleModel> findMapByIds(List<Integer> circleIds);
+
+	public List<CircleModel> findByIds(List<Integer> ids);
 }

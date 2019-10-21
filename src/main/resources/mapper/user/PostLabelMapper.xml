@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.user.user.dao.PostLabelMapper">
+
+    <resultMap id="PostLabel" type="com.coolplay.user.user.model.PostLabelModel">
+        <result property="id" column="id"/>
+        <result property="postId" column="post_id"/>
+        <result property="labelId" column="label_id"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,post_id ,label_id ,c_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="PostLabel">
+	    SELECT <include refid="columns"/> FROM d_post_label 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="PostLabel" >
+	SELECT <include refid="columns"/>
+	<![CDATA[
+	        FROM d_post_label
+	        WHERE
+		        id = #{id} 
+	    ]]>
+	</select>
+	
+</mapper>
+

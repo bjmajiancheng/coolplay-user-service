@@ -6,11 +6,13 @@
  */
 
 package com.coolplay.user.user.dao;
-import com.coolplay.user.user.model.CircleAdminModel;
+import com.coolplay.user.user.model.PostLabelModel;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.*;
+import com.coolplay.user.user.dao.*;
+import com.coolplay.user.user.service.*;
 
 /**
  * @author  davdian
@@ -18,11 +20,10 @@ import java.util.*;
  * @since 1.0
  */
 
-public interface CircleAdminMapper extends Mapper<CircleAdminModel> {
+public interface PostLabelMapper extends Mapper<PostLabelModel> {
 
-	public List<CircleAdminModel> find(Map<String, Object> param);
+	public List<PostLabelModel> find(Map<String, Object> param);
 
-	public CircleAdminModel findById(@Param("id") Integer id);
+	public PostLabelModel findById(@Param("id") Integer id);
 
-	public List<Integer> findByAdminUserId(@Param("adminUserId")Integer adminUserId);
 }

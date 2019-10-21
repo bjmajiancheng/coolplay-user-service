@@ -34,8 +34,11 @@ public class CircleMemberModel extends Sortable {
 	@Column(name = "review_status")
 	private Integer reviewStatus;//"审核状态（0：待审核，1：已审核）"
 
+	@Column(name = "status")
+	private Integer status;//"成员状态（0：未加入，1：已加入）"
+
 	@Column(name = "review_reason")
-	private String reviewReason;//"成员状态（0：未加入，1：已加入）"
+	private String reviewReason;//审核原因
 
 	@Column(name = "c_time")
 	private Date ctime;//"创建时间"
@@ -73,7 +76,15 @@ public class CircleMemberModel extends Sortable {
 	public Integer getReviewStatus() {
 		return this.reviewStatus;
 	}
-		
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
 	public void setReviewReason(String reviewReason) {
 		this.reviewReason = reviewReason;
 	}

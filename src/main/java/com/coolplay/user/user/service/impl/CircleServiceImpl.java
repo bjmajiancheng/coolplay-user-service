@@ -71,7 +71,8 @@ public class CircleServiceImpl extends BaseService<CircleModel> implements ICirc
             return Collections.emptyMap();
         }
 
-        List<CircleModel> circleModels = this.find(Collections.singletonMap("ids", ids));
+        List<CircleModel> circleModels = this.findByIds(ids);
+
         Map<Integer, CircleModel> circleModelMap = new HashMap<Integer, CircleModel>();
         if(CollectionUtils.isNotEmpty(circleModels)) {
             for(CircleModel circleModel: circleModels) {
@@ -80,5 +81,12 @@ public class CircleServiceImpl extends BaseService<CircleModel> implements ICirc
         }
 
         return circleModelMap;
+    }
+
+    public List<CircleModel> findByIds(List<Integer> ids) {
+        if(CollectionUtils.isEmpty(ids)) {
+            return Collections.emptyList();
+        }
+        return this.find(Collections.singletonMap("ids", ids));
     }
 }

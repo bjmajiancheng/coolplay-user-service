@@ -24,4 +24,5 @@ public interface LabelMapper extends Mapper<LabelModel> {
 
 	public LabelModel findById(@Param("id") Integer id);
 
+	public List<LabelModel> findByPostIds(@Param("postIds")List<Integer> postIds);
 }

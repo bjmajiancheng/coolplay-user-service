@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.user.user.dao.PostMapper">
+
+    <resultMap id="Post" type="com.coolplay.user.user.model.PostModel">
+        <result property="id" column="id"/>
+        <result property="postTitle" column="post_title"/>
+        <result property="postContent" column="post_content"/>
+        <result property="userId" column="user_id"/>
+        <result property="imgUrls" column="img_urls"/>
+        <result property="videoUrl" column="video_url"/>
+        <result property="videlPath" column="videl_path"/>
+        <result property="isTop" column="is_top"/>
+        <result property="likeCnt" column="like_cnt"/>
+        <result property="shareCnt" column="share_cnt"/>
+        <result property="commentCnt" column="comment_cnt"/>
+        <result property="readCnt" column="read_cnt"/>
+		<result property="thumbUpCnt" column="thumb_up_cnt"/>
+		<result property="collectCnt" column="collect_cnt"/>
+        <result property="isDel" column="is_del"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,post_title ,post_content ,user_id ,img_urls ,video_url ,videl_path ,is_top ,like_cnt ,share_cnt ,comment_cnt ,read_cnt ,thumb_up_cnt ,collect_cnt, is_del ,c_time
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="postTitle != null">
+				AND post_title = #{postTitle}
+			</if>
+			<if test="postContent != null">
+				AND post_content = #{postContent}
+			</if>
+			<if test="imgUrls != null">
+				AND img_urls = #{imgUrls}
+			</if>
+			<if test="videoUrl != null">
+				AND video_url = #{videoUrl}
+			</if>
+			<if test="videlPath != null">
+				AND videl_path = #{videlPath}
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="Post">
+	    SELECT <include refid="columns"/> FROM d_post 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="Post" >
+	SELECT <include refid="columns"/>
+	<![CDATA[
+	        FROM d_post
+	        WHERE
+		        id = #{id}
+	    ]]>
+	</select>
+
+	<update id="columnPlusNumber">
+		UPDATE d_post SET `#{columnName}` = `#{columnName}` + #{num} WHERE id = #{id}
+	</update>
+	
+</mapper>
+

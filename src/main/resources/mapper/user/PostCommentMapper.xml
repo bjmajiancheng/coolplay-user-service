@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.user.user.dao.PostCommentMapper">
+
+    <resultMap id="PostComment" type="com.coolplay.user.user.model.PostCommentModel">
+        <result property="id" column="id"/>
+        <result property="postId" column="post_id"/>
+        <result property="commentUserId" column="comment_user_id"/>
+        <result property="commentContent" column="comment_content"/>
+        <result property="commentLevel" column="comment_level"/>
+        <result property="postCommentId" column="post_comment_id"/>
+        <result property="isDel" column="is_del"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,post_id ,comment_user_id ,comment_content ,comment_level ,post_comment_id ,is_del ,c_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="commentContent != null">
+				AND comment_content = #{commentContent}
+			</if>
+			<if test="postId != null">
+				AND post_id = #{postId}
+			</if>
+			<if test="isDel != null">
+				AND is_del = #{isDel}
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="PostComment">
+	    SELECT <include refid="columns"/> FROM d_post_comment 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="PostComment" >
+	SELECT <include refid="columns"/>
+	<![CDATA[
+	        FROM d_post_comment
+	        WHERE
+		        id = #{id} 
+	    ]]>
+	</select>
+	
+</mapper>
+

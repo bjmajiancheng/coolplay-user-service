@@ -29,4 +29,6 @@ public interface ICircleAdminService extends IBaseService<CircleAdminModel> {
 
 	public List<CircleAdminModel> selectByFilter(CircleAdminModel circleAdminModel);
 
+	public List<Integer> findByAdminUserId(Integer adminUserId);
+
 }

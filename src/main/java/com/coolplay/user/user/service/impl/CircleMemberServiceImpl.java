@@ -64,4 +64,9 @@ public class CircleMemberServiceImpl extends BaseService<CircleMemberModel> impl
 		}
 		return getMapper().selectByExample(example);
 	}
+
+
+	public List<Integer> findByMemberUserId(Integer memberUserId) {
+		return circleMemberMapper.findByMemberUserId(memberUserId);
+	}
 }

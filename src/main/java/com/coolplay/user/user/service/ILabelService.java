@@ -28,4 +28,5 @@ public interface ILabelService extends IBaseService<LabelModel> {
 
 	public List<LabelModel> selectByFilter(LabelModel labelModel);
 
+	public Map<Integer, List<LabelModel>> findMapByPostIds(List<Integer> postIds);
 }

@@ -6,17 +6,22 @@ public class AuthenticationRequest {
 
     private String username;
 
+    private String mobilePhone;
+
     private String password;
 
     private String vcode;
 
     private String vkey;
 
+    private String verifyCode;
+
     public AuthenticationRequest() {
     }
 
     public AuthenticationRequest(String username, String password) {
         this.setUsername(username);
+        this.setMobilePhone(username);
         this.setPassword(password);
     }
 
@@ -44,6 +49,14 @@ public class AuthenticationRequest {
         this.username = username;
     }
 
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
+    }
+
     public String getPassword() {
         return this.password;
     }
@@ -52,4 +65,11 @@ public class AuthenticationRequest {
         this.password = password;
     }
 
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
+    }
 }

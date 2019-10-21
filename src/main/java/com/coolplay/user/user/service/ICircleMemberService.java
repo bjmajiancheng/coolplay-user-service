@@ -30,4 +30,5 @@ public interface ICircleMemberService extends IBaseService<CircleMemberModel> {
 
 	public List<CircleMemberModel> selectByFilter(CircleMemberModel circleMemberModel);
 
+	public List<Integer> findByMemberUserId(Integer memberUserId);
 }

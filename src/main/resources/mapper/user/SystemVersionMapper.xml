@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.user.user.dao.SystemVersionMapper">
+
+    <resultMap id="SystemVersion" type="com.coolplay.user.user.model.SystemVersionModel">
+        <result property="id" column="id"/>
+        <result property="appType" column="app_type"/>
+        <result property="version" column="version"/>
+        <result property="isForcedUpdate" column="is_forced_update"/>
+        <result property="appUrl" column="app_url"/>
+        <result property="appPath" column="app_path"/>
+        <result property="ctime" column="c_time"/>
+        <result property="utime" column="u_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,app_type ,version ,is_forced_update ,app_url ,app_path ,c_time ,u_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="appType != null">
+				AND app_type = #{appType}
+			</if>
+			<if test="version != null">
+				AND version = #{version}
+			</if>
+			<if test="appUrl != null">
+				AND app_url = #{appUrl}
+			</if>
+			<if test="appPath != null">
+				AND app_path = #{appPath}
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="SystemVersion">
+	    SELECT <include refid="columns"/> FROM d_system_version 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="SystemVersion" >
+	SELECT <include refid="columns"/>
+	<![CDATA[
+	        FROM d_system_version
+	        WHERE
+		        id = #{id} 
+	    ]]>
+	</select>
+	
+</mapper>
+
