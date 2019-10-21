@@ -1,3 +1,4 @@
+/*
 package com.coolplay.user.core.api;
 
 import com.coolplay.user.common.tools.RedisCache;
@@ -26,9 +27,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+*/
 /**
  * Created by majiancheng on 2019/9/18.
- */
+ *//*
+
 @Controller
 @RequestMapping("/api")
 public class IndexController {
@@ -45,12 +48,7 @@ public class IndexController {
     private CoolplayUserCache coolplayUserCache;
 
 
-    @ResponseBody
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public Result authenticationRequest() {
-        Integer userId = SecurityUtil.getCurrentUserId();
-        coolplayUserCache.removeUserFromCacheByUserId(userId);
-        return ResponseUtil.success();
-    }
+
 
 }
+*/

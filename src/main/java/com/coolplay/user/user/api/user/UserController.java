@@ -9,6 +9,7 @@ import com.coolplay.user.core.model.UserModel;
 import com.coolplay.user.security.api.TokenController;
 import com.coolplay.user.security.constants.SecurityConstant;
 import com.coolplay.user.security.security.AuthenticationRequest;
+import com.coolplay.user.security.security.CoolplayUserCache;
 import com.coolplay.user.security.security.HttpAuthenticationDetails;
 import com.coolplay.user.security.service.IUserService;
 import com.coolplay.user.security.utils.SecurityUtil;
@@ -56,6 +57,9 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private CoolplayUserCache coolplayUserCache;
 
     @RequestMapping(value = "/loginByMobilePhone", method = RequestMethod.POST)
     public ResponseEntity<?> authenticationRequest(HttpServletRequest request,
@@ -241,5 +245,13 @@ public class UserController {
         int updateCnt = userService.updateNotNull(userModel);
 
         return ResponseUtil.success("修改密码成功");
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public Result authenticationRequest() {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        coolplayUserCache.removeUserFromCacheByUserId(userId);
+        return ResponseUtil.success();
     }
 }
