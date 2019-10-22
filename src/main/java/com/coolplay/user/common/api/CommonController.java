@@ -150,7 +150,7 @@ public class CommonController {
      * @param mobilePhone
      */
     @ResponseBody
-    @RequestMapping(value = "/verifyCode/sendVerifyCode", method = RequestMethod.GET)
+    @RequestMapping(value = "/verifyCode/sendVerifyCode", method = RequestMethod.POST)
     public Result sendCaptchaCode(@RequestParam("mobilePhone")String mobilePhone) {
         if(StringUtils.isEmpty(mobilePhone)) {
             return ResponseUtil.error("请输入手机号码");
