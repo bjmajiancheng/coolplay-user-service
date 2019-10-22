@@ -1,12 +1,14 @@
 package com.coolplay.user.common.utils;
 
+import java.util.HashMap;
+
 /**
  * Created by majiancheng on 2019/9/15.
  */
-public class Result<T> {
+public class Result<Object> {
     private int code = 0;
     private String message = "";
-    private T data;
+    private Object data = (Object) new HashMap<String, Object>();
 
     public Result() {
     }
@@ -20,12 +22,12 @@ public class Result<T> {
         this.message = message;
     }
 
-    public Result(int code, T data) {
+    public Result(int code, Object data) {
         this.code = code;
         this.data = data;
     }
 
-    public Result(int code, String message, T data) {
+    public Result(int code, String message, Object data) {
         this.code = code;
         this.message = message;
         this.data = data;
@@ -47,11 +49,11 @@ public class Result<T> {
         this.message = message;
     }
 
-    public T getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public void setData(Object data) {
         this.data = data;
     }
 }

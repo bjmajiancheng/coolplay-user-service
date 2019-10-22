@@ -20,7 +20,6 @@ public class HttpResult<Object> {
     public HttpResult(int code, String token) {
         this.code = code;
         this.token = token;
-        System.out.println(data == null);
     }
 
     public HttpResult(int code, Object data) {
