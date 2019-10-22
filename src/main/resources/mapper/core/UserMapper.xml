@@ -99,6 +99,10 @@
 		        id = #{id} 
 	    ]]>
 	</select>
+
+	<select id="findUserByLoginName" resultMap="User">
+		SELECT <include refid="columns"/> FROM d_user WHERE user_name = #{userName}
+	</select>
 	
 </mapper>
 
