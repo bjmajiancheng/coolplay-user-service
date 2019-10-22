@@ -24,12 +24,12 @@ public interface UserMapper extends Mapper<UserModel> {
 
 	public UserModel findById(@Param("id") Integer id);
 
-	public UserModel findUserByLoginName(String loginName);
+	public UserModel findUserByLoginName(@Param("userName")String loginName);
 
-	public String findLoginNameByUserId(Integer userId);
+	public String findLoginNameByUserId(@Param("userId")Integer userId);
 
-	public void updateLastLoginInfoByUserName(String username, Date date, String remoteAddr);
+	public void updateLastLoginInfoByUserName(@Param("userName")String username, @Param("lastLoginDate")Date date, @Param("remoteAddr")String remoteAddr);
 
-	public UserModel findUserByUserId(int userId);
+	public UserModel findUserByUserId(@Param("userId")int userId);
 
 }

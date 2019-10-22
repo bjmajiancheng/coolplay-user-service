@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.coolplay.user.user.dao.UserMapper">
+<mapper namespace="com.coolplay.user.core.dao.UserMapper">
 
     <resultMap id="User" type="com.coolplay.user.core.model.UserModel">
         <result property="id" column="id"/>
@@ -102,6 +102,18 @@
 
 	<select id="findUserByLoginName" resultMap="User">
 		SELECT <include refid="columns"/> FROM d_user WHERE user_name = #{userName}
+	</select>
+
+	<select id="findLoginNameByUserId" resultType="java.lang.String">
+		SELECT user_name FROM d_user WHERE user_id = #{userId}
+	</select>
+
+	<update id="updateLastLoginInfoByUserName">
+		update d_user set last_login_time=#{lastLoginDate},last_login_ip=#{remoteAddr} where user_name=#{userName}
+	</update>
+
+	<select id="findUserByUserId" resultMap="User">
+		SELECT <include refid="columns"/> FROM d_user WHERE user_id = #{userId}
 	</select>
 	
 </mapper>
