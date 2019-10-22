@@ -210,6 +210,11 @@ public class UserController {
         } else {
             return ResponseUtil.error("验证码不存在或已过期");
         }
+        UserModel userInfo = userService.findUserByMobilePhone(mobilePhone);
+        if(userInfo != null) {
+            return ResponseUtil.error("手机号已使用, 请更换手机号.");
+        }
+
 
         UserModel userModel = new UserModel();
         userModel.setMobilePhone(mobilePhone);
@@ -219,6 +224,7 @@ public class UserController {
         userModel.setAccountNonExpired(true);
         userModel.setCredentialsNonExpired(true);
         userModel.setEnabled(true);
+        userModel.setLastPasswordReset(new Date());
 
         int insertCnt = userService.saveNotNull(userModel);
 
