@@ -168,20 +168,28 @@ public class PostController {
     @RequestMapping(value = "/likePost", method = RequestMethod.POST)
     public Result likePost(@RequestParam("id") Integer id, @RequestParam("type")Integer type) {
 
+
+        UserLikeModel userLikeModel = new UserLikeModel();
+        userLikeModel.setCollectType(2);
+        userLikeModel.setCollectTypeId(id);
+        userLikeModel.setUserId(SecurityUtil.getCurrentUserId());
+        userLikeModel.setIsDel(0);
+
         if(type == 1) {
             int updateCnt = postService.columnPlusNumber(id, "like_cnt", 1);
 
-            UserLikeModel userLikeModel = new UserLikeModel();
-            userLikeModel.setCollectType(2);
-            userLikeModel.setCollectTypeId(id);
-            userLikeModel.setUserId(SecurityUtil.getCurrentUserId());
-            userLikeModel.setIsDel(0);
             if(CollectionUtils.isEmpty(userLikeService.selectByFilter(userLikeModel))) {
                 int saveCnt = userLikeService.saveNotNull(userLikeModel);
             }
         } else if(type == 2){
             int updateCnt = postService.columnPlusNumber(id, "like_cnt", -1);
-            userLikeService.delete();
+            List<UserLikeModel> userLikeModels = userLikeService.selectByFilter(userLikeModel);
+            if(CollectionUtils.isNotEmpty(userLikeModels)) {
+                for(UserLikeModel tmpUserLikeModel : userLikeModels) {
+                    tmpUserLikeModel.setIsDel(1);
+                    userLikeService.updateNotNull(tmpUserLikeModel);
+                }
+            }
         }
 
 
