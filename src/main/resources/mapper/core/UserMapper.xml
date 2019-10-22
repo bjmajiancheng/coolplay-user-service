@@ -115,6 +115,10 @@
 	<select id="findUserByUserId" resultMap="User">
 		SELECT <include refid="columns"/> FROM d_user WHERE user_id = #{userId}
 	</select>
+
+	<select id="findUserByMobilePhone" resultMap="User">
+		SELECT <include refid="columns"/> FROM d_user WHERE mobile_phone = #{mobilePhone}
+	</select>
 	
 </mapper>
 

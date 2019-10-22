@@ -32,4 +32,6 @@ public interface UserMapper extends Mapper<UserModel> {
 
 	public UserModel findUserByUserId(@Param("userId")int userId);
 
+	public UserModel findUserByMobilePhone(@Param("mobilePhone")String mobilePhone);
+
 }

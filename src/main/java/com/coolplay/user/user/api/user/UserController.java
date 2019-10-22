@@ -239,9 +239,15 @@ public class UserController {
             return ResponseUtil.error("验证码不存在或已过期");
         }
 
+        UserModel userInfo = userService.findUserByMobilePhone(mobilePhone);
+        if(userInfo == null) {
+            return ResponseUtil.error("账户不存在");
+        }
+
         UserModel userModel = new UserModel();
-        userModel.setMobilePhone(mobilePhone);
+        userModel.setId(userInfo.getId());
         userModel.setPassword(SecurityUtil.encodeString(password));
+        userModel.setLastPasswordReset(new Date());
         int updateCnt = userService.updateNotNull(userModel);
 
         return ResponseUtil.success("修改密码成功");

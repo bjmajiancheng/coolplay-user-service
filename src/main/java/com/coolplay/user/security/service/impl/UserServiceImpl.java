@@ -103,4 +103,13 @@ public class UserServiceImpl extends BaseService<UserModel> implements IUserServ
 
         return userModelMap;
     }
+
+
+    public UserModel findUserByMobilePhone(String mobilePhone) {
+        if(StringUtils.isEmpty(mobilePhone)) {
+            return null;
+        }
+
+        return userMapper.findUserByMobilePhone(mobilePhone);
+    }
 }
