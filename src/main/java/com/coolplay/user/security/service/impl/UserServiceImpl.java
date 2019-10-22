@@ -112,4 +112,23 @@ public class UserServiceImpl extends BaseService<UserModel> implements IUserServ
 
         return userMapper.findUserByMobilePhone(mobilePhone);
     }
+
+
+    public UserModel findUserByThirdInfo(String thirdId, Integer thirdType) {
+        if(StringUtils.isEmpty(thirdId) || thirdType == null) {
+            return null;
+        }
+        String columnName = "";
+        if(thirdType == 1) {
+            columnName = "wechat_id";
+        } else if(thirdType == 2) {
+            columnName = "qq_id";
+        }
+
+        if(StringUtils.isEmpty(columnName)) {
+            return null;
+        }
+
+        return userMapper.findUserByThirdInfo(thirdId, columnName);
+    }
 }

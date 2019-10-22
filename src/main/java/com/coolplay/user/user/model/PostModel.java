@@ -82,37 +82,37 @@ public class PostModel extends Sortable {
 	private String searchKeyword;
 
 	@Transient
-	private String nickName;
+	private String nickName = "";
 
 	@Transient
-	private String headImage;
+	private String headImage = "";
 
 	@Transient
-	private List<LabelModel> labelList;
+	private List<LabelModel> labelList = new ArrayList<LabelModel>();
 
 	@Transient
 	private String ctimeStr;
 
 	@Transient
-	private List<String> imgUrlList;
+	private List<String> imgUrlList = new ArrayList<String>();
 
 	@Transient
-	private Integer isCollect;//是否收藏, 1:是， 0:否
+	private Integer isCollect = 0;//是否收藏, 1:是， 0:否
 
 	@Transient
-	private Integer isLike;//是否点赞, 1:是, 0:否
+	private Integer isLike = 0;//是否点赞, 1:是, 0:否
 
 	@Transient
-	private List<String> labelNames;//标签名称集合
+	private List<String> labelNames = new ArrayList<String>();//标签名称集合
 
 	@Transient
-	private List<Integer> circleIds;//圈子Ids集合
+	private List<Integer> circleIds = new ArrayList<Integer>();//圈子Ids集合
 
 	@Transient
-	private List<Integer> labelIds;//帖子标签Ids集合
+	private List<Integer> labelIds = new ArrayList<Integer>();//帖子标签Ids集合
 
 	@Transient
-	private List<PostCommentModel> commentList;
+	private List<PostCommentModel> commentList = new ArrayList<PostCommentModel>();
 		
 	public void setId(Integer id) {
 		this.id = id;

@@ -31,8 +31,9 @@ public class HttpResponseUtil {
         return new HttpResult(HttpServletResponse.SC_OK);
     }
 
-    public static HttpResult success(String token) {
-        return new HttpResult(HttpServletResponse.SC_OK, token);
+    public static Result success(String token) {
+        //return new HttpResult(HttpServletResponse.SC_OK, token);
+        return new Result(HttpServletResponse.SC_OK, Collections.singletonMap("token", token));
     }
 
     public static Result data(String massage) {

@@ -20,8 +20,12 @@ public class SecurityUtil {
     }
 
     public static Integer getCurrentUserId() {
+        if(SecurityContextHolder.getContext().getAuthentication() == null) {
+            return 0;
+        }
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Integer userId = null;
+
+        Integer userId = 0;
         if (principal instanceof SecurityUser) userId = ((SecurityUser) principal).getId();
         return userId;
     }
@@ -52,7 +56,7 @@ public class SecurityUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(encodeString("admin"));
+        System.out.println(encodeString("cheng12345."));
     }
 
 }

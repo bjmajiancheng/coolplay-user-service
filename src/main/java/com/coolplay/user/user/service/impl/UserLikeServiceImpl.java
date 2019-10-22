@@ -64,6 +64,22 @@ public class UserLikeServiceImpl extends BaseService<UserLikeModel> implements I
 		Example example = new Example(UserLikeModel.class);
 		Example.Criteria criteria = example.createCriteria();
 
+		if(userLikeModel.getCollectType() != null) {
+			criteria.andEqualTo("collectType", userLikeModel.getCollectType());
+		}
+
+		if(userLikeModel.getCollectTypeId() != null) {
+			criteria.andEqualTo("collectTypeId", userLikeModel.getCollectTypeId());
+		}
+
+		if(userLikeModel.getUserId() != null) {
+			criteria.andEqualTo("userId", userLikeModel.getUserId());
+		}
+
+		if(userLikeModel.getIsDel() != null) {
+			criteria.andEqualTo("isDel", userLikeModel.getIsDel());
+		}
+
 		if(StringUtils.isNotEmpty(userLikeModel.getSortWithOutOrderBy())) {
 			example.setOrderByClause(userLikeModel.getSortWithOutOrderBy());
 		}

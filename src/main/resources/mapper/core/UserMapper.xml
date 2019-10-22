@@ -34,7 +34,7 @@
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
 	    <![CDATA[
-        id ,user_name ,password ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,signature ,last_verify_code ,last_verify_time ,head_image ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,enabled ,last_password_reset ,c_time 
+        id ,user_name ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,signature ,last_verify_code ,last_verify_time ,head_image ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,enabled ,last_password_reset ,c_time
 	    ]]>
 	</sql>
 
@@ -87,7 +87,7 @@
 
 	
 	<select id="find" resultMap="User">
-	    SELECT <include refid="columns"/> FROM d_user 
+	    SELECT <include refid="columns"/> FROM d_user
 		<include refid="findWhere"/>
     </select>
 
@@ -101,7 +101,7 @@
 	</select>
 
 	<select id="findUserByLoginName" resultMap="User">
-		SELECT <include refid="columns"/> FROM d_user WHERE user_name = #{userName}
+		SELECT id ,user_name ,password ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,signature ,last_verify_code ,last_verify_time ,head_image ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,enabled ,last_password_reset ,c_time FROM d_user WHERE user_name = #{userName}
 	</select>
 
 	<select id="findLoginNameByUserId" resultType="java.lang.String">
@@ -117,7 +117,13 @@
 	</select>
 
 	<select id="findUserByMobilePhone" resultMap="User">
-		SELECT <include refid="columns"/> FROM d_user WHERE mobile_phone = #{mobilePhone}
+		SELECT id ,user_name ,password ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,signature ,last_verify_code ,last_verify_time ,head_image ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,enabled ,last_password_reset ,c_time FROM d_user
+		WHERE mobile_phone = #{mobilePhone}
+	</select>
+
+	<select id="findUserByThirdInfo" resultMap="User">
+		SELECT id ,user_name ,password ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,signature ,last_verify_code ,last_verify_time ,head_image ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,enabled ,last_password_reset ,c_time FROM d_user
+		WHERE ${columnName} = #{thirdId}
 	</select>
 	
 </mapper>

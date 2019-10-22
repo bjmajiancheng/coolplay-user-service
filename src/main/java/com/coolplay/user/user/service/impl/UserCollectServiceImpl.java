@@ -64,6 +64,22 @@ public class UserCollectServiceImpl extends BaseService<UserCollectModel> implem
 		Example example = new Example(UserCollectModel.class);
 		Example.Criteria criteria = example.createCriteria();
 
+		if(userCollectModel.getCollectType() != null) {
+			criteria.andEqualTo("collectType", userCollectModel.getCollectType());
+		}
+
+		if(userCollectModel.getCollectTypeId() != null) {
+			criteria.andEqualTo("collectTypeId", userCollectModel.getCollectTypeId());
+		}
+
+		if(userCollectModel.getUserId() != null) {
+			criteria.andEqualTo("userId", userCollectModel.getUserId());
+		}
+
+		if(userCollectModel.getIsDel() != null) {
+			criteria.andEqualTo("isDel", userCollectModel.getIsDel());
+		}
+
 		if(StringUtils.isNotEmpty(userCollectModel.getSortWithOutOrderBy())) {
 			example.setOrderByClause(userCollectModel.getSortWithOutOrderBy());
 		}

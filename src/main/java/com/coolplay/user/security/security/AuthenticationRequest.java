@@ -16,6 +16,10 @@ public class AuthenticationRequest {
 
     private String verifyCode;
 
+    private String thirdId;
+
+    private Integer thirdType;
+
     public AuthenticationRequest() {
     }
 
@@ -71,5 +75,21 @@ public class AuthenticationRequest {
 
     public void setVerifyCode(String verifyCode) {
         this.verifyCode = verifyCode;
+    }
+
+    public String getThirdId() {
+        return thirdId;
+    }
+
+    public void setThirdId(String thirdId) {
+        this.thirdId = thirdId;
+    }
+
+    public Integer getThirdType() {
+        return thirdType;
+    }
+
+    public void setThirdType(Integer thirdType) {
+        this.thirdType = thirdType;
     }
 }

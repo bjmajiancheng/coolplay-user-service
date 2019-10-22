@@ -68,7 +68,7 @@ public class PostServiceImpl extends BaseService<PostModel> implements IPostServ
 			criteria.andLike("postTitle", "%"+ postModel.getSearchKeyword() +"%");
 		}
 
-		criteria.andEqualTo("idDel", 0);
+		criteria.andEqualTo("isDel", 0);
 
 		if(StringUtils.isNotEmpty(postModel.getSortWithOutOrderBy())) {
 			example.setOrderByClause(postModel.getSortWithOutOrderBy());

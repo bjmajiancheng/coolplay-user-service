@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.user.user.dao.UserPassMappingMapper">
+
+    <resultMap id="UserPassMapping" type="com.coolplay.user.user.model.UserPassMappingModel">
+        <result property="id" column="id"/>
+        <result property="password" column="password"/>
+        <result property="passwordEncode" column="password_encode"/>
+        <result property="ctime" column="c_time"/>
+        <result property="utime" column="u_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,password ,password_encode ,c_time ,u_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+			<if test="password != null">
+				AND password = #{password}
+			</if>
+			<if test="passwordEncode != null">
+				AND password_encode = #{passwordEncode}
+			</if>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="UserPassMapping">
+	    SELECT <include refid="columns"/> FROM d_user_pass_mapping 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="UserPassMapping" >
+	SELECT <include refid="columns"/>
+	<![CDATA[
+	        FROM d_user_pass_mapping
+	        WHERE
+		        id = #{id} 
+	    ]]>
+	</select>
+
+	<select id="findByPassword" resultMap="UserPassMapping">
+		SELECT <include refid="columns"/> FROM d_user_pass_mapping WHERE password = #{password}
+	</select>
+
+	<select id="findByPasswordEncode" resultMap="UserPassMapping">
+		SELECT <include refid="columns"/> FROM d_user_pass_mapping WHERE password_encode = #{passwordEncode}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO d_user_pass_mapping(`password`, `password_encode`) values(#{password}, #{passwordEncode});
+	</insert>
+	
+</mapper>
+

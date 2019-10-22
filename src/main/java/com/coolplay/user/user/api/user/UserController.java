@@ -1,10 +1,8 @@
 package com.coolplay.user.user.api.user;
 
+import com.coolplay.user.common.constant.CommonConstant;
 import com.coolplay.user.common.tools.RedisCache;
-import com.coolplay.user.common.utils.HttpResponseUtil;
-import com.coolplay.user.common.utils.RequestUtil;
-import com.coolplay.user.common.utils.ResponseUtil;
-import com.coolplay.user.common.utils.Result;
+import com.coolplay.user.common.utils.*;
 import com.coolplay.user.core.model.UserModel;
 import com.coolplay.user.security.api.TokenController;
 import com.coolplay.user.security.constants.SecurityConstant;
@@ -15,6 +13,8 @@ import com.coolplay.user.security.service.IUserService;
 import com.coolplay.user.security.utils.SecurityUtil;
 import com.coolplay.user.security.utils.TokenUtils;
 import com.coolplay.user.user.model.CompanyLogModel;
+import com.coolplay.user.user.model.UserPassMappingModel;
+import com.coolplay.user.user.service.IUserPassMappingService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by majiancheng on 2019/10/16.
@@ -61,6 +64,9 @@ public class UserController {
     @Autowired
     private CoolplayUserCache coolplayUserCache;
 
+    @Autowired
+    private IUserPassMappingService userPassMappingService;
+
     @RequestMapping(value = "/loginByMobilePhone", method = RequestMethod.POST)
     public ResponseEntity<?> authenticationRequest(HttpServletRequest request,
             @RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {
@@ -76,8 +82,14 @@ public class UserController {
             return ResponseEntity.ok(HttpResponseUtil.error("验证码不存在或已过期"));
         }
         redisCache.del(authenticationRequest.getVkey());*/
+
+        UserModel userModel = userService.findUserByMobilePhone(authenticationRequest.getMobilePhone());
+        if(userModel == null) {
+            return ResponseEntity.ok(HttpResponseUtil.error("用户不存在"));
+        }
+
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                authenticationRequest.getMobilePhone(), authenticationRequest.getPassword());
+                userModel.getUserName(), authenticationRequest.getPassword());
         usernamePasswordAuthenticationToken.setDetails(new HttpAuthenticationDetails());
 
         Authentication authentication = null;
@@ -95,13 +107,13 @@ public class UserController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = (UserDetails) redisCache
-                .get(SecurityConstant.USER_CACHE_PREFIX + authenticationRequest.getMobilePhone());
+                .get(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName());
         if (userDetails == null)  {
-            userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getMobilePhone());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + authenticationRequest.getMobilePhone(), userDetails);
+            userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
+            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails);
         }
         String token = this.tokenUtils.generateToken(userDetails);
-        userService.updateLastLoginInfoByUserName(authenticationRequest.getMobilePhone(), new Date(),
+        userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                 RequestUtil.getIpAddress(request));
 
         return ResponseEntity.ok(HttpResponseUtil.success(token));
@@ -121,8 +133,18 @@ public class UserController {
             return ResponseEntity.ok(HttpResponseUtil.error("验证码不存在或已过期"));
         }
 
+        UserModel userModel = userService.findUserByMobilePhone(authenticationRequest.getMobilePhone());
+        if(userModel == null) {
+            return ResponseEntity.ok(HttpResponseUtil.error("用户不存在"));
+        }
+
+        UserPassMappingModel userPassMappingModel = userPassMappingService.findByPasswordEncode(userModel.getPassword());
+        if(userPassMappingModel == null) {
+            return ResponseEntity.ok(HttpResponseUtil.error("系统异常, 请稍后重试"));
+        }
+
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                authenticationRequest.getMobilePhone(), authenticationRequest.getPassword());
+                userModel.getUserName(), userPassMappingModel.getPassword());
         usernamePasswordAuthenticationToken.setDetails(new HttpAuthenticationDetails());
 
         Authentication authentication = null;
@@ -140,13 +162,13 @@ public class UserController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = (UserDetails) redisCache
-                .get(SecurityConstant.USER_CACHE_PREFIX + authenticationRequest.getMobilePhone());
+                .get(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName());
         if (userDetails == null)  {
-            userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getMobilePhone());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + authenticationRequest.getMobilePhone(), userDetails);
+            userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
+            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails);
         }
         String token = this.tokenUtils.generateToken(userDetails);
-        userService.updateLastLoginInfoByUserName(authenticationRequest.getMobilePhone(), new Date(),
+        userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                 RequestUtil.getIpAddress(request));
 
         return ResponseEntity.ok(HttpResponseUtil.success(token));
@@ -155,19 +177,50 @@ public class UserController {
     @RequestMapping(value = "/loginByThirdType", method = RequestMethod.POST)
     public ResponseEntity<?> authenticationRequestByThirdType(HttpServletRequest request,
             @RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {
-        if (StringUtils.isEmpty(authenticationRequest.getVerifyCode())) {
-            return ResponseEntity.ok(HttpResponseUtil.error("请输入验证码"));
+
+        if(StringUtils.isEmpty(authenticationRequest.getThirdId()) || authenticationRequest.getThirdType() == null) {
+            return ResponseEntity.ok(HttpResponseUtil.error("请输入第三方登录信息"));
         }
-        if (StringUtils.isNotEmpty((String) redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + authenticationRequest.getMobilePhone()))) {
-            if (!((String) redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + authenticationRequest.getMobilePhone())).equals(authenticationRequest.getVerifyCode())) {
-                return ResponseEntity.ok(HttpResponseUtil.error("验证码不正确"));
+
+        if(!CommonConstant.ALLOW_THIRD_TYPE.contains(authenticationRequest.getThirdType())) {
+            return ResponseEntity.ok(HttpResponseUtil.error("第三方登录信息输入有误"));
+        }
+
+        UserModel userModel = userService.findUserByThirdInfo(authenticationRequest.getThirdId(), authenticationRequest.getThirdType());
+        if(userModel == null) {
+            userModel = new UserModel();
+            String uuid = UUIDUtils.generUUID();
+            userModel.setMobilePhone(uuid);
+            userModel.setUserName(uuid);
+            userModel.setMobilePhone(uuid);
+            String passwordEncode = SecurityUtil.encodeString(uuid);
+            userModel.setPassword(passwordEncode);
+            if(authenticationRequest.getThirdType() == 1) {
+                userModel.setWechatId(authenticationRequest.getThirdId());
+            } else if(authenticationRequest.getThirdType() == 2) {
+                userModel.setQqId(authenticationRequest.getThirdId());
             }
-        } else {
-            return ResponseEntity.ok(HttpResponseUtil.error("验证码不存在或已过期"));
+            userModel.setAccountNonLocked(true);
+            userModel.setAccountNonExpired(true);
+            userModel.setCredentialsNonExpired(true);
+            userModel.setEnabled(true);
+            userModel.setLastPasswordReset(new Date());
+
+            int insertCnt = userService.saveNotNull(userModel);
+
+            UserPassMappingModel userPassMappingModel = new UserPassMappingModel();
+            userPassMappingModel.setPassword(uuid);
+            userPassMappingModel.setPasswordEncode(passwordEncode);
+            userPassMappingService.insert(userPassMappingModel);
+        }
+
+        UserPassMappingModel userPassMappingModel = userPassMappingService.findByPasswordEncode(userModel.getPassword());
+        if(userPassMappingModel == null) {
+            return ResponseEntity.ok(HttpResponseUtil.error("系统异常, 请稍后重试"));
         }
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                authenticationRequest.getMobilePhone(), authenticationRequest.getPassword());
+                userModel.getUserName(), userPassMappingModel.getPassword());
         usernamePasswordAuthenticationToken.setDetails(new HttpAuthenticationDetails());
 
         Authentication authentication = null;
@@ -185,13 +238,13 @@ public class UserController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = (UserDetails) redisCache
-                .get(SecurityConstant.USER_CACHE_PREFIX + authenticationRequest.getMobilePhone());
+                .get(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName());
         if (userDetails == null)  {
-            userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getMobilePhone());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + authenticationRequest.getMobilePhone(), userDetails);
+            userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
+            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails);
         }
         String token = this.tokenUtils.generateToken(userDetails);
-        userService.updateLastLoginInfoByUserName(authenticationRequest.getMobilePhone(), new Date(),
+        userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                 RequestUtil.getIpAddress(request));
 
         return ResponseEntity.ok(HttpResponseUtil.success(token));
@@ -218,7 +271,8 @@ public class UserController {
 
         UserModel userModel = new UserModel();
         userModel.setMobilePhone(mobilePhone);
-        userModel.setPassword(SecurityUtil.encodeString(password));
+        String passwordEncode = SecurityUtil.encodeString(password);
+        userModel.setPassword(passwordEncode);
         userModel.setUserName(mobilePhone);
         userModel.setAccountNonLocked(true);
         userModel.setAccountNonExpired(true);
@@ -227,6 +281,11 @@ public class UserController {
         userModel.setLastPasswordReset(new Date());
 
         int insertCnt = userService.saveNotNull(userModel);
+
+        UserPassMappingModel userPassMappingModel = new UserPassMappingModel();
+        userPassMappingModel.setPassword(password);
+        userPassMappingModel.setPasswordEncode(passwordEncode);
+        userPassMappingService.insert(userPassMappingModel);
 
         return ResponseUtil.success("注册成功");
     }
@@ -252,9 +311,15 @@ public class UserController {
 
         UserModel userModel = new UserModel();
         userModel.setId(userInfo.getId());
-        userModel.setPassword(SecurityUtil.encodeString(password));
+        String passwordEncode = SecurityUtil.encodeString(password);
+        userModel.setPassword(passwordEncode);
         userModel.setLastPasswordReset(new Date());
         int updateCnt = userService.updateNotNull(userModel);
+
+        UserPassMappingModel userPassMappingModel = new UserPassMappingModel();
+        userPassMappingModel.setPassword(password);
+        userPassMappingModel.setPasswordEncode(passwordEncode);
+        userPassMappingService.insert(userPassMappingModel);
 
         return ResponseUtil.success("修改密码成功");
     }

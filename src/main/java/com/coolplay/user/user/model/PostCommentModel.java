@@ -11,10 +11,7 @@ import com.coolplay.user.common.handler.Sortable;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.persistence.*;
 
 /**
@@ -55,13 +52,13 @@ public class PostCommentModel extends Sortable {
 	//columns END
 
 	@Transient
-	private List<PostCommentModel> commentList;
+	private List<PostCommentModel> commentList = new ArrayList<PostCommentModel>();
 
 	@Transient
-	private String commentNickName;
+	private String commentNickName = "";
 
 	@Transient
-	private String commentHeadImage;
+	private String commentHeadImage = "";
 		
 	public void setId(Integer id) {
 		this.id = id;

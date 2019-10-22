@@ -55,7 +55,7 @@
 	<select id="findByPostIds" resultMap="Label">
 		SELECT l.id, l.label_name, pl.post_id
 		FROM d_label l
-		INNER JOIN d_post_label pl ON l.label_id = pl.id
+		INNER JOIN d_post_label pl ON l.id = pl.label_id
 		WHERE l.is_del = 0 AND status = 1 AND pl.post_id IN
 		<foreach collection="postIds" item="item" open="(" separator="," close=")">
 			#{item}

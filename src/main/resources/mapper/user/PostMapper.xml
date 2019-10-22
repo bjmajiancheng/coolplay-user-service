@@ -67,7 +67,7 @@
 	</select>
 
 	<update id="columnPlusNumber">
-		UPDATE d_post SET `#{columnName}` = `#{columnName}` + #{num} WHERE id = #{id}
+		UPDATE d_post SET ${columnName} = ${columnName} + #{num} WHERE id = #{id}
 	</update>
 	
 </mapper>

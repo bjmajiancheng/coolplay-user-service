@@ -107,19 +107,22 @@ public class PostController {
     @RequestMapping(value = "/collectPost", method = RequestMethod.POST)
     public Result collectPost(@RequestParam("id") Integer id) {
 
+        int updateCnt = postService.columnPlusNumber(id, "collect_cnt", 1);
+
         UserCollectModel userCollectModel = new UserCollectModel();
         userCollectModel.setCollectType(2);
         userCollectModel.setCollectTypeId(id);
         userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
         userCollectModel.setIsDel(0);
 
-        int saveCnt = userCollectService.saveNotNull(userCollectModel);
 
-        int updateCnt = postService.columnPlusNumber(id, "collect_cnt", 1);
+        if(CollectionUtils.isEmpty(userCollectService.selectByFilter(userCollectModel))) {
+            int saveCnt = userCollectService.saveNotNull(userCollectModel);
+        }
 
         PostModel postModel = postService.findById(id);
 
-        return ResponseUtil.success(postModel.getCollectCnt());
+        return ResponseUtil.success(Collections.singletonMap("commentCnt", postModel.getCollectCnt()));
     }
 
     @ResponseBody
@@ -163,18 +166,29 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(value = "/likePost", method = RequestMethod.POST)
-    public Result likePost(@RequestParam("id") Integer id) {
-        UserLikeModel userLikeModel = new UserLikeModel();
-        userLikeModel.setCollectType(2);
-        userLikeModel.setCollectTypeId(id);
-        userLikeModel.setUserId(SecurityUtil.getCurrentUserId());
-        userLikeModel.setIsDel(0);
-        int saveCnt = userLikeService.saveNotNull(userLikeModel);
+    public Result likePost(@RequestParam("id") Integer id, @RequestParam("type")Integer type) {
 
-        int updateCnt = postService.columnPlusNumber(id, "like_cnt", 1);
+        if(type == 1) {
+            int updateCnt = postService.columnPlusNumber(id, "like_cnt", 1);
+
+            UserLikeModel userLikeModel = new UserLikeModel();
+            userLikeModel.setCollectType(2);
+            userLikeModel.setCollectTypeId(id);
+            userLikeModel.setUserId(SecurityUtil.getCurrentUserId());
+            userLikeModel.setIsDel(0);
+            if(CollectionUtils.isEmpty(userLikeService.selectByFilter(userLikeModel))) {
+                int saveCnt = userLikeService.saveNotNull(userLikeModel);
+            }
+        } else if(type == 2){
+            int updateCnt = postService.columnPlusNumber(id, "like_cnt", -1);
+            userLikeService.delete();
+        }
+
+
+
 
         PostModel postModel = postService.findById(id);
-        return ResponseUtil.success(postModel.getLikeCnt());
+        return ResponseUtil.success(Collections.singletonMap("likeCnt", postModel.getLikeCnt()));
     }
 
     /**
