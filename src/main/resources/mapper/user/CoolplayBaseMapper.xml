@@ -30,7 +30,8 @@
         <result property="contactPhone" column="contact_phone"/>
         <result property="contactEmail" column="contact_email"/>
         <result property="contactAddress" column="contact_address"/>
-        <result property="readCnt" column="read_cnt"/>
+		<result property="backgroudImg" column="backgroud_img"/>
+		<result property="readCnt" column="read_cnt"/>
         <result property="isClose" column="is_close"/>
         <result property="isDel" column="is_del"/>
         <result property="ctime" column="c_time"/>
@@ -39,7 +40,7 @@
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
 	    <![CDATA[
-        id ,base_name ,base_full_name ,base_desc ,base_type ,capacity_cnt ,status ,pos_x ,pos_y ,company_id ,company_user_id ,departures_gps ,departures_height ,land_gps ,land_height ,fly_direction ,monitor_video_url ,height ,major_project ,open_time ,contact_name ,contact_phone ,contact_email ,contact_address ,read_cnt ,is_close ,is_del ,c_time 
+        id ,base_name ,base_full_name ,base_desc ,base_type ,capacity_cnt ,status ,pos_x ,pos_y ,company_id ,company_user_id ,departures_gps ,departures_height ,land_gps ,land_height ,fly_direction ,monitor_video_url ,height ,major_project ,open_time ,contact_name ,contact_phone ,contact_email ,contact_address ,backgroud_img, read_cnt ,is_close ,is_del ,c_time
 	    ]]>
 	</sql>
 

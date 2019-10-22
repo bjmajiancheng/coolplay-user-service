@@ -97,6 +97,9 @@ public class CoolplayBaseModel extends Sortable {
 	@Column(name = "contact_address")
 	private String contactAddress;//"联系人地址"
 
+	@Column(name = "backgroud_img")
+	private String backgroudImg;//背景图片
+
 	@Column(name = "read_cnt")
 	private Integer readCnt;//"浏览次数"
 
@@ -310,7 +313,15 @@ public class CoolplayBaseModel extends Sortable {
 	public String getContactAddress() {
 		return this.contactAddress;
 	}
-		
+
+	public String getBackgroudImg() {
+		return backgroudImg;
+	}
+
+	public void setBackgroudImg(String backgroudImg) {
+		this.backgroudImg = backgroudImg;
+	}
+
 	public void setReadCnt(Integer readCnt) {
 		this.readCnt = readCnt;
 	}
