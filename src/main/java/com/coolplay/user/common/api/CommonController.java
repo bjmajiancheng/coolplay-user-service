@@ -2,6 +2,7 @@ package com.coolplay.user.common.api;
 
 import com.coolplay.user.common.service.IAttachmentService;
 import com.coolplay.user.common.tools.RedisCache;
+import com.coolplay.user.common.utils.CommonUtil;
 import com.coolplay.user.common.utils.MessageUtil;
 import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
@@ -147,11 +148,12 @@ public class CommonController {
     /**
      * 发送验证码
      *
-     * @param mobilePhone
+     * @param param
      */
     @ResponseBody
     @RequestMapping(value = "/verifyCode/sendVerifyCode", method = RequestMethod.POST)
-    public Result sendCaptchaCode(@RequestParam("mobilePhone")String mobilePhone) {
+    public Result sendCaptchaCode(Map<String, Object> param) {
+        String mobilePhone = CommonUtil.defaultString(param.get("mobilePhone"), "");
         if(StringUtils.isEmpty(mobilePhone)) {
             return ResponseUtil.error("请输入手机号码");
         }
