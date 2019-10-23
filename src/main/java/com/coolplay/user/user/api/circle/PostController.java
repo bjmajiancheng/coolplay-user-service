@@ -12,10 +12,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -225,7 +222,7 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(value = "/savePost", method = RequestMethod.POST)
-    public Result savePost(PostModel postModel) {
+    public Result savePost(@RequestBody PostModel postModel) {
 
         if (CollectionUtils.isNotEmpty(postModel.getImgUrlList())) {
             StringBuffer sb = new StringBuffer();
@@ -282,6 +279,8 @@ public class PostController {
                 }
 
                 postModel.setLabelNames(labelNames);
+
+                postModel.setLabelList(labelModels);
             }
 
             List<Integer> userLikePostIds = userLikeService
@@ -317,7 +316,7 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(value = "/commentPost", method = RequestMethod.POST)
-    public Result commentPost(PostCommentModel postCommentModel) {
+    public Result commentPost(@RequestBody PostCommentModel postCommentModel) {
         postCommentModel.setCommentUserId(SecurityUtil.getCurrentUserId());
         postCommentService.saveNotNull(postCommentModel);
 

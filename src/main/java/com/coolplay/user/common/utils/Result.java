@@ -7,7 +7,7 @@ import java.util.HashMap;
  */
 public class Result<Object> {
     private int code = 0;
-    private String message = "";
+    private String message = "操作成功";
     private Object data = (Object) new HashMap<String, Object>();
 
     public Result() {
