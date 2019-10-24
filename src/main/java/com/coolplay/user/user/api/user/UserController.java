@@ -305,6 +305,7 @@ public class UserController {
         String passwordEncode = SecurityUtil.encodeString(password);
         userModel.setPassword(passwordEncode);
         userModel.setUserName(mobilePhone);
+        userModel.setNickName(mobilePhone.substring(3, 7));
         userModel.setAccountNonLocked(true);
         userModel.setAccountNonExpired(true);
         userModel.setCredentialsNonExpired(true);

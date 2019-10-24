@@ -13,5 +13,6 @@ public class UUIDUtils {
 
     public static void main(String[] args) {
         System.out.println(UUIDUtils.generUUID().length());
+        System.out.println("13717689765".substring(3, 7));
     }
 }
