@@ -91,4 +91,31 @@ public class LabelServiceImpl extends BaseService<LabelModel> implements ILabelS
 
 		return labelMap;
 	}
+
+
+	@Override
+	public Map<Integer, List<LabelModel>> findMapByCircleIds(List<Integer> circleIds) {
+		if(CollectionUtils.isEmpty(circleIds)) {
+			return Collections.emptyMap();
+		}
+
+		List<LabelModel> labelModels = labelMapper.findByCircleIds(circleIds);
+		if(CollectionUtils.isEmpty(labelModels)) {
+			return Collections.emptyMap();
+		}
+
+		Map<Integer, List<LabelModel>> labelMap = new HashMap<Integer, List<LabelModel>>();
+
+		for(LabelModel labelModel : labelModels) {
+			List<LabelModel> tmpLabelModels = labelMap.get(labelModel.getCircleId());
+			if(CollectionUtils.isEmpty(tmpLabelModels)) {
+				tmpLabelModels = new ArrayList<LabelModel>();
+			}
+			tmpLabelModels.add(labelModel);
+
+			labelMap.put(labelModel.getCircleId(), tmpLabelModels);
+		}
+
+		return labelMap;
+	}
 }

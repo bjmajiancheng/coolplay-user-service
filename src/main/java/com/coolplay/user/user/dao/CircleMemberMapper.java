@@ -25,4 +25,10 @@ public interface CircleMemberMapper extends Mapper<CircleMemberModel> {
 	public CircleMemberModel findById(@Param("id") Integer id);
 
 	public List<Integer> findByMemberUserId(@Param("memberUserId")Integer memberUserId);
+
+	public List<CircleMemberModel> findByCircleIds(@Param("circleIds")List<Integer> circleIds);
+
+	public List<Integer> findCircleIdsByUserIdAndCircleIds(@Param("currUserId")Integer currUserId, @Param("circleIds")List<Integer> circleIds);
+
+	public List<Map<Integer, Integer>> findReviewMemberCntByCircleIds(@Param("circleIds")List<Integer> circleIds);
 }

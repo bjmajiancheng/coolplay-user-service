@@ -7,7 +7,9 @@
 
 package com.coolplay.user.user.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 import com.coolplay.user.common.handler.Sortable;
 
@@ -83,6 +85,27 @@ public class CircleModel extends Sortable {
 	private Date ctime;//"创建时间"
 
 	//columns END
+
+	@Transient
+	private String queryStr;
+
+	@Transient
+	private String nickName = "";//圈主昵称
+
+	@Transient
+	private String headImage = "";//圈主头图
+
+	@Transient
+	private Integer isMember = 0;//是圈子成员
+
+	@Transient
+	private List<LabelModel> labelList = new ArrayList<LabelModel>();//标签集合
+
+	@Transient
+	private Integer reviewMemberCnt = 0;//待审批人数
+
+	@Transient
+	private Integer isCollect = 0;//是否收藏
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -244,5 +267,60 @@ public class CircleModel extends Sortable {
 		return this.ctime;
 	}
 
+	public String getQueryStr() {
+		return queryStr;
+	}
+
+	public void setQueryStr(String queryStr) {
+		this.queryStr = queryStr;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getHeadImage() {
+		return headImage;
+	}
+
+	public void setHeadImage(String headImage) {
+		this.headImage = headImage;
+	}
+
+	public Integer getIsMember() {
+		return isMember;
+	}
+
+	public void setIsMember(Integer isMember) {
+		this.isMember = isMember;
+	}
+
+	public List<LabelModel> getLabelList() {
+		return labelList;
+	}
+
+	public void setLabelList(List<LabelModel> labelList) {
+		this.labelList = labelList;
+	}
+
+	public Integer getReviewMemberCnt() {
+		return reviewMemberCnt;
+	}
+
+	public void setReviewMemberCnt(Integer reviewMemberCnt) {
+		this.reviewMemberCnt = reviewMemberCnt;
+	}
+
+	public Integer getIsCollect() {
+		return isCollect;
+	}
+
+	public void setIsCollect(Integer isCollect) {
+		this.isCollect = isCollect;
+	}
 }
 

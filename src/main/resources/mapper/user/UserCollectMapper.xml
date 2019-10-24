@@ -48,6 +48,22 @@
 			#{item}
 		</foreach>
 	</select>
-	
+
+	<select id="findCircleIdsByUserIdAndCircleIds" resultType="java.lang.Integer">
+		SELECT collect_type_id FROM d_user_collect
+		WHERE user_id = #{userId} AND collect_type = 1 AND is_del= 0 AND collect_type_id IN
+		<foreach collection="circleIds" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="findCntByCollectTypeAndCollectTypeId" resultType="java.lang.Integer">
+		SELECT COUNT(1) AS cnt FROM d_user_collect
+		WHERE collect_type = #{collectType} AND collect_type_id = #{collectTypeId} AND is_del = 0
+	</select>
+
+	<delete id="delByUserIdAndCollectTypeInfo">
+		DELETE FROM d_user_collect WHERE collect_type = #{collectType} AND collect_type_id = #{collectTypeId} AND user_id = #{userId}
+	</delete>
 </mapper>
 

@@ -48,6 +48,9 @@ public class LabelModel extends Sortable {
 
 	@Transient
 	private Integer postId;
+
+	@Transient
+	private Integer circleId;
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -111,6 +114,14 @@ public class LabelModel extends Sortable {
 
 	public void setPostId(Integer postId) {
 		this.postId = postId;
+	}
+
+	public Integer getCircleId() {
+		return circleId;
+	}
+
+	public void setCircleId(Integer circleId) {
+		this.circleId = circleId;
 	}
 }
 

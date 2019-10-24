@@ -32,5 +32,40 @@ public interface IUserCollectService extends IBaseService<UserCollectModel> {
 
 	public List<UserCollectModel> selectByFilter(UserCollectModel userCollectModel);
 
+	/**
+	 * 根据用户ID和帖子集合查看 用户收藏的帖子
+	 *
+	 * @param userId
+	 * @param postIds
+     * @return
+     */
 	public List<Integer> findPostIdsByUserIdAndPostIds(Integer userId, List<Integer> postIds);
+
+	/**
+	 * 根据用户ID和圈子集合查看 用户收藏的圈子
+	 *
+	 * @param userId
+	 * @param circleIds
+	 * @return
+	 */
+	public List<Integer> findCircleIdsByUserIdAndCircleIds(Integer userId, List<Integer> circleIds);
+
+	/**
+	 * 根据收藏类型和收藏类型业务ID 获取收藏数
+	 *
+	 * @param collectType
+	 * @param collectTypeId
+     * @return
+     */
+	public Integer findCntByCollectTypeAndCollectTypeId(Integer collectType, Integer collectTypeId);
+
+	/**
+	 * 根据用户ID和收藏类型信息删除用户收藏信息
+	 *
+	 * @param userId
+	 * @param collectType
+	 * @param collectTypeId
+     * @return
+     */
+	public Integer delByUserIdAndCollectTypeInfo(Integer userId, Integer collectType, Integer collectTypeId);
 }

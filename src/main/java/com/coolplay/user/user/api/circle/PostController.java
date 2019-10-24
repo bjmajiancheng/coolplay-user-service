@@ -5,6 +5,7 @@ import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
 import com.coolplay.user.core.model.UserModel;
 import com.coolplay.user.security.security.SecurityUser;
+import com.coolplay.user.security.service.IUserService;
 import com.coolplay.user.security.utils.SecurityUtil;
 import com.coolplay.user.user.model.*;
 import com.coolplay.user.user.service.*;
@@ -75,7 +76,7 @@ public class PostController {
             }
 
             Map<Integer, List<LabelModel>> labelMap = labelService.findMapByPostIds(postIds);
-            Map<Integer, UserModel> userMap = userService.findMapByUserIds(userIds);
+            Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(userIds);
             List<Integer> userLikePostIds = userLikeService
                     .findPostIdsByUserIdAndPostIds(SecurityUtil.getCurrentUserId(), postIds);
             List<Integer> userCollectPostIds = userCollectService
@@ -119,7 +120,7 @@ public class PostController {
 
         PostModel postModel = postService.findById(id);
 
-        return ResponseUtil.success(Collections.singletonMap("commentCnt", postModel.getCollectCnt()));
+        return ResponseUtil.success(Collections.singletonMap("collectCnt", postModel.getCollectCnt()));
     }
 
     @ResponseBody

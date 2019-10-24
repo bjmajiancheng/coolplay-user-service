@@ -60,6 +60,26 @@ public class CircleServiceImpl extends BaseService<CircleModel> implements ICirc
         Example example = new Example(CircleModel.class);
         Example.Criteria criteria = example.createCriteria();
 
+        if(StringUtils.isNotEmpty(circleModel.getQueryStr())) {
+            criteria.andLike("circleName", "%"+ circleModel.getQueryStr() +"%");
+        }
+
+        if(circleModel.getDisabled() != null) {
+            criteria.andEqualTo("disabled", circleModel.getDisabled());
+        }
+
+        if(circleModel.getReviewStatus() != null) {
+            criteria.andEqualTo("reviewStatus", circleModel.getReviewStatus());
+        }
+
+        if(circleModel.getStatus() != null) {
+            criteria.andEqualTo("status", circleModel.getStatus());
+        }
+
+        if(circleModel.getCircleType() != null) {
+            criteria.andEqualTo("circleType", circleModel.getCircleType());
+        }
+
         if (StringUtils.isNotEmpty(circleModel.getSortWithOutOrderBy())) {
             example.setOrderByClause(circleModel.getSortWithOutOrderBy());
         }

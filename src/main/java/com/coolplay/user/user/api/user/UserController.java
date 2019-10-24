@@ -174,6 +174,14 @@ public class UserController {
         return ResponseEntity.ok(HttpResponseUtil.success(token));
     }
 
+    /**
+     * 根据第三方信息登录
+     *
+     * @param request
+     * @param authenticationRequest
+     * @return
+     * @throws AuthenticationException
+     */
     @RequestMapping(value = "/loginByThirdType", method = RequestMethod.POST)
     public ResponseEntity<?> authenticationRequestByThirdType(HttpServletRequest request,
             @RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {
@@ -250,6 +258,14 @@ public class UserController {
         return ResponseEntity.ok(HttpResponseUtil.success(token));
     }
 
+    /**
+     * 用户注册
+     *
+     * @param mobilePhone
+     * @param verifyCode
+     * @param password
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public Result register(@RequestParam("mobilePhone") String mobilePhone, @RequestParam("verifyCode") String verifyCode, @RequestParam("password") String password) {
@@ -290,6 +306,14 @@ public class UserController {
         return ResponseUtil.success("注册成功");
     }
 
+    /**
+     * 重置密码
+     *
+     * @param mobilePhone
+     * @param verifyCode
+     * @param password
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
     public Result resetPassword(@RequestParam("mobilePhone") String mobilePhone, @RequestParam("verifyCode") String verifyCode, @RequestParam("password") String password) {
@@ -324,9 +348,56 @@ public class UserController {
         return ResponseUtil.success("修改密码成功");
     }
 
+    /**
+     * 重置密码
+     *
+     * @param mobilePhone
+     * @param verifyCode
+     * @param password
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
+    public Result updatePassword(@RequestParam("mobilePhone") String mobilePhone, @RequestParam("verifyCode") String verifyCode, @RequestParam("password") String password) {
+        if (StringUtils.isEmpty(verifyCode)) {
+            return ResponseUtil.error("请输入验证码");
+        }
+        if (StringUtils.isNotEmpty((String) redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + mobilePhone))) {
+            if (!((String) redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + mobilePhone)).equals(verifyCode)) {
+                return ResponseUtil.error("验证码不正确");
+            }
+        } else {
+            return ResponseUtil.error("验证码不存在或已过期");
+        }
+
+        UserModel userInfo = userService.findUserByMobilePhone(mobilePhone);
+        if(userInfo == null) {
+            return ResponseUtil.error("账户不存在");
+        }
+
+        UserModel userModel = new UserModel();
+        userModel.setId(userInfo.getId());
+        String passwordEncode = SecurityUtil.encodeString(password);
+        userModel.setPassword(passwordEncode);
+        userModel.setLastPasswordReset(new Date());
+        int updateCnt = userService.updateNotNull(userModel);
+
+        UserPassMappingModel userPassMappingModel = new UserPassMappingModel();
+        userPassMappingModel.setPassword(password);
+        userPassMappingModel.setPasswordEncode(passwordEncode);
+        userPassMappingService.insert(userPassMappingModel);
+
+        return ResponseUtil.success("修改密码成功");
+    }
+
+    /**
+     * 退出登录
+     *
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public Result authenticationRequest() {
+    public Result logout() {
         Integer userId = SecurityUtil.getCurrentUserId();
         coolplayUserCache.removeUserFromCacheByUserId(userId);
         return ResponseUtil.success();

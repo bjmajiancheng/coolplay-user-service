@@ -9,6 +9,7 @@ package com.coolplay.user.user.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.coolplay.user.user.model.CircleMemberModel;
@@ -68,5 +69,64 @@ public class CircleMemberServiceImpl extends BaseService<CircleMemberModel> impl
 
 	public List<Integer> findByMemberUserId(Integer memberUserId) {
 		return circleMemberMapper.findByMemberUserId(memberUserId);
+	}
+
+
+	public Map<Integer, List<Integer>> findMapByCircleIds(List<Integer> circleIds) {
+		if(CollectionUtils.isEmpty(circleIds)) {
+			return Collections.emptyMap();
+		}
+
+		List<CircleMemberModel> circleMembers = circleMemberMapper.findByCircleIds(circleIds);
+
+		if(CollectionUtils.isEmpty(circleMembers)) {
+			return Collections.emptyMap();
+		}
+
+		Map<Integer, List<Integer>> circleMemberUserIdMap = new HashMap<Integer, List<Integer>>();
+		for(CircleMemberModel circleMember : circleMembers) {
+			List<Integer> memberUserIds = circleMemberUserIdMap.get(circleMember.getCircleId());
+
+			if(CollectionUtils.isEmpty(memberUserIds)) {
+				memberUserIds = new ArrayList<Integer>();
+			}
+
+			memberUserIds.add(circleMember.getMemberUserId());
+			circleMemberUserIdMap.put(circleMember.getCircleId(), memberUserIds);
+		}
+
+		return circleMemberUserIdMap;
+	}
+
+
+	public List<Integer> findCircleIdsByUserIdAndCircleIds(Integer securityUserId, List<Integer> circleIds) {
+		if(CollectionUtils.isEmpty(circleIds)) {
+			return Collections.emptyList();
+		}
+
+		return circleMemberMapper.findCircleIdsByUserIdAndCircleIds(securityUserId, circleIds);
+	}
+
+	/**
+	 * 查询圈子待审核成员数量
+	 *
+	 * @param circleIds
+	 * @return
+	 */
+	public Map<Integer, Integer> findReviewMemberCntByCircleIds(List<Integer> circleIds) {
+		if(CollectionUtils.isEmpty(circleIds)) {
+			return Collections.emptyMap();
+		}
+
+		List<Map<Integer, Integer>> reviewMemberCntList = circleMemberMapper.findReviewMemberCntByCircleIds(circleIds);
+
+		Map<Integer, Integer> reviewMemberCntMap = new HashMap<Integer, Integer>(reviewMemberCntList.size());
+		if(CollectionUtils.isEmpty(reviewMemberCntList)) {
+			for(Map<Integer, Integer> reviewMemberCnt : reviewMemberCntList) {
+				reviewMemberCntMap.putAll(reviewMemberCnt);
+			}
+		}
+
+		return reviewMemberCntMap;
 	}
 }

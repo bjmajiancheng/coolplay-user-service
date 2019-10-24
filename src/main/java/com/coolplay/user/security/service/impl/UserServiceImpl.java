@@ -131,4 +131,9 @@ public class UserServiceImpl extends BaseService<UserModel> implements IUserServ
 
         return userMapper.findUserByThirdInfo(thirdId, columnName);
     }
+
+
+    public UserModel findById(Integer id) {
+        return userMapper.findById(id);
+    }
 }

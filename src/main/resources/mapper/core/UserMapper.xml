@@ -82,6 +82,12 @@
 			<if test="lastLoginIp != null">
 				AND last_login_ip = #{lastLoginIp}
 			</if>
+			<if test="userIds != null">
+				AND id IN
+				<foreach collection="userIds" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
 	    </where>
 	</sql>
 

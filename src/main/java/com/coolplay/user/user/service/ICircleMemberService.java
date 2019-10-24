@@ -31,4 +31,23 @@ public interface ICircleMemberService extends IBaseService<CircleMemberModel> {
 	public List<CircleMemberModel> selectByFilter(CircleMemberModel circleMemberModel);
 
 	public List<Integer> findByMemberUserId(Integer memberUserId);
+
+	public Map<Integer, List<Integer>> findMapByCircleIds(List<Integer> circleIds);
+
+	/**
+	 * 查询当前用户所属的圈子集合
+	 *
+	 * @param currUserId
+	 * @param circleId
+     * @return
+     */
+	public List<Integer> findCircleIdsByUserIdAndCircleIds(Integer currUserId, List<Integer> circleId);
+
+	/**
+	 * 查询圈子待审核成员数量
+	 *
+	 * @param circleIds
+	 * @return
+     */
+	public Map<Integer, Integer> findReviewMemberCntByCircleIds(List<Integer> circleIds);
 }

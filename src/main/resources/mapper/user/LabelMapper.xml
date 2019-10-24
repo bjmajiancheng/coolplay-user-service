@@ -14,6 +14,7 @@
         <result property="isDel" column="is_del"/>
 		<result property="ctime" column="c_time"/>
 		<result property="postId" column="post_id"/>
+		<result property="circleId" column="circle_id"/>
     </resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -56,8 +57,18 @@
 		SELECT l.id, l.label_name, pl.post_id
 		FROM d_label l
 		INNER JOIN d_post_label pl ON l.id = pl.label_id
-		WHERE l.is_del = 0 AND status = 1 AND pl.post_id IN
+		WHERE l.is_del = 0 AND l.status = 1 AND pl.post_id IN
 		<foreach collection="postIds" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="findByCircleIds" resultMap="Label">
+		SELECT l.id, l.label_name, cl.circle_id
+		FROM d_label l
+		INNER JOIN d_circle_label cl ON l.id = cl.label_id
+		WHERE l.is_del = 0 AND l.status = 1 AND cl.circle_id IN
+		<foreach collection="circleIds" item="item" open="(" separator="," close=")">
 			#{item}
 		</foreach>
 	</select>

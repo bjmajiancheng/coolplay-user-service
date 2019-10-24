@@ -45,5 +45,29 @@
 		SELECT circle_id FROM d_circle_member WHERE member_user_id = #{memberUserId} AND review_status = 1 AND status = 1
 	</select>
 
+	<select id="findByCircleIds" resultMap="CircleMember">
+		SELECT <include refid="columns"/> FROM d_circle_member
+		WHERE review_status = 1 AND status = 1 AND circle_id IN
+		<foreach collection="circleIds" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="findCircleIdsByUserIdAndCircleIds" resultType="java.lang.INteger">
+		SELECT circle_id FROM d_circle_member
+		WHERE review_status = 1 AND status = 1 AND member_user_id = #{currUserId} AND circle_id IN
+		<foreach collection="circleIds" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="findReviewMemberCntByCircleIds" resultType="java.util.List">
+		SELECT circle_id, COUNT(1) AS cnt FROM d_circle_member
+		WHERE review_status = 0 AND circle_id IN
+		<foreach collection="circleIds" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		GROUP BY circle_id
+	</select>
 </mapper>
 
