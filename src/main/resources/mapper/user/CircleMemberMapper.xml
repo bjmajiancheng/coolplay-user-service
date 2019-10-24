@@ -53,7 +53,7 @@
 		</foreach>
 	</select>
 
-	<select id="findCircleIdsByUserIdAndCircleIds" resultType="java.lang.INteger">
+	<select id="findCircleIdsByUserIdAndCircleIds" resultType="java.lang.Integer">
 		SELECT circle_id FROM d_circle_member
 		WHERE review_status = 1 AND status = 1 AND member_user_id = #{currUserId} AND circle_id IN
 		<foreach collection="circleIds" item="item" open="(" separator="," close=")">
