@@ -7,7 +7,6 @@ import java.util.HashMap;
  */
 public class HttpResult<Object> {
     private int code = 0;
-    private String token;
     private String message = "操作成功";
     private Object data = (Object) new HashMap<String, Object>();
 
@@ -18,9 +17,9 @@ public class HttpResult<Object> {
         this.code = code;
     }
 
-    public HttpResult(int code, String token) {
+    public HttpResult(int code, String message) {
         this.code = code;
-        this.token = token;
+        this.message = message;
     }
 
     public HttpResult(int code, Object data) {
@@ -28,14 +27,14 @@ public class HttpResult<Object> {
         this.data = data;
     }
 
-    public HttpResult(String token, Object data) {
-        this.token = token;
+    public HttpResult(String message, Object data) {
+        this.message = message;
         this.data = data;
     }
 
-    public HttpResult(int code, String token, Object data) {
+    public HttpResult(int code, String message, Object data) {
         this.code = code;
-        this.token = token;
+        this.message = message;
         this.data = data;
     }
 
@@ -46,14 +45,6 @@ public class HttpResult<Object> {
 
     public void setCode(int code) {
         this.code = code;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getMessage() {

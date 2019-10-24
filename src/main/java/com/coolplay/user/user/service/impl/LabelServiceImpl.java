@@ -118,4 +118,35 @@ public class LabelServiceImpl extends BaseService<LabelModel> implements ILabelS
 
 		return labelMap;
 	}
+
+	/**
+	 * 根据用户获取标签信息
+	 *
+	 * @param userIds
+	 * @return
+	 */
+	public Map<Integer, List<LabelModel>> findMapByUserIds(List<Integer> userIds) {
+		if(CollectionUtils.isEmpty(userIds)) {
+			return Collections.emptyMap();
+		}
+
+		List<LabelModel> labelModels = labelMapper.findByUserIds(userIds);
+		if(CollectionUtils.isEmpty(labelModels)) {
+			return Collections.emptyMap();
+		}
+
+		Map<Integer, List<LabelModel>> labelMap = new HashMap<Integer, List<LabelModel>>();
+
+		for(LabelModel labelModel : labelModels) {
+			List<LabelModel> tmpLabelModels = labelMap.get(labelModel.getUserId());
+			if(CollectionUtils.isEmpty(tmpLabelModels)) {
+				tmpLabelModels = new ArrayList<LabelModel>();
+			}
+			tmpLabelModels.add(labelModel);
+
+			labelMap.put(labelModel.getUserId(), tmpLabelModels);
+		}
+
+		return labelMap;
+	}
 }

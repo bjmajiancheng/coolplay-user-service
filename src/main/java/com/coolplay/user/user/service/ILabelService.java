@@ -28,7 +28,27 @@ public interface ILabelService extends IBaseService<LabelModel> {
 
 	public List<LabelModel> selectByFilter(LabelModel labelModel);
 
+	/**
+	 * 根据帖子获取标签信息
+	 *
+	 * @param postIds
+	 * @return
+     */
 	public Map<Integer, List<LabelModel>> findMapByPostIds(List<Integer> postIds);
 
+	/**
+	 * 根据酷玩圈获取标签信息
+	 *
+	 * @param circleIds
+	 * @return
+     */
 	public Map<Integer, List<LabelModel>> findMapByCircleIds(List<Integer> circleIds);
+
+	/**
+	 * 根据用户获取标签信息
+	 *
+	 * @param userIds
+	 * @return
+     */
+	public Map<Integer, List<LabelModel>> findMapByUserIds(List<Integer> userIds);
 }

@@ -13,8 +13,11 @@ import com.coolplay.user.security.service.IUserService;
 import com.coolplay.user.security.utils.SecurityUtil;
 import com.coolplay.user.security.utils.TokenUtils;
 import com.coolplay.user.user.model.CompanyLogModel;
+import com.coolplay.user.user.model.LabelModel;
 import com.coolplay.user.user.model.UserPassMappingModel;
+import com.coolplay.user.user.service.ILabelService;
 import com.coolplay.user.user.service.IUserPassMappingService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,10 +35,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by majiancheng on 2019/10/16.
@@ -66,6 +66,9 @@ public class UserController {
 
     @Autowired
     private IUserPassMappingService userPassMappingService;
+
+    @Autowired
+    private ILabelService labelService;
 
     @RequestMapping(value = "/loginByMobilePhone", method = RequestMethod.POST)
     public ResponseEntity<?> authenticationRequest(HttpServletRequest request,
@@ -116,7 +119,10 @@ public class UserController {
         userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                 RequestUtil.getIpAddress(request));
 
-        return ResponseEntity.ok(HttpResponseUtil.success(token));
+        UserModel userDetailInfo = getUserDetailInfo(userModel.getId());
+        userDetailInfo.setToken(token);
+
+        return ResponseEntity.ok(HttpResponseUtil.success(userDetailInfo));
     }
 
     @RequestMapping(value = "/loginByVerifyCode", method = RequestMethod.POST)
@@ -171,7 +177,11 @@ public class UserController {
         userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                 RequestUtil.getIpAddress(request));
 
-        return ResponseEntity.ok(HttpResponseUtil.success(token));
+        UserModel userDetailInfo = getUserDetailInfo(userModel.getId());
+        userDetailInfo.setToken(token);
+
+        return ResponseEntity.ok(HttpResponseUtil.success(userDetailInfo));
+        //return ResponseEntity.ok(HttpResponseUtil.success(token));
     }
 
     /**
@@ -255,7 +265,12 @@ public class UserController {
         userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                 RequestUtil.getIpAddress(request));
 
-        return ResponseEntity.ok(HttpResponseUtil.success(token));
+
+        UserModel userDetailInfo = getUserDetailInfo(userModel.getId());
+        userDetailInfo.setToken(token);
+
+        return ResponseEntity.ok(HttpResponseUtil.success(userDetailInfo));
+        //return ResponseEntity.ok(HttpResponseUtil.success(token));
     }
 
     /**
@@ -390,6 +405,13 @@ public class UserController {
         return ResponseUtil.success("修改密码成功");
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/userDetail", method = RequestMethod.POST)
+    public Result userDetail(@RequestParam("id") Integer id) {
+
+        return ResponseUtil.success(getUserDetailInfo(id));
+    }
+
     /**
      * 退出登录
      *
@@ -401,5 +423,22 @@ public class UserController {
         Integer userId = SecurityUtil.getCurrentUserId();
         coolplayUserCache.removeUserFromCacheByUserId(userId);
         return ResponseUtil.success();
+    }
+
+    /**
+     * 获取用户详细信息
+     *
+     * @param id
+     * @return
+     */
+    private UserModel getUserDetailInfo(Integer id) {
+        UserModel userModel = userService.findById(id);
+
+        Map<Integer, List<LabelModel>> labelModels = labelService.findMapByUserIds(Collections.singletonList(id));
+        if(CollectionUtils.isNotEmpty(labelModels.get(id))) {
+            userModel.setLabelList(labelModels.get(id));
+        }
+
+        return userModel;
     }
 }

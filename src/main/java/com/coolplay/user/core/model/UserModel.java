@@ -8,12 +8,12 @@
 package com.coolplay.user.core.model;
 
 import com.coolplay.user.common.handler.Sortable;
+import com.coolplay.user.user.model.LabelModel;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import javax.persistence.*;
 
 /**
@@ -97,7 +97,16 @@ public class UserModel extends Sortable {
 	private Date ctime;//"创建时间"
 
 	//columns END
-		
+
+	@Transient
+	private List<String> idCardImageArr = new ArrayList<String>();//身份证图片链接数组
+
+	@Transient
+	private List<LabelModel> labelList = new ArrayList<LabelModel>();//标签数组
+
+	@Transient
+	private String token;
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -282,5 +291,32 @@ public class UserModel extends Sortable {
 		return this.ctime;
 	}
 
+	public List<String> getIdCardImageArr() {
+		if(StringUtils.isNotEmpty(this.getIdCardImages())) {
+			this.idCardImageArr = Arrays.asList(this.getIdCardImages().split(","));
+		}
+
+		return idCardImageArr;
+	}
+
+	public void setIdCardImageArr(List<String> idCardImageArr) {
+		this.idCardImageArr = idCardImageArr;
+	}
+
+	public List<LabelModel> getLabelList() {
+		return labelList;
+	}
+
+	public void setLabelList(List<LabelModel> labelList) {
+		this.labelList = labelList;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 }
 
