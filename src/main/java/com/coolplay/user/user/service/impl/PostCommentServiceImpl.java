@@ -14,6 +14,7 @@ import java.util.Set;
 
 import com.coolplay.user.common.baseservice.impl.BaseService;
 import com.coolplay.user.core.model.UserModel;
+import com.coolplay.user.security.service.IUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -95,7 +96,7 @@ public class PostCommentServiceImpl extends BaseService<PostCommentModel> implem
 			}
 		}
 
-		Map<Integer, UserModel> userMap = userService.findMapByUserIds(commentUserIds);
+		Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(commentUserIds);
 
 		List<PostCommentModel> rootPostComments = new ArrayList<PostCommentModel>();
 		Map<Integer, List<PostCommentModel>> childPostCommentMap = new HashMap<Integer, List<PostCommentModel>>();

@@ -4,6 +4,7 @@ import com.coolplay.user.common.utils.PageConvertUtil;
 import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
 import com.coolplay.user.core.model.UserModel;
+import com.coolplay.user.security.service.IUserService;
 import com.coolplay.user.user.model.*;
 import com.coolplay.user.user.service.ICircleLabelService;
 import com.coolplay.user.user.service.ICirclePublicService;
@@ -35,7 +36,7 @@ public class CompanyCircleController {
     private ICompanyCircleService companyCircleService;
 
     @Autowired
-    private com.coolplay.user.user.service.IUserService appUserService;
+    private IUserService userService;
 
     @Autowired
     private ICircleService circleService;
@@ -68,7 +69,7 @@ public class CompanyCircleController {
                 }
             }
 
-            Map<Integer, UserModel> userModelMap = appUserService.findMapByUserIds(applicationUserIds);
+            Map<Integer, UserModel> userModelMap = userService.findUserMapByUserIds(applicationUserIds);
             Map<Integer, CircleModel> circleModelMap = circleService.findMapByIds(circleIds);
             Map<Integer, List<CircleLabelModel>> circleLabelMap = circleLabelService.findMapByCircleIds(circleIds);
 
@@ -115,7 +116,7 @@ public class CompanyCircleController {
         CirclePublicModel circlePublicModel = circlePublicService.findLastPublicByCircleId(circleId);
         List<CircleLabelModel> circleLabels = circleLabelService.find(Collections.singletonMap("circleId", circleId));
 
-        UserModel userModel = appUserService.findById(companyCircleModel.getApplicationUserId());
+        UserModel userModel = userService.findById(companyCircleModel.getApplicationUserId());
 
         if(circleModel != null) {
             companyCircleModel.setCircleName(circleModel.getCircleName());
