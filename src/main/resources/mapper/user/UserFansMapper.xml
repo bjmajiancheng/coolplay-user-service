@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coolplay.user.user.dao.UserFansMapper">
+
+    <resultMap id="UserFans" type="com.coolplay.user.user.model.UserFansModel">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="fansUserId" column="fans_user_id"/>
+        <result property="ctime" column="c_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        id ,user_id ,fans_user_id ,c_time 
+	    ]]>
+	</sql>
+
+	<sql id="findWhere">
+	    <where>
+	    </where>
+	</sql>
+
+	
+	<select id="find" resultMap="UserFans">
+	    SELECT <include refid="columns"/> FROM d_user_fans 
+		<include refid="findWhere"/>
+    </select>
+
+	<select id="findById" resultMap="UserFans" >
+	SELECT <include refid="columns"/>
+	<![CDATA[
+	        FROM d_user_fans
+	        WHERE
+		        id = #{id} 
+	    ]]>
+	</select>
+
+	<select id="findCntByUserId" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM d_user_fans WHERE user_id = #{userId}
+	</select>
+
+	<select id="findCntByFansUserId" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM d_user_fans WHERE fans_user_id = #{fansUserId}
+	</select>
+
+	<delete id="delByUserIdAndFansUserId">
+		DELETE FROM d_user_fans where user_id = #{userId} AND fans_user_id = #{fansUserId}
+	</delete>
+	
+</mapper>
+

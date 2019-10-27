@@ -31,4 +31,11 @@ public interface ICircleAdminService extends IBaseService<CircleAdminModel> {
 
 	public List<Integer> findByAdminUserId(Integer adminUserId);
 
+	/**
+	 * 根据圈主删除圈子管理员
+	 *
+	 * @param circleId
+	 * @return
+     */
+	public int delByCircleId(Integer circleId);
 }

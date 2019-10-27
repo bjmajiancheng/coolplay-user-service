@@ -32,4 +32,6 @@ public interface ICircleLabelService extends IBaseService<CircleLabelModel> {
 
 	public Map<Integer, List<CircleLabelModel>> findMapByCircleIds(List<Integer> circleIds);
 
+	public int delByCircleId(Integer circleId);
+
 }

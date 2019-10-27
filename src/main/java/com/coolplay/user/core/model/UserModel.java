@@ -9,6 +9,7 @@ package com.coolplay.user.core.model;
 
 import com.coolplay.user.common.handler.Sortable;
 import com.coolplay.user.user.model.LabelModel;
+import com.coolplay.user.user.model.PostModel;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
@@ -90,6 +91,9 @@ public class UserModel extends Sortable {
 	@Column(name = "enabled")
 	private Boolean enabled;//"状态，0=冻结，1=正常"
 
+	@Column(name = "allowMessage")
+	private Integer allowMessage;//"是否允许通知消息， 0：否, 1:是"
+
 	@Column(name = "last_password_reset")
 	private Date lastPasswordReset;//"上次密码重置时间"
 
@@ -103,6 +107,18 @@ public class UserModel extends Sortable {
 
 	@Transient
 	private List<LabelModel> labelList = new ArrayList<LabelModel>();//标签数组
+
+	@Transient
+	private Integer followCnt = 0;//关注人数
+
+	@Transient
+	private Integer fansCnt = 0;//粉丝人数
+
+	@Transient
+	private Integer isFans = 0;//是否关注 1：已关注，0未关注
+
+	@Transient
+	private List<PostModel> dynamicList = new ArrayList<PostModel>();
 
 	@Transient
 	private String token;
@@ -274,7 +290,15 @@ public class UserModel extends Sortable {
 	public Boolean getEnabled() {
 		return this.enabled;
 	}
-		
+
+	public Integer getAllowMessage() {
+		return allowMessage;
+	}
+
+	public void setAllowMessage(Integer allowMessage) {
+		this.allowMessage = allowMessage;
+	}
+
 	public void setLastPasswordReset(Date lastPasswordReset) {
 		this.lastPasswordReset = lastPasswordReset;
 	}
@@ -309,6 +333,38 @@ public class UserModel extends Sortable {
 
 	public void setLabelList(List<LabelModel> labelList) {
 		this.labelList = labelList;
+	}
+
+	public Integer getFollowCnt() {
+		return followCnt;
+	}
+
+	public void setFollowCnt(Integer followCnt) {
+		this.followCnt = followCnt;
+	}
+
+	public Integer getFansCnt() {
+		return fansCnt;
+	}
+
+	public void setFansCnt(Integer fansCnt) {
+		this.fansCnt = fansCnt;
+	}
+
+	public Integer getIsFans() {
+		return isFans;
+	}
+
+	public void setIsFans(Integer isFans) {
+		this.isFans = isFans;
+	}
+
+	public List<PostModel> getDynamicList() {
+		return dynamicList;
+	}
+
+	public void setDynamicList(List<PostModel> dynamicList) {
+		this.dynamicList = dynamicList;
 	}
 
 	public String getToken() {

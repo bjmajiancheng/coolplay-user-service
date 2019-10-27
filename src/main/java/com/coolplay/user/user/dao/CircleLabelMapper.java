@@ -25,4 +25,6 @@ public interface CircleLabelMapper extends Mapper<CircleLabelModel> {
 	public CircleLabelModel findById(@Param("id") Integer id);
 
 	public List<CircleLabelModel> findFullInfoByCircleIds(@Param("circleIds")List<Integer> circleIds);
+
+	public int delByCircleId(@Param("circleId")Integer circleId);
 }

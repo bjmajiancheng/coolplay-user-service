@@ -27,4 +27,20 @@ public interface PostMapper extends Mapper<PostModel> {
 	public PostModel findById(@Param("id") Integer id);
 
 	public int columnPlusNumber(@Param("id")Integer id, @Param("columnName")String columnName, @Param("num")Integer number);
+
+	/**
+	 * 根据酷玩圈ID获取帖子集合
+	 *
+	 * @param circleId
+	 * @return
+	 */
+	public List<PostModel> findByCircleId(@Param("circleId") Integer circleId);
+
+	/**
+	 * 根据id集合获取酷玩圈信息
+	 *
+	 * @param ids
+	 * @return
+     */
+	public List<PostModel> findByIds(@Param("ids") List<Integer> ids);
 }

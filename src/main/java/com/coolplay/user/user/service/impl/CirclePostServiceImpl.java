@@ -64,4 +64,15 @@ public class CirclePostServiceImpl extends BaseService<CirclePostModel> implemen
 		}
 		return getMapper().selectByExample(example);
 	}
+
+	/**
+	 * 根据酷玩圈ID获取帖子数量
+	 *
+	 * @param circleId
+	 * @return
+	 */
+	public int findPostCntByCircleId(Integer circleId) {
+
+		return circlePostMapper.findPostCntByCircleId(circleId);
+	}
 }

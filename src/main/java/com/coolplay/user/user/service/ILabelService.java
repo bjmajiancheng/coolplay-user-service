@@ -51,4 +51,12 @@ public interface ILabelService extends IBaseService<LabelModel> {
 	 * @return
      */
 	public Map<Integer, List<LabelModel>> findMapByUserIds(List<Integer> userIds);
+
+	/**
+	 * 根据基地获取标签信息
+	 *
+	 * @param baseIds
+	 * @return
+     */
+	public Map<Integer, List<LabelModel>> findMapByBaseIds(List<Integer> baseIds);
 }

@@ -10,6 +10,7 @@ package com.coolplay.user.user.model;
 import com.coolplay.user.common.handler.Sortable;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
@@ -113,14 +114,21 @@ public class CoolplayBaseModel extends Sortable {
 	private Date ctime;//"创建时间"
 
 	//columns END
-	@Transient
-	private String companyUserName;//"创建人名称"
 
 	@Transient
-	private List<Integer> labelIds;//"标签集合"
+	private String queryStr = "";//查询文本
 
 	@Transient
-	private String labelName = "";//"标签名称"
+	private Integer type = 0;//查询类型, 1:基地列表, 2:地图列表
+
+	@Transient
+	private String companyName = "";//企业名称
+
+	@Transient
+	private List<LabelModel> labelList = new ArrayList<LabelModel>();//标签集合
+
+	@Transient
+	private BigDecimal distinct = new BigDecimal(0);//距离
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -354,28 +362,44 @@ public class CoolplayBaseModel extends Sortable {
 		return this.ctime;
 	}
 
-	public String getCompanyUserName() {
-		return companyUserName;
+	public String getQueryStr() {
+		return queryStr;
 	}
 
-	public void setCompanyUserName(String companyUserName) {
-		this.companyUserName = companyUserName;
+	public void setQueryStr(String queryStr) {
+		this.queryStr = queryStr;
 	}
 
-	public List<Integer> getLabelIds() {
-		return labelIds;
+	public Integer getType() {
+		return type;
 	}
 
-	public void setLabelIds(List<Integer> labelIds) {
-		this.labelIds = labelIds;
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
-	public String getLabelName() {
-		return labelName;
+	public String getCompanyName() {
+		return companyName;
 	}
 
-	public void setLabelName(String labelName) {
-		this.labelName = labelName;
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public List<LabelModel> getLabelList() {
+		return labelList;
+	}
+
+	public void setLabelList(List<LabelModel> labelList) {
+		this.labelList = labelList;
+	}
+
+	public BigDecimal getDistinct() {
+		return distinct;
+	}
+
+	public void setDistinct(BigDecimal distinct) {
+		this.distinct = distinct;
 	}
 }
 

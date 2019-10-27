@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 import com.coolplay.user.common.handler.Sortable;
+import com.coolplay.user.common.utils.DateStyle;
+import com.coolplay.user.common.utils.DateUtil;
 
 /**
  * @author  shawn
@@ -61,10 +63,10 @@ public class CircleModel extends Sortable {
 	private Integer readCnt;//"浏览次数"
 
 	@Column(name = "application_time")
-	private Integer applicationTime;//"申请时间"
+	private Date applicationTime;//"申请时间"
 
 	@Column(name = "review_time")
-	private Integer reviewTime;//"审核时间"
+	private Date reviewTime;//"审核时间"
 
 	@Column(name = "review_status")
 	private Integer reviewStatus;//"审核状态（0：未审核，1：已审核）"
@@ -99,6 +101,9 @@ public class CircleModel extends Sortable {
 	private Integer isMember = 0;//是圈子成员
 
 	@Transient
+	private Integer isOwner = 0;//是否是圈主
+
+	@Transient
 	private List<LabelModel> labelList = new ArrayList<LabelModel>();//标签集合
 
 	@Transient
@@ -106,6 +111,30 @@ public class CircleModel extends Sortable {
 
 	@Transient
 	private Integer isCollect = 0;//是否收藏
+
+	@Transient
+	private List<Integer> labelIds = new ArrayList<Integer>();//标签Ids
+
+	@Transient
+	private String ctimeStr = "";//创建时间戳
+
+	@Transient
+	private String publicContent = "";//公告内容
+
+	@Transient
+	private Integer postCnt = 0;//帖子人数
+
+	@Transient
+	private List<CirclePublicModel> circlePublics = new ArrayList<CirclePublicModel>();//圈子公告集合
+
+	@Transient
+	private List<PostModel> circlePosts = new ArrayList<PostModel>();//圈子帖子集合
+
+	@Transient
+	private Integer type = 0;//类型, 1：我加入的圈子，2：我创建的圈子
+
+	@Transient
+	private List<Integer> ids = new ArrayList<Integer>();//圈子ID集合
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -162,7 +191,7 @@ public class CircleModel extends Sortable {
 	public String getBackgroudImg() {
 		return this.backgroudImg;
 	}
-		
+
 	public void setMemberCnt(Integer memberCnt) {
 		this.memberCnt = memberCnt;
 	}
@@ -186,7 +215,7 @@ public class CircleModel extends Sortable {
 	public Integer getShareCnt() {
 		return this.shareCnt;
 	}
-		
+
 	public void setCommentCnt(Integer commentCnt) {
 		this.commentCnt = commentCnt;
 	}
@@ -203,19 +232,19 @@ public class CircleModel extends Sortable {
 		return this.readCnt;
 	}
 		
-	public void setApplicationTime(Integer applicationTime) {
+	public void setApplicationTime(Date applicationTime) {
 		this.applicationTime = applicationTime;
 	}
 
-	public Integer getApplicationTime() {
+	public Date getApplicationTime() {
 		return this.applicationTime;
 	}
 		
-	public void setReviewTime(Integer reviewTime) {
+	public void setReviewTime(Date reviewTime) {
 		this.reviewTime = reviewTime;
 	}
 
-	public Integer getReviewTime() {
+	public Date getReviewTime() {
 		return this.reviewTime;
 	}
 		
@@ -299,6 +328,14 @@ public class CircleModel extends Sortable {
 		this.isMember = isMember;
 	}
 
+	public Integer getIsOwner() {
+		return isOwner;
+	}
+
+	public void setIsOwner(Integer isOwner) {
+		this.isOwner = isOwner;
+	}
+
 	public List<LabelModel> getLabelList() {
 		return labelList;
 	}
@@ -321,6 +358,73 @@ public class CircleModel extends Sortable {
 
 	public void setIsCollect(Integer isCollect) {
 		this.isCollect = isCollect;
+	}
+
+	public List<Integer> getLabelIds() {
+		return labelIds;
+	}
+
+	public void setLabelIds(List<Integer> labelIds) {
+		this.labelIds = labelIds;
+	}
+
+	public String getCtimeStr() {
+		if(this.getCtime() != null) {
+			this.ctimeStr = DateUtil.DateToString(this.getCtime(), DateStyle.YYYY_MM_DD_HH_MM);
+		}
+		return ctimeStr;
+	}
+
+	public void setCtimeStr(String ctimeStr) {
+		this.ctimeStr = ctimeStr;
+	}
+
+	public String getPublicContent() {
+		return publicContent;
+	}
+
+	public void setPublicContent(String publicContent) {
+		this.publicContent = publicContent;
+	}
+
+	public Integer getPostCnt() {
+		return postCnt;
+	}
+
+	public void setPostCnt(Integer postCnt) {
+		this.postCnt = postCnt;
+	}
+
+	public List<CirclePublicModel> getCirclePublics() {
+		return circlePublics;
+	}
+
+	public void setCirclePublics(List<CirclePublicModel> circlePublics) {
+		this.circlePublics = circlePublics;
+	}
+
+	public List<PostModel> getCirclePosts() {
+		return circlePosts;
+	}
+
+	public void setCirclePosts(List<PostModel> circlePosts) {
+		this.circlePosts = circlePosts;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public List<Integer> getIds() {
+		return ids;
+	}
+
+	public void setIds(List<Integer> ids) {
+		this.ids = ids;
 	}
 }
 

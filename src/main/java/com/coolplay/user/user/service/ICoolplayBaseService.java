@@ -30,4 +30,12 @@ public interface ICoolplayBaseService extends IBaseService<CoolplayBaseModel> {
 
 	public List<CoolplayBaseModel> selectByFilter(CoolplayBaseModel coolplayBaseModel);
 
+	/**
+	 * 获取基地信息
+	 *
+	 * @param ids
+	 * @return
+     */
+	public Map<Integer, CoolplayBaseModel> findMapByIds(List<Integer> ids);
+
 }

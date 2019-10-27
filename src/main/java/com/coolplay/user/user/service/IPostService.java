@@ -33,4 +33,20 @@ public interface IPostService extends IBaseService<PostModel> {
 
 	public int columnPlusNumber(Integer id, String columnName, Integer number);
 
+	/**
+	 * 根据酷玩圈ID获取帖子集合
+	 *
+	 * @param circleId
+	 * @return
+     */
+	public List<PostModel> findByCircleId(Integer circleId);
+
+	/**
+	 * 根据帖子集合获取帖子map信息
+	 *
+	 * @param ids
+	 * @return
+     */
+	public Map<Integer, PostModel> findMapByIds(List<Integer> ids);
+
 }

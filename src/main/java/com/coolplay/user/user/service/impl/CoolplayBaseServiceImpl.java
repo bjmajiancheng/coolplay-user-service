@@ -9,6 +9,7 @@ package com.coolplay.user.user.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.coolplay.user.user.model.CoolplayBaseModel;
@@ -59,8 +60,8 @@ public class CoolplayBaseServiceImpl extends BaseService<CoolplayBaseModel> impl
     public List<CoolplayBaseModel> selectByFilter(CoolplayBaseModel coolplayBaseModel) {
         Example example = new Example(CoolplayBaseModel.class);
         Example.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotEmpty(coolplayBaseModel.getBaseName())) {
-            criteria.andLike("baseName", "%" + coolplayBaseModel.getBaseName() + "%");
+        if (StringUtils.isNotEmpty(coolplayBaseModel.getQueryStr())) {
+            criteria.andLike("baseName", "%" + coolplayBaseModel.getQueryStr() + "%");
         }
 
         if (coolplayBaseModel.getIsClose() != null) {
@@ -75,5 +76,34 @@ public class CoolplayBaseServiceImpl extends BaseService<CoolplayBaseModel> impl
             example.setOrderByClause(coolplayBaseModel.getSortWithOutOrderBy());
         }
         return getMapper().selectByExample(example);
+    }
+
+    /**
+     * 获取基地信息
+     *
+     * @param ids
+     * @return
+     */
+    public Map<Integer, CoolplayBaseModel> findMapByIds(List<Integer> ids) {
+        if(CollectionUtils.isEmpty(ids)) {
+            return Collections.emptyMap();
+        }
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("ids", ids);
+        param.put("isClose", 0);
+        param.put("isDel", 0);
+
+        List<CoolplayBaseModel> coolplayBaseModels = this.find(param);
+
+        if(CollectionUtils.isEmpty(coolplayBaseModels)) {
+            return Collections.emptyMap();
+        }
+
+        Map<Integer, CoolplayBaseModel> coolplayBaseMap = new HashMap<Integer, CoolplayBaseModel>();
+        for(CoolplayBaseModel coolplayBaseModel : coolplayBaseModels) {
+            coolplayBaseMap.put(coolplayBaseModel.getId(), coolplayBaseModel);
+        }
+
+        return coolplayBaseMap;
     }
 }

@@ -81,4 +81,38 @@ public class PostServiceImpl extends BaseService<PostModel> implements IPostServ
 	public int columnPlusNumber(Integer id, String columnName, Integer number) {
 		return postMapper.columnPlusNumber(id, columnName, number);
 	}
+
+	/**
+	 * 根据酷玩圈ID获取帖子集合
+	 *
+	 * @param circleId
+	 * @return
+	 */
+	public List<PostModel> findByCircleId(Integer circleId) {
+		return postMapper.findByCircleId(circleId);
+	}
+
+	/**
+	 * 根据帖子集合获取帖子map信息
+	 *
+	 * @param ids
+	 * @return
+	 */
+	public Map<Integer, PostModel> findMapByIds(List<Integer> ids) {
+		if(CollectionUtils.isEmpty(ids)) {
+			return Collections.emptyMap();
+		}
+		List<PostModel> postModels = postMapper.findByIds(ids);
+
+		Map<Integer, PostModel> postMap = new HashMap<Integer, PostModel>();
+		if(CollectionUtils.isEmpty(postModels)) {
+			return Collections.emptyMap();
+		}
+
+		for(PostModel postModel : postModels) {
+			postMap.put(postModel.getId(), postModel);
+		}
+
+		return postMap;
+	}
 }

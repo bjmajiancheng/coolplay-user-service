@@ -54,6 +54,9 @@ public class LabelModel extends Sortable {
 
 	@Transient
 	private Integer userId;
+
+	@Transient
+	private Integer baseId;
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -133,6 +136,14 @@ public class LabelModel extends Sortable {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+
+	public Integer getBaseId() {
+		return baseId;
+	}
+
+	public void setBaseId(Integer baseId) {
+		this.baseId = baseId;
 	}
 }
 

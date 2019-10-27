@@ -86,6 +86,9 @@ public class CompanyModel extends Sortable {
 	@Column(name = "c_time")
 	private Date ctime;//"创建时间"
 	//columns END
+
+	@Transient
+	private Integer isCollect = 0;//当前用户是否收藏
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -255,5 +258,12 @@ public class CompanyModel extends Sortable {
 		return this.ctime;
 	}
 
+	public Integer getIsCollect() {
+		return isCollect;
+	}
+
+	public void setIsCollect(Integer isCollect) {
+		this.isCollect = isCollect;
+	}
 }
 

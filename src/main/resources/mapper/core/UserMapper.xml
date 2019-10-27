@@ -26,7 +26,8 @@
         <result property="credentialsNonExpired" column="credentials_non_expired"/>
         <result property="lastLoginIp" column="last_login_ip"/>
         <result property="lastLoginTime" column="last_login_time"/>
-        <result property="enabled" column="enabled"/>
+		<result property="enabled" column="enabled"/>
+		<result property="allowMessage" column="allow_message"/>
         <result property="lastPasswordReset" column="last_password_reset"/>
         <result property="ctime" column="c_time"/>
     </resultMap>
@@ -34,7 +35,13 @@
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
 	    <![CDATA[
-        id ,user_name ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,signature ,last_verify_code ,last_verify_time ,head_image ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,enabled ,last_password_reset ,c_time
+        id ,user_name ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,signature ,last_verify_code ,last_verify_time ,head_image ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,enabled ,allow_message ,last_password_reset ,c_time
+	    ]]>
+	</sql>
+
+	<sql id="passwordColumns">
+		<![CDATA[
+        id ,user_name ,password ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,signature ,last_verify_code ,last_verify_time ,head_image ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,enabled ,allow_message ,last_password_reset ,c_time
 	    ]]>
 	</sql>
 
@@ -107,7 +114,7 @@
 	</select>
 
 	<select id="findUserByLoginName" resultMap="User">
-		SELECT id ,user_name ,password ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,signature ,last_verify_code ,last_verify_time ,head_image ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,enabled ,last_password_reset ,c_time FROM d_user WHERE user_name = #{userName}
+		SELECT <include refid="passwordColumns"/> FROM d_user WHERE user_name = #{userName}
 	</select>
 
 	<select id="findLoginNameByUserId" resultType="java.lang.String">
@@ -119,16 +126,16 @@
 	</update>
 
 	<select id="findUserByUserId" resultMap="User">
-		SELECT <include refid="columns"/> FROM d_user WHERE user_id = #{userId}
+		SELECT <include refid="passwordColumns"/> FROM d_user WHERE user_id = #{userId}
 	</select>
 
 	<select id="findUserByMobilePhone" resultMap="User">
-		SELECT id ,user_name ,password ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,signature ,last_verify_code ,last_verify_time ,head_image ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,enabled ,last_password_reset ,c_time FROM d_user
+		SELECT <include refid="passwordColumns"/> FROM d_user
 		WHERE mobile_phone = #{mobilePhone}
 	</select>
 
 	<select id="findUserByThirdInfo" resultMap="User">
-		SELECT id ,user_name ,password ,mobile_phone ,wechat_id ,qq_id ,nick_name ,real_name ,id_card ,id_card_images ,user_desc ,signature ,last_verify_code ,last_verify_time ,head_image ,account_non_locked ,account_non_expired ,credentials_non_expired ,last_login_ip ,last_login_time ,enabled ,last_password_reset ,c_time FROM d_user
+		SELECT <include refid="passwordColumns"/> FROM d_user
 		WHERE ${columnName} = #{thirdId}
 	</select>
 	

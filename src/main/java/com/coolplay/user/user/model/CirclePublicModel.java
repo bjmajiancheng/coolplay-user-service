@@ -10,6 +10,8 @@ package com.coolplay.user.user.model;
 import java.util.Date;
 import javax.persistence.*;
 import com.coolplay.user.common.handler.Sortable;
+import com.coolplay.user.common.utils.DateStyle;
+import com.coolplay.user.common.utils.DateUtil;
 
 /**
  * @author  shawn
@@ -35,6 +37,9 @@ public class CirclePublicModel extends Sortable {
 	private Date ctime;//"创建时间"
 
 	//columns END
+
+	@Transient
+	private String ctimeStr;//创建时间
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -68,5 +73,15 @@ public class CirclePublicModel extends Sortable {
 		return this.ctime;
 	}
 
+	public String getCtimeStr() {
+		if(this.getCtime() != null) {
+			this.ctimeStr = DateUtil.DateToString(this.ctime, DateStyle.YYYY_MM_DD);
+		}
+		return ctimeStr;
+	}
+
+	public void setCtimeStr(String ctimeStr) {
+		this.ctimeStr = ctimeStr;
+	}
 }
 

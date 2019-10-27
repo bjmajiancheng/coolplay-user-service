@@ -29,4 +29,6 @@ public interface LabelMapper extends Mapper<LabelModel> {
 	public List<LabelModel> findByCircleIds(@Param("circleIds")List<Integer> circleIds);
 
 	public List<LabelModel> findByUserIds(@Param("userIds")List<Integer> userIds);
+
+	public List<LabelModel> findByBaseIds(@Param("baseIds")List<Integer> baseIds);
 }

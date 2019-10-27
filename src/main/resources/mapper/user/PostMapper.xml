@@ -69,6 +69,21 @@
 	<update id="columnPlusNumber">
 		UPDATE d_post SET ${columnName} = ${columnName} + #{num} WHERE id = #{id}
 	</update>
+
+	<select id="findByCircleId" resultMap="Post">
+		SELECT p.id ,p.post_title ,p.post_content ,p.user_id ,p.img_urls ,p.video_url ,p.videl_path ,p.is_top ,p.like_cnt ,p.share_cnt ,p.comment_cnt ,p.read_cnt ,p.thumb_up_cnt ,p.collect_cnt, p.is_del ,p.c_time
+		FROM d_post p
+		INNER JOIN d_circle_post cp ON p.id = cp.post_id
+		WHERE cp.circle_id = #{circleId} AND p.is_del = 0
+	</select>
+
+	<select id="findByIds" resultMap="Post">
+		SELECT <include refid="columns"/> FROM d_post
+		WHERE id IN
+		<foreach collection="ids" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
 	
 </mapper>
 

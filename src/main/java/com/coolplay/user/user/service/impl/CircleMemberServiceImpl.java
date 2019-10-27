@@ -60,6 +60,18 @@ public class CircleMemberServiceImpl extends BaseService<CircleMemberModel> impl
 		Example example = new Example(CircleMemberModel.class);
 		Example.Criteria criteria = example.createCriteria();
 
+		if(circleMemberModel.getCircleId() != null) {
+			criteria.andEqualTo("circleId", circleMemberModel.getCircleId());
+		}
+
+		if(circleMemberModel.getStatus() != null) {
+			criteria.andEqualTo("status", circleMemberModel.getStatus());
+		}
+
+		if(circleMemberModel.getReviewStatus() != null) {
+			criteria.andEqualTo("reviewStatus", circleMemberModel.getReviewStatus());
+		}
+
 		if(StringUtils.isNotEmpty(circleMemberModel.getSortWithOutOrderBy())) {
 			example.setOrderByClause(circleMemberModel.getSortWithOutOrderBy());
 		}

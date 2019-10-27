@@ -59,6 +59,10 @@ public class CirclePublicServiceImpl extends BaseService<CirclePublicModel> impl
 		Example example = new Example(CirclePublicModel.class);
 		Example.Criteria criteria = example.createCriteria();
 
+		if(circlePublicModel.getCircleId() != null) {
+			criteria.andEqualTo("circleId", circlePublicModel.getCircleId());
+		}
+
 		if(StringUtils.isNotEmpty(circlePublicModel.getSortWithOutOrderBy())) {
 			example.setOrderByClause(circlePublicModel.getSortWithOutOrderBy());
 		}

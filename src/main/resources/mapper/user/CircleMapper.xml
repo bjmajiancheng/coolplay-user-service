@@ -31,7 +31,7 @@
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
 	    <![CDATA[
-        id ,user_id ,circle_name ,circle_desc ,circle_type ,reason ,backgroud_img ,member_cnt ,like_cnt ,share_cnt ,comment_cnt ,read_cnt ,application_time ,review_time ,review_status ,status ,reject_reason ,company_id ,disabled ,c_time 
+        id ,user_id ,circle_name ,circle_desc ,circle_type ,reason ,backgroud_img ,member_cnt ,like_cnt ,share_cnt ,comment_cnt ,read_cnt ,application_time ,review_time ,review_status ,status ,reject_reason ,company_id ,disabled ,c_time
 	    ]]>
 	</sql>
 

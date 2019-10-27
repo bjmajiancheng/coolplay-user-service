@@ -110,6 +110,21 @@ public class UserCollectServiceImpl extends BaseService<UserCollectModel> implem
 	}
 
 	/**
+	 * 根据用户ID和俱乐部集合查看 用户收藏的俱乐部
+	 *
+	 * @param userId
+	 * @param companyIds
+	 * @return
+	 */
+	public List<Integer> findCompanyIdsByUserIdAndCompanyIds(Integer userId, List<Integer> companyIds) {
+		if(CollectionUtils.isEmpty(companyIds)) {
+			return Collections.emptyList();
+		}
+
+		return userCollectMapper.findCompanyIdsByUserIdAndCompanyIds(userId, companyIds);
+	}
+
+	/**
 	 * 根据收藏类型和收藏类型业务ID 获取收藏数
 	 *
 	 * @param collectType

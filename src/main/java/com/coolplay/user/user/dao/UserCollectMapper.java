@@ -37,6 +37,15 @@ public interface UserCollectMapper extends Mapper<UserCollectModel> {
 	 */
 	public List<Integer> findCircleIdsByUserIdAndCircleIds(@Param("userId")Integer userId, @Param("circleIds")List<Integer> circleIds);
 
+	/**
+	 * 根据用户ID和俱乐部集合查看 用户收藏的俱乐部
+	 *
+	 * @param userId
+	 * @param companyIds
+	 * @return
+	 */
+	public List<Integer> findCompanyIdsByUserIdAndCompanyIds(@Param("userId")Integer userId, @Param("companyIds")List<Integer> companyIds);
+
 
 	public Integer findCntByCollectTypeAndCollectTypeId(@Param("collectType")Integer collectType, @Param("collectTypeId")Integer collectTypeId);
 

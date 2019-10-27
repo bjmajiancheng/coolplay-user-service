@@ -57,27 +57,6 @@ public class CompanyCircleModel extends Sortable {
 	private Date ctime;//"创建时间"
 
 	//columns END
-
-	@Transient
-	private String applicationStartTime;
-
-	@Transient
-	private String applicationEndTime;
-
-	@Transient
-	private String applicationUserName;//"申请用户名称"
-
-	@Transient
-	private String circleName;//"圈子名称"
-
-	@Transient
-	private Integer memberCnt;//"圈子人数"
-
-	@Transient
-	private String publicContent;//"圈子公告"
-
-	@Transient
-	private String circleLabels;//"圈子标签"
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -165,62 +144,6 @@ public class CompanyCircleModel extends Sortable {
 
 	public Date getCtime() {
 		return this.ctime;
-	}
-
-	public String getApplicationStartTime() {
-		return applicationStartTime;
-	}
-
-	public void setApplicationStartTime(String applicationStartTime) {
-		this.applicationStartTime = applicationStartTime;
-	}
-
-	public String getApplicationEndTime() {
-		return applicationEndTime;
-	}
-
-	public void setApplicationEndTime(String applicationEndTime) {
-		this.applicationEndTime = applicationEndTime;
-	}
-
-	public String getApplicationUserName() {
-		return applicationUserName;
-	}
-
-	public void setApplicationUserName(String applicationUserName) {
-		this.applicationUserName = applicationUserName;
-	}
-
-	public String getCircleName() {
-		return circleName;
-	}
-
-	public void setCircleName(String circleName) {
-		this.circleName = circleName;
-	}
-
-	public Integer getMemberCnt() {
-		return memberCnt;
-	}
-
-	public void setMemberCnt(Integer memberCnt) {
-		this.memberCnt = memberCnt;
-	}
-
-	public String getPublicContent() {
-		return publicContent;
-	}
-
-	public void setPublicContent(String publicContent) {
-		this.publicContent = publicContent;
-	}
-
-	public String getCircleLabels() {
-		return circleLabels;
-	}
-
-	public void setCircleLabels(String circleLabels) {
-		this.circleLabels = circleLabels;
 	}
 }
 

@@ -7,29 +7,33 @@
 
 package com.coolplay.user.user.model;
 
-import java.util.Date;
-import javax.persistence.*;
 import com.coolplay.user.common.handler.Sortable;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import javax.persistence.*;
 
 /**
  * @author  shawn
  * @version 1.0
  * @since 1.0
  */
-@Table(name = "d_circle_admin")
-public class CircleAdminModel extends Sortable {
+@Table(name = "d_user_fans")
+public class UserFansModel extends Sortable {
 	private static final long serialVersionUID = 1L;
 
 	//columns START
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;//"主键"
 
-	@Column(name = "circle_id")
-	private Integer circleId;//"酷玩圈ID"
+	@Column(name = "user_id")
+	private Integer userId;//"用户ID"
 
-	@Column(name = "admin_user_id")
-	private Integer adminUserId;//"管理员用户ID"
+	@Column(name = "fans_user_id")
+	private Integer fansUserId;//"粉丝用户ID"
 
 	@Column(name = "c_time")
 	private Date ctime;//"创建时间"
@@ -44,20 +48,20 @@ public class CircleAdminModel extends Sortable {
 		return this.id;
 	}
 		
-	public void setCircleId(Integer circleId) {
-		this.circleId = circleId;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-	public Integer getCircleId() {
-		return this.circleId;
+	public Integer getUserId() {
+		return this.userId;
 	}
 		
-	public void setAdminUserId(Integer adminUserId) {
-		this.adminUserId = adminUserId;
+	public void setFansUserId(Integer fansUserId) {
+		this.fansUserId = fansUserId;
 	}
 
-	public Integer getAdminUserId() {
-		return this.adminUserId;
+	public Integer getFansUserId() {
+		return this.fansUserId;
 	}
 		
 	public void setCtime(Date ctime) {

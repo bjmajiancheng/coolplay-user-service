@@ -90,4 +90,9 @@ public class CircleLabelServiceImpl extends BaseService<CircleLabelModel> implem
 
 		return circleLabelMap;
 	}
+
+
+	public int delByCircleId(Integer circleId) {
+		return circleLabelMapper.delByCircleId(circleId);
+	}
 }

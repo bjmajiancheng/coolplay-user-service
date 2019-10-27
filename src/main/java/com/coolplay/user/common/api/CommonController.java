@@ -9,8 +9,10 @@ import com.coolplay.user.common.utils.Result;
 import com.coolplay.user.core.model.Attachment;
 import com.coolplay.user.security.constants.SecurityConstant;
 import com.coolplay.user.security.service.IUserService;
+import com.coolplay.user.user.model.CompanyModel;
 import com.coolplay.user.user.model.SystemVersionModel;
 import com.coolplay.user.user.model.VerifyCodeModel;
+import com.coolplay.user.user.service.ICompanyService;
 import com.coolplay.user.user.service.ISystemVersionService;
 import com.coolplay.user.user.service.IVerifyCodeService;
 import org.apache.commons.collections.CollectionUtils;
@@ -52,6 +54,9 @@ public class CommonController {
 
     @Autowired
     private ISystemVersionService systemVersionService;
+
+    @Autowired
+    private ICompanyService companyService;
 
     @RequestMapping(value = "/uploadFile", method = { RequestMethod.POST })
     @ResponseBody

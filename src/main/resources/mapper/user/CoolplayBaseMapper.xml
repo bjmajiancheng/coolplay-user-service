@@ -82,6 +82,18 @@
 			<if test="contactAddress != null">
 				AND contact_address = #{contactAddress}
 			</if>
+			<if test="isDel != null">
+				AND is_del = #{isDel}
+			</if>
+			<if test="isClose != null">
+				AND is_close = #{isClose}
+			</if>
+			<if test="ids != null">
+				AND ids IN
+				<foreach collection="ids" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
 	    </where>
 	</sql>
 

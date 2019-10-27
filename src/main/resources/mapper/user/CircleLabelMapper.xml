@@ -46,5 +46,9 @@
 			#{item}
 		</foreach>
 	</select>
+
+	<delete id="delByCircleId">
+		DELETE FROM d_circle_label WHERE circle_id = #{circleId}
+	</delete>
 </mapper>
 

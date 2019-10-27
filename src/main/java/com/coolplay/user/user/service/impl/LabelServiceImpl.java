@@ -60,6 +60,14 @@ public class LabelServiceImpl extends BaseService<LabelModel> implements ILabelS
 		Example example = new Example(LabelModel.class);
 		Example.Criteria criteria = example.createCriteria();
 
+		if(labelModel.getStatus() != null) {
+			criteria.andEqualTo("status", labelModel.getStatus());
+		}
+
+		if(labelModel.getIsDel() != null) {
+			criteria.andEqualTo("isDel", labelModel.getIsDel());
+		}
+
 		if(StringUtils.isNotEmpty(labelModel.getSortWithOutOrderBy())) {
 			example.setOrderByClause(labelModel.getSortWithOutOrderBy());
 		}
@@ -145,6 +153,37 @@ public class LabelServiceImpl extends BaseService<LabelModel> implements ILabelS
 			tmpLabelModels.add(labelModel);
 
 			labelMap.put(labelModel.getUserId(), tmpLabelModels);
+		}
+
+		return labelMap;
+	}
+
+	/**
+	 * 根据基地获取标签信息
+	 *
+	 * @param baseIds
+	 * @return
+	 */
+	public Map<Integer, List<LabelModel>> findMapByBaseIds(List<Integer> baseIds) {
+		if(CollectionUtils.isEmpty(baseIds)) {
+			return Collections.emptyMap();
+		}
+
+		List<LabelModel> labelModels = labelMapper.findByBaseIds(baseIds);
+		if(CollectionUtils.isEmpty(labelModels)) {
+			return Collections.emptyMap();
+		}
+
+		Map<Integer, List<LabelModel>> labelMap = new HashMap<Integer, List<LabelModel>>();
+
+		for(LabelModel labelModel : labelModels) {
+			List<LabelModel> tmpLabelModels = labelMap.get(labelModel.getBaseId());
+			if(CollectionUtils.isEmpty(tmpLabelModels)) {
+				tmpLabelModels = new ArrayList<LabelModel>();
+			}
+			tmpLabelModels.add(labelModel);
+
+			labelMap.put(labelModel.getBaseId(), tmpLabelModels);
 		}
 
 		return labelMap;

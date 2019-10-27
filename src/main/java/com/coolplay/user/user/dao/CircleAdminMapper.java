@@ -25,4 +25,12 @@ public interface CircleAdminMapper extends Mapper<CircleAdminModel> {
 	public CircleAdminModel findById(@Param("id") Integer id);
 
 	public List<Integer> findByAdminUserId(@Param("adminUserId")Integer adminUserId);
+
+	/**
+	 * 根据圈主删除圈子管理员
+	 *
+	 * @param circleId
+	 * @return
+	 */
+	public int delByCircleId(@Param("circleId") Integer circleId);
 }
