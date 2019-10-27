@@ -91,7 +91,7 @@ public class UserModel extends Sortable {
 	@Column(name = "enabled")
 	private Boolean enabled;//"状态，0=冻结，1=正常"
 
-	@Column(name = "allowMessage")
+	@Column(name = "allow_message")
 	private Integer allowMessage;//"是否允许通知消息， 0：否, 1:是"
 
 	@Column(name = "last_password_reset")
@@ -107,6 +107,9 @@ public class UserModel extends Sortable {
 
 	@Transient
 	private List<LabelModel> labelList = new ArrayList<LabelModel>();//标签数组
+
+	@Transient
+	private List<Integer> labelIds = new ArrayList<Integer>();//标签id集合
 
 	@Transient
 	private Integer followCnt = 0;//关注人数
@@ -333,6 +336,14 @@ public class UserModel extends Sortable {
 
 	public void setLabelList(List<LabelModel> labelList) {
 		this.labelList = labelList;
+	}
+
+	public List<Integer> getLabelIds() {
+		return labelIds;
+	}
+
+	public void setLabelIds(List<Integer> labelIds) {
+		this.labelIds = labelIds;
 	}
 
 	public Integer getFollowCnt() {

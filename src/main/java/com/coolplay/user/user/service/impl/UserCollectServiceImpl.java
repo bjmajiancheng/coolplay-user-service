@@ -154,4 +154,18 @@ public class UserCollectServiceImpl extends BaseService<UserCollectModel> implem
 
 		return userCollectMapper.delByUserIdAndCollectTypeInfo(userId, collectType, collectTypeId);
 	}
+
+	/**
+	 * 插入用户收藏信息
+	 *
+	 * @param userCollectModel
+	 * @return
+	 */
+	public int insertIgnore(UserCollectModel userCollectModel) {
+		if(userCollectModel == null) {
+			return 0;
+		}
+
+		return userCollectMapper.insertIgnore(userCollectModel);
+	}
 }

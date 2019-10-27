@@ -35,10 +35,9 @@ public class UserFansController {
 
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public Result list(@RequestBody UserFansModel userFansModel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        PageInfo<UserFansModel> pageInfo = userFansService.selectByFilterAndPage(userFansModel, pageNum, pageSize);
+    public Result list(@RequestBody UserFansModel userFansModel) {
+        PageInfo<UserFansModel> pageInfo = userFansService
+                .selectByFilterAndPage(userFansModel, userFansModel.getPageNum(), userFansModel.getPageSize());
 
         List<UserModel> fansUserModels = new ArrayList<UserModel>();
         if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
@@ -115,7 +114,6 @@ public class UserFansController {
         return ResponseUtil.success();
     }
 
-
     /**
      * 关注账号信息
      *
@@ -135,16 +133,13 @@ public class UserFansController {
      * （我的关注/TA的关注）列表页
      *
      * @param userFansModel
-     * @param pageNum
-     * @param pageSize
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/followList", method = RequestMethod.POST)
-    public Result followList(@RequestBody UserFansModel userFansModel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        PageInfo<UserFansModel> pageInfo = userFansService.selectByFilterAndPage(userFansModel, pageNum, pageSize);
+    public Result followList(@RequestBody UserFansModel userFansModel) {
+        PageInfo<UserFansModel> pageInfo = userFansService
+                .selectByFilterAndPage(userFansModel, userFansModel.getPageNum(), userFansModel.getPageSize());
 
         List<UserModel> userModels = new ArrayList<UserModel>();
         if (CollectionUtils.isNotEmpty(pageInfo.getList())) {

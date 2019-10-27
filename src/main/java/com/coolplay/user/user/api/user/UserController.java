@@ -12,13 +12,8 @@ import com.coolplay.user.security.security.HttpAuthenticationDetails;
 import com.coolplay.user.security.service.IUserService;
 import com.coolplay.user.security.utils.SecurityUtil;
 import com.coolplay.user.security.utils.TokenUtils;
-import com.coolplay.user.user.model.CompanyLogModel;
-import com.coolplay.user.user.model.LabelModel;
-import com.coolplay.user.user.model.UserLabelModel;
-import com.coolplay.user.user.model.UserPassMappingModel;
-import com.coolplay.user.user.service.ILabelService;
-import com.coolplay.user.user.service.IUserLabelService;
-import com.coolplay.user.user.service.IUserPassMappingService;
+import com.coolplay.user.user.model.*;
+import com.coolplay.user.user.service.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -74,6 +69,12 @@ public class UserController {
 
     @Autowired
     private IUserLabelService userLabelService;
+
+    @Autowired
+    private IUserFansService userFansService;
+
+    @Autowired
+    private IPostService postService;
 
     @RequestMapping(value = "/loginByMobilePhone", method = RequestMethod.POST)
     public ResponseEntity<?> authenticationRequest(HttpServletRequest request,
@@ -468,7 +469,7 @@ public class UserController {
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
     public Result updateUser(@RequestBody UserModel userModel) {
 
-        Integer currUserId = SecurityUtil.getCurrentUserId();
+        int currUserId = SecurityUtil.getCurrentUserId();
         if (userModel.getId() != currUserId) {
             return ResponseUtil.error("无权限修改其他用户详细信息");
         }
@@ -487,11 +488,11 @@ public class UserController {
         }
 
         int delCnt = userLabelService.delByUserId(userModel.getId());
-        if (CollectionUtils.isNotEmpty(userModel.getLabelList())) {
-            for (LabelModel labelModel : userModel.getLabelList()) {
+        if (CollectionUtils.isNotEmpty(userModel.getLabelIds())) {
+            for (Integer labelId : userModel.getLabelIds()) {
                 UserLabelModel userLabelModel = new UserLabelModel();
                 userLabelModel.setUserId(currUserId);
-                userLabelModel.setLabelId(labelModel.getId());
+                userLabelModel.setLabelId(labelId);
                 userLabelService.saveNotNull(userLabelModel);
             }
         }
@@ -553,5 +554,31 @@ public class UserController {
         int updateCnt = userService.updateNotNull(userModel);
 
         return ResponseUtil.success();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/userSpaceDetail", method = RequestMethod.POST)
+    public Result userSpaceDetail(@RequestParam("userId")Integer userId) {
+        UserModel userModel = userService.findById(userId);
+
+        int fansCnt = userFansService.findCntByUserId(userId);
+        int followCnt = userFansService.findCntByFansUserId(userId);
+
+        userModel.setFansCnt(fansCnt);
+        userModel.setFollowCnt(followCnt);
+
+        Map<Integer, List<Integer>> followUserMap = userFansService.getFollowMapByFansUserIds(Collections.singletonList(SecurityUtil.getCurrentUserId()));
+        List<Integer> followUsers = followUserMap.get(SecurityUtil.getCurrentUserId());
+        if(CollectionUtils.isNotEmpty(followUsers) && followUsers.contains(userId)) {
+            userModel.setIsFans(1);
+        }
+
+        PostModel postModel = new PostModel();
+        postModel.setUserId(userId);
+        postModel.setIsDel(0);
+        List<PostModel> dynamicList = postService.selectByFilter(postModel);
+        userModel.setDynamicList(dynamicList);
+
+        return ResponseUtil.success(userModel);
     }
 }

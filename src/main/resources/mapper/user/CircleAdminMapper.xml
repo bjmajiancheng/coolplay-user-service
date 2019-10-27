@@ -21,6 +21,9 @@
 
 	<sql id="findWhere">
 	    <where>
+			<if test="circleId != null">
+				AND circle_id = #{circleId}
+			</if>
 	    </where>
 	</sql>
 

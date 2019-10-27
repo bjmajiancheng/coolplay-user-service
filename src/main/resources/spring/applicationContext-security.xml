@@ -12,7 +12,12 @@
     <http pattern="/api/token/**" security="none"/>
     <http pattern="/api/noneAuth/**" security="none"/>
     <http pattern="/api/index/**" security="none"/>
-    <http pattern="/api/user/**" security="none"/>
+    <!--<http pattern="/api/user/**" security="none"/>-->
+    <http pattern="/api/user/loginByMobilePhone" security="none"/>
+    <http pattern="/api/user/loginByVerifyCode" security="none"/>
+    <http pattern="/api/user/loginByThirdType" security="none"/>
+    <http pattern="/api/user/register" security="none"/>
+
     <http pattern="/api/common/**" security="none"/>
     <http pattern="/api/circle/post/list" security="none"/>
     <http pattern="/api/circle/post/postDetail" security="none"/>

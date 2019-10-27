@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,14 +46,15 @@ public class CoolplayBaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public Map list(@RequestBody CoolplayBaseModel coolplayBaseModel,
-            @RequestParam(value = "page", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "rows", required = false, defaultValue = "15") int pageSize) {
+    public Result list(@RequestBody CoolplayBaseModel coolplayBaseModel) {
 
         coolplayBaseModel.setIsClose(0);
         coolplayBaseModel.setIsDel(0);
+        BigDecimal currPosX = coolplayBaseModel.getPosX() == null ? BigDecimal.ZERO : coolplayBaseModel.getPosX();
+        BigDecimal currPosY = coolplayBaseModel.getPosY() == null ? BigDecimal.ZERO : coolplayBaseModel.getPosY();
+
         PageInfo<CoolplayBaseModel> pageInfo = coolplayBaseService
-                .selectByFilterAndPage(coolplayBaseModel, pageNum, pageSize);
+                .selectByFilterAndPage(coolplayBaseModel, coolplayBaseModel.getPageNum(), coolplayBaseModel.getPageSize());
         if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
             List<Integer> companyIds = new ArrayList<Integer>();
             List<Integer> baseIds = new ArrayList<Integer>();
@@ -73,14 +75,16 @@ public class CoolplayBaseController {
                     tmpCoolplayBase.setCompanyName(companyModel.getCompanyName());
                 }
 
-                tmpCoolplayBase.setLabelList(labelMap.get(tmpCoolplayBase.getId()));
+                if(CollectionUtils.isNotEmpty(labelMap.get(tmpCoolplayBase.getId()))) {
+                    tmpCoolplayBase.setLabelList(labelMap.get(tmpCoolplayBase.getId()));
+                }
                 tmpCoolplayBase.setDistinct(DistanceUtil
-                        .getDistance(coolplayBaseModel.getPosX(), coolplayBaseModel.getPosY(),
+                        .getDistance(currPosX, currPosY,
                                 tmpCoolplayBase.getPosX(), tmpCoolplayBase.getPosY()));
             }
         }
 
-        return PageConvertUtil.grid(pageInfo);
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
     /**
@@ -100,7 +104,9 @@ public class CoolplayBaseController {
         }
 
         Map<Integer, List<LabelModel>> labelMap = labelService.findMapByBaseIds(Collections.singletonList(id));
-        coolplayBaseModel.setLabelList(labelMap.get(coolplayBaseModel.getId()));
+        if(CollectionUtils.isNotEmpty(labelMap.get(coolplayBaseModel.getId()))) {
+            coolplayBaseModel.setLabelList(labelMap.get(coolplayBaseModel.getId()));
+        }
 
         return ResponseUtil.success(coolplayBaseModel);
     }
@@ -111,24 +117,31 @@ public class CoolplayBaseController {
     public Result collectBase(@RequestParam("id")Integer id, @RequestParam("type")Integer type) {
         Integer currUserId = SecurityUtil.getCurrentUserId();
 
-        UserCollectModel userCollectModel = new UserCollectModel();
-        userCollectModel.setCollectType(4);
-        userCollectModel.setCollectTypeId(id);
-        userCollectModel.setUserId(currUserId);
-        userCollectModel.setIsDel(0);
+        try{
+            UserCollectModel userCollectModel = new UserCollectModel();
+            userCollectModel.setCollectType(4);
+            userCollectModel.setCollectTypeId(id);
+            userCollectModel.setUserId(currUserId);
+            userCollectModel.setIsDel(0);
 
-        //操作类型 1: 收藏 2:取消收藏
+            //操作类型 1: 收藏 2:取消收藏
 
-        if(type == 1) {
-            if(CollectionUtils.isEmpty(userCollectService.selectByFilter(userCollectModel))) {
-                int saveCnt = userCollectService.saveNotNull(userCollectModel);
+            if(type == 1) {
+                //if(CollectionUtils.isEmpty(userCollectService.selectByFilter(userCollectModel))) {
+                    //int saveCnt = userCollectService.saveNotNull(userCollectModel);
+                    int saveCnt = userCollectService.insertIgnore(userCollectModel);
+                //}
+            } else if(type == 2) {
+                int delCnt = userCollectService.delByUserIdAndCollectTypeInfo(currUserId, 4, id);
             }
-        } else if(type == 2) {
-            int delCnt = userCollectService.delByUserIdAndCollectTypeInfo(currUserId, 4, id);
+
+            int collectCnt = userCollectService.findCntByCollectTypeAndCollectTypeId(4, id);
+
+            return ResponseUtil.success(Collections.singletonMap("collectCnt", collectCnt));
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseUtil.error("系统错误, 请稍后重试");
         }
 
-        int collectCnt = userCollectService.findCntByCollectTypeAndCollectTypeId(4, id);
-
-        return ResponseUtil.success(Collections.singletonMap("collectCnt", collectCnt));
     }
 }

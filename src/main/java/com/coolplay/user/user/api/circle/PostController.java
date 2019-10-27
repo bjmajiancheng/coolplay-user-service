@@ -62,11 +62,9 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public Result list(PostModel postModel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+    public Result list(@RequestBody PostModel postModel) {
 
-        PageInfo<PostModel> pageInfo = this.postService.selectByFilterAndPage(postModel, pageNum, pageSize);
+        PageInfo<PostModel> pageInfo = this.postService.selectByFilterAndPage(postModel, postModel.getPageNum(), postModel.getPageSize());
         if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
             List<Integer> postIds = new ArrayList<Integer>();
             List<Integer> userIds = new ArrayList<Integer>();
@@ -83,7 +81,9 @@ public class PostController {
                     .findPostIdsByUserIdAndPostIds(SecurityUtil.getCurrentUserId(), postIds);
 
             for (PostModel tmpPostModel : pageInfo.getList()) {
-                tmpPostModel.setLabelList(labelMap.get(tmpPostModel.getId()));
+                if(CollectionUtils.isNotEmpty(labelMap.get(tmpPostModel.getId()))) {
+                    tmpPostModel.setLabelList(labelMap.get(tmpPostModel.getId()));
+                }
                 UserModel userModel = userMap.get(tmpPostModel.getUserId());
                 if (userModel != null) {
                     tmpPostModel.setNickName(userModel.getNickName());

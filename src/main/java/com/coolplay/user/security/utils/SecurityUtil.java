@@ -25,7 +25,7 @@ public class SecurityUtil {
         }
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        Integer userId = 0;
+        int userId = 0;
         if (principal instanceof SecurityUser) userId = ((SecurityUser) principal).getId();
         return userId;
     }

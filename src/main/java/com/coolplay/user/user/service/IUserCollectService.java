@@ -77,4 +77,12 @@ public interface IUserCollectService extends IBaseService<UserCollectModel> {
      * @return
      */
 	public Integer delByUserIdAndCollectTypeInfo(Integer userId, Integer collectType, Integer collectTypeId);
+
+	/**
+	 * 插入用户收藏信息
+	 *
+	 * @param userCollectModel
+	 * @return
+     */
+	public int insertIgnore(UserCollectModel userCollectModel);
 }

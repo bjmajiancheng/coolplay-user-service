@@ -55,14 +55,12 @@ public class UserCollectController {
 
     @ResponseBody
     @RequestMapping(value = "/circleList", method = RequestMethod.POST)
-    public Result list(@RequestBody CircleModel circleModel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+    public Result list(@RequestBody CircleModel circleModel) {
         UserCollectModel userCollectModel = new UserCollectModel();
         userCollectModel.setCollectType(1);
         userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
         PageInfo<UserCollectModel> pageInfo = userCollectService
-                .selectByFilterAndPage(userCollectModel, pageNum, pageSize);
+                .selectByFilterAndPage(userCollectModel, circleModel.getPageNum(), circleModel.getPageSize());
 
         List<CircleModel> circleModels = new ArrayList<CircleModel>();
         if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
@@ -105,7 +103,9 @@ public class UserCollectController {
                     tmpCircleModel.setHeadImage(userModel.getHeadImage());
                 }
 
-                tmpCircleModel.setLabelList(labelMap.get(tmpCircleModel.getId()));
+                if(CollectionUtils.isNotEmpty(labelMap.get(tmpCircleModel.getId()))) {
+                    tmpCircleModel.setLabelList(labelMap.get(tmpCircleModel.getId()));
+                }
 
                 if (circleMemberCircleIds.contains(tmpCircleModel.getId())) {
                     tmpCircleModel.setIsMember(1);
@@ -124,15 +124,13 @@ public class UserCollectController {
 
     @ResponseBody
     @RequestMapping(value = "/postList", method = RequestMethod.POST)
-    public Result list(@RequestBody PostModel postModel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+    public Result list(@RequestBody PostModel postModel) {
 
         UserCollectModel userCollectModel = new UserCollectModel();
         userCollectModel.setCollectType(2);
         userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
         PageInfo<UserCollectModel> pageInfo = userCollectService
-                .selectByFilterAndPage(userCollectModel, pageNum, pageSize);
+                .selectByFilterAndPage(userCollectModel, postModel.getPageNum(), postModel.getPageSize());
 
         List<PostModel> postModels = new ArrayList<PostModel>();
         if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
@@ -156,15 +154,13 @@ public class UserCollectController {
 
     @ResponseBody
     @RequestMapping(value = "/companyList", method = RequestMethod.POST)
-    public Result list(@RequestBody CompanyModel companyModel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+    public Result list(@RequestBody CompanyModel companyModel) {
 
         UserCollectModel userCollectModel = new UserCollectModel();
         userCollectModel.setCollectType(3);
         userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
         PageInfo<UserCollectModel> pageInfo = userCollectService
-                .selectByFilterAndPage(userCollectModel, pageNum, pageSize);
+                .selectByFilterAndPage(userCollectModel, companyModel.getPageNum(), companyModel.getPageSize());
 
         List<CompanyModel> companyModels = new ArrayList<CompanyModel>();
 
@@ -189,15 +185,13 @@ public class UserCollectController {
 
     @ResponseBody
     @RequestMapping(value = "/baseList", method = RequestMethod.POST)
-    public Result list(@RequestBody CoolplayBaseModel coolplayBaseModel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+    public Result list(@RequestBody CoolplayBaseModel coolplayBaseModel) {
 
         UserCollectModel userCollectModel = new UserCollectModel();
         userCollectModel.setCollectType(4);
         userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
         PageInfo<UserCollectModel> pageInfo = userCollectService
-                .selectByFilterAndPage(userCollectModel, pageNum, pageSize);
+                .selectByFilterAndPage(userCollectModel, coolplayBaseModel.getPageNum(), coolplayBaseModel.getPageSize());
 
         List<CoolplayBaseModel> baseModels = new ArrayList<CoolplayBaseModel>();
 
@@ -235,31 +229,5 @@ public class UserCollectController {
         int delCnt = userCollectService.delByUserIdAndCollectTypeInfo(currUserId, collectType, collectTypeId);
 
         return ResponseUtil.success();
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/userSpaceDetail", method = RequestMethod.POST)
-    public Result userSpaceDetail(@RequestParam("userId")Integer userId) {
-        UserModel userModel = userService.findById(userId);
-
-        int fansCnt = userFansService.findCntByUserId(userId);
-        int followCnt = userFansService.findCntByFansUserId(userId);
-
-        userModel.setFansCnt(fansCnt);
-        userModel.setFollowCnt(followCnt);
-
-        Map<Integer, List<Integer>> followUserMap = userFansService.getFollowMapByFansUserIds(Collections.singletonList(SecurityUtil.getCurrentUserId()));
-        List<Integer> followUsers = followUserMap.get(SecurityUtil.getCurrentUserId());
-        if(CollectionUtils.isNotEmpty(followUsers) && followUsers.contains(userId)) {
-            userModel.setIsFans(1);
-        }
-
-        PostModel postModel = new PostModel();
-        postModel.setUserId(userId);
-        postModel.setIsDel(0);
-        List<PostModel> dynamicList = postService.selectByFilter(postModel);
-        userModel.setDynamicList(dynamicList);
-
-        return ResponseUtil.success(userModel);
     }
 }

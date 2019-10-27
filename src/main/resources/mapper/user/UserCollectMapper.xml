@@ -73,5 +73,9 @@
 	<delete id="delByUserIdAndCollectTypeInfo">
 		DELETE FROM d_user_collect WHERE collect_type = #{collectType} AND collect_type_id = #{collectTypeId} AND user_id = #{userId}
 	</delete>
+
+	<insert id="insertIgnore">
+		INSERT IGNORE INTO d_user_collect(collect_type, collect_type_id, user_id, is_del) values(#{collectType}, #{collectTypeId}, #{userId}, #{isDel})
+	</insert>
 </mapper>
 

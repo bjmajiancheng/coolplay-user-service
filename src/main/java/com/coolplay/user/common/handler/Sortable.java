@@ -19,11 +19,11 @@ public class Sortable implements Serializable {
 
     @Transient
     @JsonIgnore
-    private Integer pageOffset;
+    private Integer pageNum = 1;
 
     @Transient
     @JsonIgnore
-    private Integer pageSize;
+    private Integer pageSize = 15;
 
     public String getSort_() {
         if (StringUtils.isNotEmpty(getSortWithOutOrderBy())) return "order by " + getSortWithOutOrderBy();
@@ -48,12 +48,12 @@ public class Sortable implements Serializable {
         return sortStr;
     }
 
-    public Integer getPageOffset() {
-        return pageOffset;
+    public Integer getPageNum() {
+        return pageNum;
     }
 
-    public void setPageOffset(Integer pageOffset) {
-        this.pageOffset = pageOffset;
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
     }
 
     public Integer getPageSize() {

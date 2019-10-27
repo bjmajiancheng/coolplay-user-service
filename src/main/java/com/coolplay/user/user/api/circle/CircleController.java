@@ -1,5 +1,6 @@
 package com.coolplay.user.user.api.circle;
 
+import com.alibaba.fastjson.JSON;
 import com.coolplay.user.common.utils.PageConvertUtil;
 import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
@@ -63,14 +64,13 @@ public class CircleController {
 
     @ResponseBody
     @RequestMapping(value = "/list", method= RequestMethod.POST)
-    public Result list(CircleModel circleModel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+    public Result list(@RequestBody CircleModel circleModel) {
+
         circleModel.setDisabled(0);
         circleModel.setReviewStatus(1);
         circleModel.setStatus(1);
         circleModel.setCircleType(1);
-        PageInfo<CircleModel> pageInfo = circleService.selectByFilterAndPage(circleModel, pageNum, pageSize);
+        PageInfo<CircleModel> pageInfo = circleService.selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
 
         List<CircleModel> circleModels = pageInfo.getList();
         if(CollectionUtils.isNotEmpty(circleModels)) {
@@ -101,7 +101,9 @@ public class CircleController {
                     tmpCircleModel.setHeadImage(userModel.getHeadImage());
                 }
 
-                tmpCircleModel.setLabelList(labelMap.get(tmpCircleModel.getId()));
+                if(CollectionUtils.isNotEmpty(labelMap.get(tmpCircleModel.getId()))) {
+                    tmpCircleModel.setLabelList(labelMap.get(tmpCircleModel.getId()));
+                }
 
                 if(circleMemberCircleIds.contains(tmpCircleModel.getId())) {
                     tmpCircleModel.setIsMember(1);
@@ -197,7 +199,7 @@ public class CircleController {
     @RequestMapping(value = "/getBaseInfo", method = RequestMethod.POST)
     public Result getBaseInfo() {
         LabelModel labelModel = new LabelModel();
-        labelModel.setStatus(0);
+        labelModel.setStatus(1);
         labelModel.setIsDel(0);
         List<LabelModel> labelList = labelService.selectByFilter(labelModel);
 
@@ -270,9 +272,11 @@ public class CircleController {
             int saveCnt = circlePublicService.saveNotNull(circlePublicModel);
         }
 
+        int updateCnt = circleService.updateNotNull(updateCircleModel);
+
         int delCnt = circleLabelService.delByCircleId(updateCircleModel.getId());
-        if(CollectionUtils.isNotEmpty(circleModel.getLabelIds())) {
-            List<Integer> labelIds = circleModel.getLabelIds();
+        if(CollectionUtils.isNotEmpty(updateCircleModel.getLabelIds())) {
+            List<Integer> labelIds = updateCircleModel.getLabelIds();
 
             for(Integer labelId : labelIds) {
                 CircleLabelModel circleLabelModel = new CircleLabelModel();
@@ -301,6 +305,11 @@ public class CircleController {
 
         if(CollectionUtils.isNotEmpty(circleLabelMap.get(circleModel.getId()))){
             circleModel.setLabelList(circleLabelMap.get(circleModel.getId()));
+        }
+
+        List<CirclePublicModel> circlePublics = circlePublicService.find(Collections.singletonMap("circleId", id));
+        if(CollectionUtils.isNotEmpty(circlePublics)) {
+            circleModel.setCirclePublics(circlePublics);
         }
 
         Integer postCnt = circlePostService.findPostCntByCircleId(id);
@@ -472,12 +481,10 @@ public class CircleController {
      */
     @ResponseBody
     @RequestMapping(value = "/circlePublics", method = RequestMethod.POST)
-    public Result circlePublics(@RequestBody CirclePublicModel circlePublicModel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+    public Result circlePublics(@RequestBody CirclePublicModel circlePublicModel) {
 
-        circlePublicModel.setSort_("ctime_desc");
-        PageInfo<CirclePublicModel> pageInfo = circlePublicService.selectByFilterAndPage(circlePublicModel, pageNum, pageSize);
+        circlePublicModel.setSort_("c_time_desc");
+        PageInfo<CirclePublicModel> pageInfo = circlePublicService.selectByFilterAndPage(circlePublicModel, circlePublicModel.getPageNum(), circlePublicModel.getPageSize());
 
 
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
@@ -485,9 +492,7 @@ public class CircleController {
 
     @ResponseBody
     @RequestMapping(value = "/myCircleList", method = RequestMethod.POST)
-    public Result myCircleList(@RequestBody CircleModel circleModel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+    public Result myCircleList(@RequestBody CircleModel circleModel) {
         Integer currUserId = SecurityUtil.getCurrentUserId();
 
         circleModel.setReviewStatus(1);
@@ -497,13 +502,16 @@ public class CircleController {
         if(circleModel.getType() == 1) {
             List<Integer> memberUserIds = new ArrayList<Integer>();
             List<Integer> circleIds = circleMemberService.findByMemberUserId(currUserId);
+            if(CollectionUtils.isEmpty(circleIds)) {
+                circleIds = Collections.singletonList(0);
+            }
             circleModel.setIds(circleIds);
 
-            pageInfo = circleService.selectByFilterAndPage(circleModel, pageNum, pageSize);
+            pageInfo = circleService.selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
 
         } else if(circleModel.getType() == 2) {
             circleModel.setUserId(currUserId);
-            pageInfo = circleService.selectByFilterAndPage(circleModel, pageNum, pageSize);
+            pageInfo = circleService.selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
         }
 
         List<CircleModel> circleModels = pageInfo.getList();
@@ -529,7 +537,9 @@ public class CircleController {
                 if(tmpCircle.getUserId() == currUserId) {
                     tmpCircle.setIsOwner(1);
                 }
-                tmpCircle.setLabelList(labelMap.get(tmpCircle.getId()));
+                if(CollectionUtils.isNotEmpty(labelMap.get(tmpCircle.getId()))) {
+                    tmpCircle.setLabelList(labelMap.get(tmpCircle.getId()));
+                }
             }
         }
 

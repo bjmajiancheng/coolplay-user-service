@@ -24,6 +24,9 @@
 			<if test="publicContent != null">
 				AND public_content = #{publicContent}
 			</if>
+			<if test="circleId != null">
+				AND circle_id = #{circleId}
+			</if>
 	    </where>
 	</sql>
 

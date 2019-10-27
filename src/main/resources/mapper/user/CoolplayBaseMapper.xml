@@ -89,7 +89,7 @@
 				AND is_close = #{isClose}
 			</if>
 			<if test="ids != null">
-				AND ids IN
+				AND id IN
 				<foreach collection="ids" item="item" open="(" separator="," close=")">
 					#{item}
 				</foreach>

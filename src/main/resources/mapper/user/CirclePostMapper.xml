@@ -35,7 +35,7 @@
 		FROM d_circle_post WHERE id = #{id}
 	</select>
 
-	<select id="findPostCntByCircleId" resultMap="java.lang.Integer">
+	<select id="findPostCntByCircleId" resultType="java.lang.Integer">
 		SELECT count(1) as cnt FROM d_circle_post where circle_id = #{circleId}
 	</select>
 

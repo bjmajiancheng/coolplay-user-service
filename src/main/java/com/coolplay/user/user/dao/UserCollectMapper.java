@@ -58,4 +58,12 @@ public interface UserCollectMapper extends Mapper<UserCollectModel> {
 	 * @return
 	 */
 	public Integer delByUserIdAndCollectTypeInfo(@Param("userId")Integer userId, @Param("collectType")Integer collectType, @Param("collectTypeId")Integer collectTypeId);
+
+	/**
+	 * 添加用户收藏信息
+	 *
+	 * @param userCollectModel
+	 * @return
+     */
+	public Integer insertIgnore(UserCollectModel userCollectModel);
 }
