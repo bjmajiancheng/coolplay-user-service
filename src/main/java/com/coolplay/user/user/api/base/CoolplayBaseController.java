@@ -53,6 +53,7 @@ public class CoolplayBaseController {
         BigDecimal currPosX = coolplayBaseModel.getPosX() == null ? BigDecimal.ZERO : coolplayBaseModel.getPosX();
         BigDecimal currPosY = coolplayBaseModel.getPosY() == null ? BigDecimal.ZERO : coolplayBaseModel.getPosY();
 
+        coolplayBaseModel.initPageInfo();
         PageInfo<CoolplayBaseModel> pageInfo = coolplayBaseService
                 .selectByFilterAndPage(coolplayBaseModel, coolplayBaseModel.getPageNum(), coolplayBaseModel.getPageSize());
         if (CollectionUtils.isNotEmpty(pageInfo.getList())) {

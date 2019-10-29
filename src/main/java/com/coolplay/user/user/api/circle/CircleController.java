@@ -70,6 +70,7 @@ public class CircleController {
         circleModel.setReviewStatus(1);
         circleModel.setStatus(1);
         circleModel.setCircleType(1);
+        circleModel.initPageInfo();
         PageInfo<CircleModel> pageInfo = circleService.selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
 
         List<CircleModel> circleModels = pageInfo.getList();
@@ -484,6 +485,7 @@ public class CircleController {
     public Result circlePublics(@RequestBody CirclePublicModel circlePublicModel) {
 
         circlePublicModel.setSort_("c_time_desc");
+        circlePublicModel.initPageInfo();
         PageInfo<CirclePublicModel> pageInfo = circlePublicService.selectByFilterAndPage(circlePublicModel, circlePublicModel.getPageNum(), circlePublicModel.getPageSize());
 
 
@@ -499,6 +501,7 @@ public class CircleController {
         circleModel.setStatus(1);
         circleModel.setDisabled(0);
         PageInfo<CircleModel> pageInfo = new PageInfo<CircleModel>();
+        circleModel.initPageInfo();
         if(circleModel.getType() == 1) {
             List<Integer> memberUserIds = new ArrayList<Integer>();
             List<Integer> circleIds = circleMemberService.findByMemberUserId(currUserId);

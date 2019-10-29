@@ -63,6 +63,7 @@ public class PostController {
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Result list(@RequestBody PostModel postModel) {
+        postModel.initPageInfo();
 
         PageInfo<PostModel> pageInfo = this.postService.selectByFilterAndPage(postModel, postModel.getPageNum(), postModel.getPageSize());
         if (CollectionUtils.isNotEmpty(pageInfo.getList())) {

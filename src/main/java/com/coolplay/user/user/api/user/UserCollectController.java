@@ -59,6 +59,7 @@ public class UserCollectController {
         UserCollectModel userCollectModel = new UserCollectModel();
         userCollectModel.setCollectType(1);
         userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
+        circleModel.initPageInfo();
         PageInfo<UserCollectModel> pageInfo = userCollectService
                 .selectByFilterAndPage(userCollectModel, circleModel.getPageNum(), circleModel.getPageSize());
 
@@ -129,6 +130,7 @@ public class UserCollectController {
         UserCollectModel userCollectModel = new UserCollectModel();
         userCollectModel.setCollectType(2);
         userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
+        postModel.initPageInfo();
         PageInfo<UserCollectModel> pageInfo = userCollectService
                 .selectByFilterAndPage(userCollectModel, postModel.getPageNum(), postModel.getPageSize());
 
@@ -159,6 +161,7 @@ public class UserCollectController {
         UserCollectModel userCollectModel = new UserCollectModel();
         userCollectModel.setCollectType(3);
         userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
+        companyModel.initPageInfo();
         PageInfo<UserCollectModel> pageInfo = userCollectService
                 .selectByFilterAndPage(userCollectModel, companyModel.getPageNum(), companyModel.getPageSize());
 
@@ -190,6 +193,7 @@ public class UserCollectController {
         UserCollectModel userCollectModel = new UserCollectModel();
         userCollectModel.setCollectType(4);
         userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
+        coolplayBaseModel.initPageInfo();
         PageInfo<UserCollectModel> pageInfo = userCollectService
                 .selectByFilterAndPage(userCollectModel, coolplayBaseModel.getPageNum(), coolplayBaseModel.getPageSize());
 

@@ -36,6 +36,7 @@ public class UserFansController {
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Result list(@RequestBody UserFansModel userFansModel) {
+        userFansModel.initPageInfo();
         PageInfo<UserFansModel> pageInfo = userFansService
                 .selectByFilterAndPage(userFansModel, userFansModel.getPageNum(), userFansModel.getPageSize());
 
@@ -138,6 +139,7 @@ public class UserFansController {
     @ResponseBody
     @RequestMapping(value = "/followList", method = RequestMethod.POST)
     public Result followList(@RequestBody UserFansModel userFansModel) {
+        userFansModel.initPageInfo();
         PageInfo<UserFansModel> pageInfo = userFansService
                 .selectByFilterAndPage(userFansModel, userFansModel.getPageNum(), userFansModel.getPageSize());
 
