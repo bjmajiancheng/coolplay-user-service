@@ -8,6 +8,8 @@
 package com.coolplay.user.user.model;
 
 import com.coolplay.user.common.handler.Sortable;
+import com.coolplay.user.common.utils.DateStyle;
+import com.coolplay.user.common.utils.DateUtil;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -54,6 +56,9 @@ public class MessageModel extends Sortable {
 	private Date ctime;//"创建时间"
 
 	//columns END
+
+	@Transient
+	private String ctimeStr;//"创建时间"
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -127,5 +132,15 @@ public class MessageModel extends Sortable {
 		return this.ctime;
 	}
 
+	public String getCtimeStr() {
+		if(this.getCtime() != null) {
+			this.ctimeStr = DateUtil.DateToString(this.getCtime(), DateStyle.YYYY_MM_DD_HH_MM);
+		}
+		return ctimeStr;
+	}
+
+	public void setCtimeStr(String ctimeStr) {
+		this.ctimeStr = ctimeStr;
+	}
 }
 
