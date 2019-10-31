@@ -45,5 +45,10 @@
 	<delete id="delByCircleId">
 		DELETE FROM d_circle_admin WHERE circle_id = #{circleId}
 	</delete>
+
+	<select id="findByCircleId" resultMap="CircleAdmin">
+		SELECT <include refid="columns"/>
+		FROM d_circle_admin WHERE circle_id = #{circleId}
+	</select>
 </mapper>
 

@@ -62,8 +62,11 @@ public class CircleController {
     @Autowired
     private ICompanyCircleService companyCircleService;
 
+    @Autowired
+    private IMessageService messageService;
+
     @ResponseBody
-    @RequestMapping(value = "/list", method= RequestMethod.POST)
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Result list(@RequestBody CircleModel circleModel) {
 
         try {
@@ -72,14 +75,15 @@ public class CircleController {
             circleModel.setStatus(1);
             circleModel.setCircleType(1);
             circleModel.initPageInfo();
-            PageInfo<CircleModel> pageInfo = circleService.selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
+            PageInfo<CircleModel> pageInfo = circleService
+                    .selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
 
             List<CircleModel> circleModels = pageInfo.getList();
-            if(CollectionUtils.isNotEmpty(circleModels)) {
+            if (CollectionUtils.isNotEmpty(circleModels)) {
                 List<Integer> userIds = new ArrayList<Integer>();
                 List<Integer> circleIds = new ArrayList<Integer>();
-                for(CircleModel tmpCircleModel : circleModels) {
-                    if(userIds.contains(tmpCircleModel.getUserId())) {
+                for (CircleModel tmpCircleModel : circleModels) {
+                    if (userIds.contains(tmpCircleModel.getUserId())) {
                         userIds.add(tmpCircleModel.getUserId());
                     }
 
@@ -89,34 +93,35 @@ public class CircleController {
                 Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(userIds);
                 Map<Integer, List<LabelModel>> labelMap = labelService.findMapByCircleIds(circleIds);
                 Map<Integer, List<Integer>> circleMemberUserIdMap = circleMemberService.findMapByCircleIds(circleIds);
-                List<Integer> circleMemberCircleIds = circleMemberService.findCircleIdsByUserIdAndCircleIds(SecurityUtil.getCurrentUserId(), circleIds);
-                Map<Integer, Integer> reviewMemberCntMap = circleMemberService.findReviewMemberCntByCircleIds(circleIds);
+                List<Integer> circleMemberCircleIds = circleMemberService
+                        .findCircleIdsByUserIdAndCircleIds(SecurityUtil.getCurrentUserId(), circleIds);
+                Map<Integer, Integer> reviewMemberCntMap = circleMemberService
+                        .findReviewMemberCntByCircleIds(circleIds);
 
                 List<Integer> userCollectCircleIds = userCollectService
                         .findCircleIdsByUserIdAndCircleIds(SecurityUtil.getCurrentUserId(), circleIds);
 
-
-                for(CircleModel tmpCircleModel : circleModels) {
+                for (CircleModel tmpCircleModel : circleModels) {
                     UserModel userModel = userMap.get(tmpCircleModel.getUserId());
-                    if(userModel != null) {
+                    if (userModel != null) {
                         tmpCircleModel.setNickName(userModel.getNickName());
                         tmpCircleModel.setHeadImage(userModel.getHeadImage());
                     }
 
-                    if(CollectionUtils.isNotEmpty(labelMap.get(tmpCircleModel.getId()))) {
+                    if (CollectionUtils.isNotEmpty(labelMap.get(tmpCircleModel.getId()))) {
                         tmpCircleModel.setLabelList(labelMap.get(tmpCircleModel.getId()));
                     }
 
-                    if(circleMemberCircleIds.contains(tmpCircleModel.getId())) {
+                    if (circleMemberCircleIds.contains(tmpCircleModel.getId())) {
                         tmpCircleModel.setIsMember(1);
                     }
 
-                    if(userCollectCircleIds.contains(tmpCircleModel.getId())) {
+                    if (userCollectCircleIds.contains(tmpCircleModel.getId())) {
                         tmpCircleModel.setIsCollect(1);
                     }
 
                     Integer reviewMemberCnt = reviewMemberCntMap.get(tmpCircleModel.getId());
-                    if(reviewMemberCnt != null) {
+                    if (reviewMemberCnt != null) {
                         tmpCircleModel.setReviewMemberCnt(reviewMemberCnt);
                     }
                 }
@@ -124,7 +129,7 @@ public class CircleController {
 
             return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -139,30 +144,29 @@ public class CircleController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/collectCircle", method=RequestMethod.POST)
-    public Result collectCircle(@RequestParam("id")Integer id, @RequestParam("type")Integer type) {
+    @RequestMapping(value = "/collectCircle", method = RequestMethod.POST)
+    public Result collectCircle(@RequestParam("id") Integer id, @RequestParam("type") Integer type) {
 
         try {
-            if(type == 1) {
+            if (type == 1) {
                 UserCollectModel userCollectModel = new UserCollectModel();
                 userCollectModel.setCollectType(1);
                 userCollectModel.setCollectTypeId(id);
                 userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
                 userCollectModel.setIsDel(0);
 
-                if(CollectionUtils.isEmpty(userCollectService.selectByFilter(userCollectModel))) {
+                if (CollectionUtils.isEmpty(userCollectService.selectByFilter(userCollectModel))) {
                     int saveCnt = userCollectService.saveNotNull(userCollectModel);
                 }
-            } else if(type == 2) {
+            } else if (type == 2) {
                 int delCnt = userCollectService.delByUserIdAndCollectTypeInfo(SecurityUtil.getCurrentUserId(), 1, id);
             }
-
 
             Integer collectCnt = userCollectService.findCntByCollectTypeAndCollectTypeId(1, id);
 
             return ResponseUtil.success(Collections.singletonMap("collectCnt", collectCnt));
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -178,11 +182,12 @@ public class CircleController {
      */
     @ResponseBody
     @RequestMapping(value = "/applicationCircle", method = RequestMethod.POST)
-    public Result applicationCircle(@RequestParam("id") Integer id, @RequestParam("applicationReason") String applicationReason) {
+    public Result applicationCircle(@RequestParam("id") Integer id,
+            @RequestParam("applicationReason") String applicationReason) {
 
         try {
             CircleModel circleModel = circleService.findById(id);
-            if(circleModel.getCircleType() == 2) {
+            if (circleModel.getCircleType() == 2) {
                 return ResponseUtil.error("圈子为私密圈, 不能申请加入, 只能被成员邀请");
             }
 
@@ -206,7 +211,7 @@ public class CircleController {
 
             return ResponseUtil.success("申请加入圈子成功");
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -231,7 +236,7 @@ public class CircleController {
 
             return ResponseUtil.success(Collections.singletonMap("labelList", labelList));
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -243,7 +248,7 @@ public class CircleController {
     public Result saveCircle(@RequestBody CircleModel circleModel) {
 
         try {
-            if(circleModel == null) {
+            if (circleModel == null) {
                 return ResponseUtil.error("系统错误, 请确认是否传递参数信息");
             }
 
@@ -254,10 +259,10 @@ public class CircleController {
 
             int saveCnt = circleService.saveNotNull(circleModel);
 
-            if(CollectionUtils.isNotEmpty(circleModel.getLabelIds())) {
+            if (CollectionUtils.isNotEmpty(circleModel.getLabelIds())) {
                 List<Integer> labelIds = circleModel.getLabelIds();
 
-                for(Integer labelId : labelIds) {
+                for (Integer labelId : labelIds) {
                     CircleLabelModel circleLabelModel = new CircleLabelModel();
                     circleLabelModel.setLabelId(labelId);
                     circleLabelModel.setCircleId(circleModel.getId());
@@ -266,10 +271,9 @@ public class CircleController {
                 }
             }
 
-
             return ResponseUtil.success();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -284,15 +288,16 @@ public class CircleController {
 
             CircleModel circleModel = circleService.findById(id);
 
-            Map<Integer, List<LabelModel>> circleLabelMap = labelService.findMapByCircleIds(Collections.singletonList(circleModel.getId()));
+            Map<Integer, List<LabelModel>> circleLabelMap = labelService
+                    .findMapByCircleIds(Collections.singletonList(circleModel.getId()));
 
-            if(CollectionUtils.isNotEmpty(circleLabelMap.get(circleModel.getId()))){
+            if (CollectionUtils.isNotEmpty(circleLabelMap.get(circleModel.getId()))) {
                 circleModel.setLabelList(circleLabelMap.get(circleModel.getId()));
             }
 
             return ResponseUtil.success(circleModel);
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -311,11 +316,11 @@ public class CircleController {
 
         try {
             CircleModel circleModel = circleService.findById(updateCircleModel.getId());
-            if(circleModel.getUserId() != SecurityUtil.getCurrentUserId()) {
+            if (circleModel.getUserId() != SecurityUtil.getCurrentUserId()) {
                 return ResponseUtil.error("当前用户不是圈主, 无法修改圈子信息");
             }
 
-            if(StringUtils.isNotEmpty(updateCircleModel.getPublicContent())) {
+            if (StringUtils.isNotEmpty(updateCircleModel.getPublicContent())) {
                 CirclePublicModel circlePublicModel = new CirclePublicModel();
 
                 circlePublicModel.setCircleId(updateCircleModel.getId());
@@ -326,10 +331,10 @@ public class CircleController {
             int updateCnt = circleService.updateNotNull(updateCircleModel);
 
             int delCnt = circleLabelService.delByCircleId(updateCircleModel.getId());
-            if(CollectionUtils.isNotEmpty(updateCircleModel.getLabelIds())) {
+            if (CollectionUtils.isNotEmpty(updateCircleModel.getLabelIds())) {
                 List<Integer> labelIds = updateCircleModel.getLabelIds();
 
-                for(Integer labelId : labelIds) {
+                for (Integer labelId : labelIds) {
                     CircleLabelModel circleLabelModel = new CircleLabelModel();
                     circleLabelModel.setLabelId(labelId);
                     circleLabelModel.setCircleId(circleModel.getId());
@@ -340,7 +345,7 @@ public class CircleController {
 
             return ResponseUtil.success();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -355,19 +360,20 @@ public class CircleController {
      */
     @ResponseBody
     @RequestMapping(value = "/circleDetail", method = RequestMethod.POST)
-    public Result circleDetail(@RequestParam("id")Integer id) {
+    public Result circleDetail(@RequestParam("id") Integer id) {
 
         try {
             CircleModel circleModel = circleService.findById(id);
 
-            Map<Integer, List<LabelModel>> circleLabelMap = labelService.findMapByCircleIds(Collections.singletonList(circleModel.getId()));
+            Map<Integer, List<LabelModel>> circleLabelMap = labelService
+                    .findMapByCircleIds(Collections.singletonList(circleModel.getId()));
 
-            if(CollectionUtils.isNotEmpty(circleLabelMap.get(circleModel.getId()))){
+            if (CollectionUtils.isNotEmpty(circleLabelMap.get(circleModel.getId()))) {
                 circleModel.setLabelList(circleLabelMap.get(circleModel.getId()));
             }
 
             List<CirclePublicModel> circlePublics = circlePublicService.find(Collections.singletonMap("circleId", id));
-            if(CollectionUtils.isNotEmpty(circlePublics)) {
+            if (CollectionUtils.isNotEmpty(circlePublics)) {
                 circleModel.setCirclePublics(circlePublics);
             }
 
@@ -375,13 +381,13 @@ public class CircleController {
             circleModel.setPostCnt(postCnt);
 
             List<PostModel> circlePosts = postService.findByCircleId(id);
-            if(CollectionUtils.isNotEmpty(circlePosts)) {
+            if (CollectionUtils.isNotEmpty(circlePosts)) {
                 circleModel.setCirclePosts(circlePosts);
             }
 
             return ResponseUtil.success(circleModel);
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -396,13 +402,14 @@ public class CircleController {
      */
     @ResponseBody
     @RequestMapping(value = "/circleUsers", method = RequestMethod.POST)
-    public Result circleUsers(@RequestParam("id")Integer id) {
+    public Result circleUsers(@RequestParam("id") Integer id) {
 
         try {
             //获取圈子信息
             CircleModel circleModel = circleService.findById(id);
             //获取圈子管理员信息
-            List<CircleAdminModel> circleAdminModels = circleAdminService.find(Collections.singletonMap("circleId", id));
+            List<CircleAdminModel> circleAdminModels = circleAdminService
+                    .find(Collections.singletonMap("circleId", id));
             //获取圈子成员信息
             CircleMemberModel circleMemberModel = new CircleMemberModel();
             circleMemberModel.setCircleId(id);
@@ -416,18 +423,18 @@ public class CircleController {
             circleUserDtos.add(new CircleUserDto(id, circleModel.getUserId(), 1, 0));
             userIds.add(circleModel.getUserId());
 
-            if(CollectionUtils.isNotEmpty(circleAdminModels)) {
-                for(CircleAdminModel circleAdminModel : circleAdminModels) {
-                    if(!userIds.contains(circleAdminModel.getAdminUserId())) {
+            if (CollectionUtils.isNotEmpty(circleAdminModels)) {
+                for (CircleAdminModel circleAdminModel : circleAdminModels) {
+                    if (!userIds.contains(circleAdminModel.getAdminUserId())) {
                         userIds.add(circleAdminModel.getAdminUserId());
                         circleUserDtos.add(new CircleUserDto(id, circleAdminModel.getAdminUserId(), 0, 1));
                     }
                 }
             }
 
-            if(CollectionUtils.isNotEmpty(circleMemberModels)) {
-                for(CircleMemberModel tmpCircleMember : circleMemberModels) {
-                    if(!userIds.contains(tmpCircleMember.getMemberUserId())) {
+            if (CollectionUtils.isNotEmpty(circleMemberModels)) {
+                for (CircleMemberModel tmpCircleMember : circleMemberModels) {
+                    if (!userIds.contains(tmpCircleMember.getMemberUserId())) {
                         userIds.add(tmpCircleMember.getMemberUserId());
                         circleUserDtos.add(new CircleUserDto(id, tmpCircleMember.getMemberUserId(), 0, 0));
                     }
@@ -435,10 +442,10 @@ public class CircleController {
             }
 
             Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(userIds);
-            if(CollectionUtils.isNotEmpty(circleUserDtos)) {
-                for(CircleUserDto circleUserDto : circleUserDtos) {
+            if (CollectionUtils.isNotEmpty(circleUserDtos)) {
+                for (CircleUserDto circleUserDto : circleUserDtos) {
                     UserModel userModel = userMap.get(circleUserDto.getUserId());
-                    if(userModel != null) {
+                    if (userModel != null) {
                         circleUserDto.setNickName(userModel.getNickName());
                         circleUserDto.setHeadImage(userModel.getHeadImage());
                     }
@@ -447,13 +454,12 @@ public class CircleController {
 
             return ResponseUtil.success(Collections.singletonMap("circleUsers", circleUserDtos));
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
         }
     }
-
 
     /**
      * 圈子转让提交
@@ -464,7 +470,7 @@ public class CircleController {
      */
     @ResponseBody
     @RequestMapping(value = "/transferUser", method = RequestMethod.POST)
-    public Result transferUser(@RequestParam("id")Integer id, @RequestParam("userId")Integer userId) {
+    public Result transferUser(@RequestParam("id") Integer id, @RequestParam("userId") Integer userId) {
 
         try {
             CircleModel circleModel = new CircleModel();
@@ -475,7 +481,7 @@ public class CircleController {
 
             return ResponseUtil.success();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -491,13 +497,14 @@ public class CircleController {
      */
     @ResponseBody
     @RequestMapping(value = "/transferAdminUser", method = RequestMethod.POST)
-    public Result transferAdminUser(@RequestParam("id")Integer id, @RequestParam("adminUserIds")List<Integer> adminUserIds) {
+    public Result transferAdminUser(@RequestParam("id") Integer id,
+            @RequestParam("adminUserIds") List<Integer> adminUserIds) {
 
         try {
             int delCnt = circleAdminService.delByCircleId(id);
 
-            if(CollectionUtils.isNotEmpty(adminUserIds)) {
-                for(Integer adminUserId : adminUserIds) {
+            if (CollectionUtils.isNotEmpty(adminUserIds)) {
+                for (Integer adminUserId : adminUserIds) {
                     CircleAdminModel circleAdminModel = new CircleAdminModel();
                     circleAdminModel.setCircleId(id);
                     circleAdminModel.setAdminUserId(adminUserId);
@@ -508,7 +515,7 @@ public class CircleController {
 
             return ResponseUtil.success();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -525,10 +532,12 @@ public class CircleController {
      */
     @ResponseBody
     @RequestMapping(value = "/inviteCircle", method = RequestMethod.POST)
-    public Result inviteCircle(@RequestParam("id")Integer id, @RequestParam("userId")Integer userId,
-            @RequestParam("applicationReason")String applicationReason) {
+    public Result inviteCircle(@RequestParam("id") Integer id, @RequestParam("userId") Integer userId,
+            @RequestParam("applicationReason") String applicationReason) {
 
         try {
+            CircleModel circleModel = circleService.findById(id);
+
             CircleMemberReviewModel circleMemberReviewModel = new CircleMemberReviewModel();
             circleMemberReviewModel.setCircleId(id);
             circleMemberReviewModel.setInviteUserId(SecurityUtil.getCurrentUserId());
@@ -536,11 +545,40 @@ public class CircleController {
             circleMemberReviewModel.setReviewStatus(0);
             circleMemberReviewModel.setApplicationReason(applicationReason);
 
+            List<CircleAdminModel> circleAdmins = circleAdminService.findByCircleId(id);
+            List<Integer> circleAdminUserIds = new ArrayList<Integer>();
+            for (CircleAdminModel circleAdmin : circleAdmins) {
+                if (!circleAdminUserIds.contains(circleAdmin.getAdminUserId())) {
+                    circleAdminUserIds.add(circleAdmin.getAdminUserId());
+                }
+            }
+            if (!circleAdminUserIds.contains(circleModel.getUserId())) {
+                circleAdminUserIds.add(circleModel.getUserId());
+            }
+
+            Map<Integer, UserModel> userModelMap = userService
+                    .findUserMapByUserIds(Arrays.asList(new Integer[] { SecurityUtil.getCurrentUserId(), userId }));
+
+            UserModel inviteUserModel = userModelMap.get(SecurityUtil.getCurrentUserId());
+            UserModel memberUserModel = userModelMap.get(userId);
+            String inviteUserNickName = inviteUserModel == null ? "" : inviteUserModel.getNickName();
+            String memberUserNickName = memberUserModel == null ? "" : memberUserModel.getNickName();
+
+            for (Integer adminUserId : circleAdminUserIds) {
+                MessageModel messageModel = new MessageModel();
+                messageModel.setUserId(adminUserId);
+                messageModel.setMessageName("加入" + circleModel.getCircleName() + "圈申请");
+                messageModel.setMessageContent(inviteUserNickName + "邀请"+ memberUserNickName +"加入" + circleModel.getCircleName() + "圈，是否同意");
+                messageModel.setMessageType(1);
+
+                int saveCnt = messageService.saveNotNull(messageModel);
+            }
+
             int saveCnt = circleMemberReviewService.saveNotNull(circleMemberReviewModel);
 
             return ResponseUtil.success();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -556,7 +594,7 @@ public class CircleController {
      */
     @ResponseBody
     @RequestMapping(value = "/updateCircleCompany", method = RequestMethod.POST)
-    public Result updateCircleCompany(@RequestParam("id")Integer id, @RequestParam("companyId")Integer companyId) {
+    public Result updateCircleCompany(@RequestParam("id") Integer id, @RequestParam("companyId") Integer companyId) {
 
         try {
             CompanyCircleModel companyCircleModel = new CompanyCircleModel();
@@ -571,7 +609,7 @@ public class CircleController {
 
             return ResponseUtil.success();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -591,12 +629,13 @@ public class CircleController {
         try {
             circlePublicModel.setSort_("c_time_desc");
             circlePublicModel.initPageInfo();
-            PageInfo<CirclePublicModel> pageInfo = circlePublicService.selectByFilterAndPage(circlePublicModel, circlePublicModel.getPageNum(), circlePublicModel.getPageSize());
-
+            PageInfo<CirclePublicModel> pageInfo = circlePublicService
+                    .selectByFilterAndPage(circlePublicModel, circlePublicModel.getPageNum(),
+                            circlePublicModel.getPageSize());
 
             return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -615,28 +654,30 @@ public class CircleController {
             circleModel.setDisabled(0);
             PageInfo<CircleModel> pageInfo = new PageInfo<CircleModel>();
             circleModel.initPageInfo();
-            if(circleModel.getType() == 1) {
+            if (circleModel.getType() == 1) {
                 List<Integer> memberUserIds = new ArrayList<Integer>();
                 List<Integer> circleIds = circleMemberService.findByMemberUserId(currUserId);
-                if(CollectionUtils.isEmpty(circleIds)) {
+                if (CollectionUtils.isEmpty(circleIds)) {
                     circleIds = Collections.singletonList(0);
                 }
                 circleModel.setIds(circleIds);
 
-                pageInfo = circleService.selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
+                pageInfo = circleService
+                        .selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
 
-            } else if(circleModel.getType() == 2) {
+            } else if (circleModel.getType() == 2) {
                 circleModel.setUserId(currUserId);
-                pageInfo = circleService.selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
+                pageInfo = circleService
+                        .selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
             }
 
             List<CircleModel> circleModels = pageInfo.getList();
-            if(CollectionUtils.isNotEmpty(circleModels)) {
+            if (CollectionUtils.isNotEmpty(circleModels)) {
                 List<Integer> userIds = new ArrayList<Integer>();
                 List<Integer> circleIds = new ArrayList<Integer>();
 
-                for(CircleModel tmpCircle : circleModels) {
-                    if(!userIds.contains(tmpCircle.getUserId())) {
+                for (CircleModel tmpCircle : circleModels) {
+                    if (!userIds.contains(tmpCircle.getUserId())) {
                         userIds.add(tmpCircle.getUserId());
                     }
                     circleIds.add(tmpCircle.getUserId());
@@ -644,16 +685,16 @@ public class CircleController {
 
                 Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(userIds);
                 Map<Integer, List<LabelModel>> labelMap = labelService.findMapByCircleIds(circleIds);
-                for(CircleModel tmpCircle : circleModels) {
+                for (CircleModel tmpCircle : circleModels) {
                     UserModel userModel = userMap.get(tmpCircle.getUserId());
-                    if(userModel != null) {
+                    if (userModel != null) {
                         tmpCircle.setNickName(userModel.getNickName());
                         tmpCircle.setHeadImage(userModel.getHeadImage());
                     }
-                    if(tmpCircle.getUserId() == currUserId) {
+                    if (tmpCircle.getUserId() == currUserId) {
                         tmpCircle.setIsOwner(1);
                     }
-                    if(CollectionUtils.isNotEmpty(labelMap.get(tmpCircle.getId()))) {
+                    if (CollectionUtils.isNotEmpty(labelMap.get(tmpCircle.getId()))) {
                         tmpCircle.setLabelList(labelMap.get(tmpCircle.getId()));
                     }
                 }
@@ -661,12 +702,11 @@ public class CircleController {
 
             return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
         }
     }
-
 
 }

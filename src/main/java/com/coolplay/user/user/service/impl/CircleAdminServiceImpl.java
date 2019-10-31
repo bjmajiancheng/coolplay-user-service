@@ -74,4 +74,18 @@ public class CircleAdminServiceImpl extends BaseService<CircleAdminModel> implem
 	public int delByCircleId(Integer circleId) {
 		return circleAdminMapper.delByCircleId(circleId);
 	}
+
+	/**
+	 * 根据圈子ID获取管理员信息
+	 *
+	 * @param circleId
+	 * @return
+	 */
+	public List<CircleAdminModel> findByCircleId(Integer circleId) {
+		if(circleId == null) {
+			return Collections.emptyList();
+		}
+
+		return circleAdminMapper.findByCircleId(circleId);
+	}
 }
