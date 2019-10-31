@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 @Component("redisCache")
 public class RedisCache implements IBasicCache<String, Object> {
 
-    private final static int DEFAULT_EXPIRE_SECOND = 3 * 24 * 60 * 60;
+    private final static int DEFAULT_EXPIRE_SECOND = 30 * 24 * 60 * 60;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
