@@ -37,41 +37,49 @@ public class UserFansController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Result list(@RequestBody UserFansModel userFansModel) {
         userFansModel.initPageInfo();
-        PageInfo<UserFansModel> pageInfo = userFansService
-                .selectByFilterAndPage(userFansModel, userFansModel.getPageNum(), userFansModel.getPageSize());
 
-        List<UserModel> fansUserModels = new ArrayList<UserModel>();
-        if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
-            List<Integer> fansUserIds = new ArrayList<Integer>();
+        try {
+            PageInfo<UserFansModel> pageInfo = userFansService
+                    .selectByFilterAndPage(userFansModel, userFansModel.getPageNum(), userFansModel.getPageSize());
 
-            for (UserFansModel tmpUserFans : pageInfo.getList()) {
-                fansUserIds.add(tmpUserFans.getFansUserId());
-            }
+            List<UserModel> fansUserModels = new ArrayList<UserModel>();
+            if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
+                List<Integer> fansUserIds = new ArrayList<Integer>();
 
-            Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(fansUserIds);
-            for (UserFansModel tmpUserFans : pageInfo.getList()) {
-                UserModel userModel = userMap.get(tmpUserFans.getFansUserId());
-                if (userModel != null) {
-                    fansUserModels.add(userModel);
+                for (UserFansModel tmpUserFans : pageInfo.getList()) {
+                    fansUserIds.add(tmpUserFans.getFansUserId());
+                }
+
+                Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(fansUserIds);
+                for (UserFansModel tmpUserFans : pageInfo.getList()) {
+                    UserModel userModel = userMap.get(tmpUserFans.getFansUserId());
+                    if (userModel != null) {
+                        fansUserModels.add(userModel);
+                    }
                 }
             }
-        }
 
-        if (CollectionUtils.isNotEmpty(fansUserModels)) {
+            if (CollectionUtils.isNotEmpty(fansUserModels)) {
 
-            Map<Integer, List<Integer>> followMap = userFansService
-                    .getFollowMapByFansUserIds(Collections.singletonList(SecurityUtil.getCurrentUserId()));
+                Map<Integer, List<Integer>> followMap = userFansService
+                        .getFollowMapByFansUserIds(Collections.singletonList(SecurityUtil.getCurrentUserId()));
 
-            List<Integer> followUserIds = followMap.get(SecurityUtil.getCurrentUserId());
-            for (UserModel fansUserModel : fansUserModels) {
-                if (followUserIds.contains(fansUserModel.getId())) {
-                    fansUserModel.setIsFans(1);
+                List<Integer> followUserIds = followMap.get(SecurityUtil.getCurrentUserId());
+                for (UserModel fansUserModel : fansUserModels) {
+                    if (followUserIds.contains(fansUserModel.getId())) {
+                        fansUserModel.setIsFans(1);
+                    }
                 }
             }
-        }
 
-        PageInfo<UserModel> fansUserPageInfo = new PageInfo<UserModel>(fansUserModels);
-        return ResponseUtil.success(PageConvertUtil.grid(fansUserPageInfo));
+            PageInfo<UserModel> fansUserPageInfo = new PageInfo<UserModel>(fansUserModels);
+            return ResponseUtil.success(PageConvertUtil.grid(fansUserPageInfo));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
     }
 
     /**
@@ -88,9 +96,16 @@ public class UserFansController {
             return ResponseUtil.error("无权限修改其他用户信息");
         }
 
-        int delCnt = userFansService.delByUserIdAndFansUserId(userId, fansUserId);
+        try {
+            int delCnt = userFansService.delByUserIdAndFansUserId(userId, fansUserId);
 
-        return ResponseUtil.success();
+            return ResponseUtil.success();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
     }
 
     /**
@@ -106,13 +121,20 @@ public class UserFansController {
             return ResponseUtil.error("无法关注自己账号");
         }
 
-        UserFansModel userFansModel = new UserFansModel();
-        userFansModel.setUserId(userId);
-        userFansModel.setFansUserId(SecurityUtil.getCurrentUserId());
+        try {
+            UserFansModel userFansModel = new UserFansModel();
+            userFansModel.setUserId(userId);
+            userFansModel.setFansUserId(SecurityUtil.getCurrentUserId());
 
-        int saveCnt = userFansService.saveNotNull(userFansModel);
+            int saveCnt = userFansService.saveNotNull(userFansModel);
 
-        return ResponseUtil.success();
+            return ResponseUtil.success();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
     }
 
     /**
@@ -125,9 +147,16 @@ public class UserFansController {
     @RequestMapping(value = "/disableFollowUser", method = RequestMethod.POST)
     public Result disableFollowUser(@RequestParam("userId") Integer userId) {
 
-        int delCnt = userFansService.delByUserIdAndFansUserId(userId, SecurityUtil.getCurrentUserId());
+        try {
+            int delCnt = userFansService.delByUserIdAndFansUserId(userId, SecurityUtil.getCurrentUserId());
 
-        return ResponseUtil.success();
+            return ResponseUtil.success();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
     }
 
     /**
@@ -139,41 +168,49 @@ public class UserFansController {
     @ResponseBody
     @RequestMapping(value = "/followList", method = RequestMethod.POST)
     public Result followList(@RequestBody UserFansModel userFansModel) {
-        userFansModel.initPageInfo();
-        PageInfo<UserFansModel> pageInfo = userFansService
-                .selectByFilterAndPage(userFansModel, userFansModel.getPageNum(), userFansModel.getPageSize());
 
-        List<UserModel> userModels = new ArrayList<UserModel>();
-        if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
-            List<Integer> userIds = new ArrayList<Integer>();
+        try {
+            userFansModel.initPageInfo();
+            PageInfo<UserFansModel> pageInfo = userFansService
+                    .selectByFilterAndPage(userFansModel, userFansModel.getPageNum(), userFansModel.getPageSize());
 
-            for (UserFansModel tmpUserFans : pageInfo.getList()) {
-                userIds.add(tmpUserFans.getUserId());
-            }
+            List<UserModel> userModels = new ArrayList<UserModel>();
+            if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
+                List<Integer> userIds = new ArrayList<Integer>();
 
-            Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(userIds);
-            for (UserFansModel tmpUserFans : pageInfo.getList()) {
-                UserModel userModel = userMap.get(tmpUserFans.getUserId());
-                if (userModel != null) {
-                    userModels.add(userModel);
+                for (UserFansModel tmpUserFans : pageInfo.getList()) {
+                    userIds.add(tmpUserFans.getUserId());
+                }
+
+                Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(userIds);
+                for (UserFansModel tmpUserFans : pageInfo.getList()) {
+                    UserModel userModel = userMap.get(tmpUserFans.getUserId());
+                    if (userModel != null) {
+                        userModels.add(userModel);
+                    }
                 }
             }
-        }
 
-        if (CollectionUtils.isNotEmpty(userModels)) {
+            if (CollectionUtils.isNotEmpty(userModels)) {
 
-            Map<Integer, List<Integer>> followMap = userFansService
-                    .getFollowMapByFansUserIds(Collections.singletonList(SecurityUtil.getCurrentUserId()));
+                Map<Integer, List<Integer>> followMap = userFansService
+                        .getFollowMapByFansUserIds(Collections.singletonList(SecurityUtil.getCurrentUserId()));
 
-            List<Integer> followUserIds = followMap.get(SecurityUtil.getCurrentUserId());
-            for (UserModel userModel : userModels) {
-                if (followUserIds.contains(userModel.getId())) {
-                    userModel.setIsFans(1);
+                List<Integer> followUserIds = followMap.get(SecurityUtil.getCurrentUserId());
+                for (UserModel userModel : userModels) {
+                    if (followUserIds.contains(userModel.getId())) {
+                        userModel.setIsFans(1);
+                    }
                 }
             }
-        }
 
-        PageInfo<UserModel> userPageInfo = new PageInfo<UserModel>(userModels);
-        return ResponseUtil.success(PageConvertUtil.grid(userPageInfo));
+            PageInfo<UserModel> userPageInfo = new PageInfo<UserModel>(userModels);
+            return ResponseUtil.success(PageConvertUtil.grid(userPageInfo));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
     }
 }

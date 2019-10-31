@@ -30,14 +30,22 @@ public class UserMessageController {
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Result list(@RequestBody MessageModel messageModel) {
-        messageModel.initPageInfo();
-        messageModel.setUserId(SecurityUtil.getCurrentUserId());
-        messageModel.setSort_("c_time_desc");
 
-        PageInfo<MessageModel> pageInfo = messageService
-                .selectByFilterAndPage(messageModel, messageModel.getPageNum(), messageModel.getPageSize());
+        try {
+            messageModel.initPageInfo();
+            messageModel.setUserId(SecurityUtil.getCurrentUserId());
+            messageModel.setSort_("c_time_desc");
 
-        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+            PageInfo<MessageModel> pageInfo = messageService
+                    .selectByFilterAndPage(messageModel, messageModel.getPageNum(), messageModel.getPageSize());
+
+            return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
     }
 
     /**
@@ -50,19 +58,27 @@ public class UserMessageController {
     @ResponseBody
     @RequestMapping(value = "/dealMessage", method = RequestMethod.POST)
     public Result dealMessage(@RequestParam("id") Integer id, @RequestParam("isAgree") Integer isAgree) {
-        MessageModel messageModel = messageService.findById(id);
 
-        if(messageModel.getUserId() != SecurityUtil.getCurrentUserId()) {
-            return ResponseUtil.error("处理消息失败, 用户无权限操作其他消息.");
+        try {
+            MessageModel messageModel = messageService.findById(id);
+
+            if(messageModel.getUserId() != SecurityUtil.getCurrentUserId()) {
+                return ResponseUtil.error("处理消息失败, 用户无权限操作其他消息.");
+            }
+
+            MessageModel updateMessage = new MessageModel();
+            updateMessage.setId(id);
+            updateMessage.setIsAgree(isAgree);
+            updateMessage.setIsRead(1);
+            int updateCnt = messageService.updateNotNull(updateMessage);
+
+            return ResponseUtil.success();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
         }
-
-        MessageModel updateMessage = new MessageModel();
-        updateMessage.setId(id);
-        updateMessage.setIsAgree(isAgree);
-        updateMessage.setIsRead(1);
-        int updateCnt = messageService.updateNotNull(updateMessage);
-
-        return ResponseUtil.success();
     }
 
     /**
@@ -74,14 +90,22 @@ public class UserMessageController {
     @ResponseBody
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
     public Result detail(@RequestParam("id") Integer id) {
-        MessageModel updateMessage = new MessageModel();
-        updateMessage.setId(id);
-        updateMessage.setIsRead(1);
-        int updateCnt = messageService.updateNotNull(updateMessage);
 
-        MessageModel messageModel = messageService.findById(id);
+        try {
+            MessageModel updateMessage = new MessageModel();
+            updateMessage.setId(id);
+            updateMessage.setIsRead(1);
+            int updateCnt = messageService.updateNotNull(updateMessage);
 
-        return ResponseUtil.success(messageModel);
+            MessageModel messageModel = messageService.findById(id);
+
+            return ResponseUtil.success(messageModel);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
     }
 
 

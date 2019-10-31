@@ -35,32 +35,56 @@ public class IndexController {
     @ResponseBody
     @RequestMapping(value = "/bannerList", method = RequestMethod.POST)
     public Result bannerList(BannerModel bannerModel) {
-        int pageNo = 1;
-        int pageSize = 5;
-        PageInfo<BannerModel> pageInfo = this.bannerService.selectByFilterAndPage(bannerModel, pageNo, pageSize);
 
-        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+        try {
+            int pageNo = 1;
+            int pageSize = 5;
+            PageInfo<BannerModel> pageInfo = this.bannerService.selectByFilterAndPage(bannerModel, pageNo, pageSize);
+
+            return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
     }
 
     @ResponseBody
     @RequestMapping(value = "/circleList", method = RequestMethod.POST)
     public Result circleList(CircleModel circleModel) {
-        int pageNo = 1;
-        int pageSize = 3;
-        circleModel.setSort_("memberCnt_desc");
-        PageInfo<CircleModel> pageInfo = this.circleService.selectByFilterAndPage(circleModel, pageNo, pageSize);
 
-        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+        try {
+            int pageNo = 1;
+            int pageSize = 3;
+            circleModel.setSort_("memberCnt_desc");
+            PageInfo<CircleModel> pageInfo = this.circleService.selectByFilterAndPage(circleModel, pageNo, pageSize);
+
+            return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
     }
 
     @ResponseBody
     @RequestMapping(value = "/baseList", method = RequestMethod.POST)
     public Result baseList(CoolplayBaseModel coolplayBaseModel) {
-        int pageNo = 1;
-        int pageSize = 3;
-        coolplayBaseModel.setSort_("readCnt_desc");
-        PageInfo<CoolplayBaseModel> pageInfo = this.coolplayBaseService.selectByFilterAndPage(coolplayBaseModel, pageNo, pageSize);
 
-        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+        try {
+            int pageNo = 1;
+            int pageSize = 3;
+            coolplayBaseModel.setSort_("readCnt_desc");
+            PageInfo<CoolplayBaseModel> pageInfo = this.coolplayBaseService.selectByFilterAndPage(coolplayBaseModel, pageNo, pageSize);
+
+            return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
     }
 }

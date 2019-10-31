@@ -137,14 +137,20 @@ public class CommonController {
 
     @RequestMapping(value = "/attachment", method = RequestMethod.POST)
     @ResponseBody
-    public Result attachment(@RequestParam("attachmentId") Integer attachmentId) throws Exception {
-        if (attachmentId != null) {
-            Attachment attachment = attachmentService.selectByKey(attachmentId);
-            if (attachment != null) {
-                return ResponseUtil.success(attachment);
+    public Result attachment(@RequestParam("attachmentId") Integer attachmentId) {
+        try {
+            if (attachmentId != null) {
+                Attachment attachment = attachmentService.selectByKey(attachmentId);
+                if (attachment != null) {
+                    return ResponseUtil.success(attachment);
+                }
             }
+            return ResponseUtil.error("附件id不存在。");
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
         }
-        return ResponseUtil.error("附件id不存在。");
     }
 
     /**
@@ -160,58 +166,66 @@ public class CommonController {
             return ResponseUtil.error("请输入手机号码");
         }
 
-        /*UserModel userModel = userService.findUserByLoginName(mobilePhone);
-        if(userModel == null) {
-            return ResponseUtil.error("用户不存在, 请重新操作...");
-        }*/
+        try {
+            String verifyCode = "";
+            Object obj = redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + mobilePhone);
+            if(obj != null) {
+                verifyCode = String.valueOf(obj);
+            }
 
-        String verifyCode = "";
-        Object obj = redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + mobilePhone);
-        if(obj != null) {
-            verifyCode = String.valueOf(obj);
+            if(StringUtils.isNotEmpty(verifyCode)) {
+                return ResponseUtil.error("验证码还在有效期内,请输入之前验证码。");
+            }
+
+
+            verifyCode = String.valueOf(new Random().nextInt(8999) + 1000);
+
+            String key = "sms_0000000003";
+            String[] values = {verifyCode};
+
+
+            String msgContent = messageUtil.getProperty(key, values);
+
+            VerifyCodeModel verifyCodeModel = new VerifyCodeModel();
+            verifyCodeModel.setMobilePhone(mobilePhone);
+            verifyCodeModel.setVerifyCode(verifyCode);
+            verifyCodeModel.setContent(msgContent);
+            verifyCodeModel.setCtime(new Date());
+            verifyCodeService.saveNotNull(verifyCodeModel);
+
+            //验证码设置缓存信息
+            redisCache.set(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + mobilePhone, verifyCode, SecurityConstant.THREE_MINUTES_EXPIRE_SECOND);
+
+            Result result = messageUtil.sendMessage(mobilePhone, key, values);
+
+            return ResponseUtil.success("验证码发送成功");
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
         }
-
-        if(StringUtils.isNotEmpty(verifyCode)) {
-            return ResponseUtil.error("验证码还在有效期内,请输入之前验证码。");
-        }
-
-
-        verifyCode = String.valueOf(new Random().nextInt(8999) + 1000);
-
-        String key = "sms_0000000003";
-        String[] values = {verifyCode};
-
-
-        String msgContent = messageUtil.getProperty(key, values);
-
-        VerifyCodeModel verifyCodeModel = new VerifyCodeModel();
-        verifyCodeModel.setMobilePhone(mobilePhone);
-        verifyCodeModel.setVerifyCode(verifyCode);
-        verifyCodeModel.setContent(msgContent);
-        verifyCodeModel.setCtime(new Date());
-        verifyCodeService.saveNotNull(verifyCodeModel);
-
-        //验证码设置缓存信息
-        redisCache.set(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + mobilePhone, verifyCode, SecurityConstant.THREE_MINUTES_EXPIRE_SECOND);
-
-        Result result = messageUtil.sendMessage(mobilePhone, key, values);
-
-        return ResponseUtil.success("验证码发送成功");
     }
 
     @ResponseBody
     @RequestMapping(value = "/lastVersion", method = RequestMethod.POST)
     public Result lastVersion() {
-        List<SystemVersionModel> systemVersions = systemVersionService.selectByFilter(new SystemVersionModel());
-        Map<String, SystemVersionModel> systemVersionMap = new HashMap<String, SystemVersionModel>();
 
-        if(CollectionUtils.isNotEmpty(systemVersions)) {
-            for(SystemVersionModel systemVersion : systemVersions) {
-                systemVersionMap.put(systemVersion.getAppType(), systemVersion);
+        try {
+            List<SystemVersionModel> systemVersions = systemVersionService.selectByFilter(new SystemVersionModel());
+            Map<String, SystemVersionModel> systemVersionMap = new HashMap<String, SystemVersionModel>();
+
+            if(CollectionUtils.isNotEmpty(systemVersions)) {
+                for(SystemVersionModel systemVersion : systemVersions) {
+                    systemVersionMap.put(systemVersion.getAppType(), systemVersion);
+                }
             }
-        }
 
-        return ResponseUtil.success(systemVersionMap);
+            return ResponseUtil.success(systemVersionMap);
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
     }
 
 }
