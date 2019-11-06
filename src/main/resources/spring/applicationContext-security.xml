@@ -22,6 +22,9 @@
     <http pattern="/api/circle/post/list" security="none"/>
     <http pattern="/api/circle/post/postDetail" security="none"/>
     <http pattern="/api/circle/post/detail" security="none"/>
+    <http pattern="/api/circle/circle/list" security="none"/>
+    <http pattern="/api/circle/circle/circleDetail" security="none"/>
+
     <http pattern="/index.jsp" security="none"/>
     <http pattern="/favicon.ico" security="none"/>
 

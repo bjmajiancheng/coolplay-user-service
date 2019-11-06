@@ -281,7 +281,7 @@ public class CircleController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "circleInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "/circleInfo", method = RequestMethod.POST)
     public Result circleInfo(@RequestParam("id") Integer id) {
 
         try {
