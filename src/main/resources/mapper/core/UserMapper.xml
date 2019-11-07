@@ -118,7 +118,7 @@
 	</select>
 
 	<select id="findLoginNameByUserId" resultType="java.lang.String">
-		SELECT user_name FROM d_user WHERE user_id = #{userId}
+		SELECT user_name FROM d_user WHERE id = #{userId}
 	</select>
 
 	<update id="updateLastLoginInfoByUserName">
@@ -126,7 +126,7 @@
 	</update>
 
 	<select id="findUserByUserId" resultMap="User">
-		SELECT <include refid="passwordColumns"/> FROM d_user WHERE user_id = #{userId}
+		SELECT <include refid="passwordColumns"/> FROM d_user WHERE id = #{userId}
 	</select>
 
 	<select id="findUserByMobilePhone" resultMap="User">
