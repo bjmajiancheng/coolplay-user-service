@@ -95,6 +95,9 @@ public class CircleModel extends Sortable {
 	private String nickName = "";//圈主昵称
 
 	@Transient
+	private String userDesc = "";//用户描述
+
+	@Transient
 	private String headImage = "";//圈主头图
 
 	@Transient
@@ -122,7 +125,13 @@ public class CircleModel extends Sortable {
 	private String publicContent = "";//公告内容
 
 	@Transient
-	private Integer postCnt = 0;//帖子人数
+	private Integer postCnt = 0;//帖子数
+
+	@Transient
+	private Integer followCnt = 0;//圈主关注人数
+
+	@Transient
+	private Integer fansCnt = 0;//圈主粉丝人数
 
 	@Transient
 	private List<CirclePublicModel> circlePublics = new ArrayList<CirclePublicModel>();//圈子公告集合
@@ -312,6 +321,14 @@ public class CircleModel extends Sortable {
 		this.nickName = nickName;
 	}
 
+	public String getUserDesc() {
+		return userDesc;
+	}
+
+	public void setUserDesc(String userDesc) {
+		this.userDesc = userDesc;
+	}
+
 	public String getHeadImage() {
 		return headImage;
 	}
@@ -393,6 +410,22 @@ public class CircleModel extends Sortable {
 
 	public void setPostCnt(Integer postCnt) {
 		this.postCnt = postCnt;
+	}
+
+	public Integer getFollowCnt() {
+		return followCnt;
+	}
+
+	public void setFollowCnt(Integer followCnt) {
+		this.followCnt = followCnt;
+	}
+
+	public Integer getFansCnt() {
+		return fansCnt;
+	}
+
+	public void setFansCnt(Integer fansCnt) {
+		this.fansCnt = fansCnt;
 	}
 
 	public List<CirclePublicModel> getCirclePublics() {

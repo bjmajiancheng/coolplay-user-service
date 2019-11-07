@@ -34,6 +34,7 @@
 	<select id="find" resultMap="CirclePublic">
 	    SELECT <include refid="columns"/> FROM d_circle_public 
 		<include refid="findWhere"/>
+		ORDER BY c_time DESC
     </select>
 
 	<select id="findById" resultMap="CirclePublic" >

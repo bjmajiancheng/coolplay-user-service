@@ -65,6 +65,9 @@ public class CircleController {
     @Autowired
     private IMessageService messageService;
 
+    @Autowired
+    private IUserFansService userFansService;
+
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Result list(@RequestBody CircleModel circleModel) {
@@ -375,6 +378,7 @@ public class CircleController {
             List<CirclePublicModel> circlePublics = circlePublicService.find(Collections.singletonMap("circleId", id));
             if (CollectionUtils.isNotEmpty(circlePublics)) {
                 circleModel.setCirclePublics(circlePublics);
+                circleModel.setPublicContent(circlePublics.get(0).getPublicContent());
             }
 
             Integer postCnt = circlePostService.findPostCntByCircleId(id);
@@ -384,6 +388,19 @@ public class CircleController {
             if (CollectionUtils.isNotEmpty(circlePosts)) {
                 circleModel.setCirclePosts(circlePosts);
             }
+
+            UserModel userModel = userService.findById(circleModel.getUserId());
+            if(userModel != null) {
+                circleModel.setNickName(userModel.getNickName());
+                circleModel.setUserDesc(userModel.getUserDesc());
+                circleModel.setHeadImage(userModel.getHeadImage());
+            }
+
+            int fansCnt = userFansService.findCntByUserId(circleModel.getUserId());
+            int followCnt = userFansService.findCntByFansUserId(circleModel.getUserId());
+
+            circleModel.setFansCnt(fansCnt);
+            circleModel.setFollowCnt(followCnt);
 
             return ResponseUtil.success(circleModel);
 
