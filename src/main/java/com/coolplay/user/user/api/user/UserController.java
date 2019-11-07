@@ -531,6 +531,8 @@ public class UserController {
                 userModel.setIdCardImages(sb.toString());
             }
 
+            int updateCnt = userService.updateNotNull(userModel);
+
             int delCnt = userLabelService.delByUserId(userModel.getId());
             if (CollectionUtils.isNotEmpty(userModel.getLabelIds())) {
                 for (Integer labelId : userModel.getLabelIds()) {
