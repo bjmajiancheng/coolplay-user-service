@@ -541,7 +541,9 @@ public class UserController {
                 }
             }
 
-            return ResponseUtil.success();
+            UserModel userDetailInfo = getUserDetailInfo(userModel.getId());
+
+            return ResponseUtil.success(userDetailInfo);
 
         } catch(Exception e) {
             e.printStackTrace();
