@@ -387,7 +387,7 @@ public class CircleModel extends Sortable {
 
 	public String getCtimeStr() {
 		if(this.getCtime() != null) {
-			this.ctimeStr = DateUtil.DateToString(this.getCtime(), DateStyle.YYYY_MM_DD_HH_MM);
+			this.ctimeStr = DateUtil.DateToString(this.getCtime(), DateStyle.YYYY_MM_DD_HH_MM_SS);
 		}
 		return ctimeStr;
 	}
