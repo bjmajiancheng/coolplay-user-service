@@ -61,7 +61,7 @@
 		</foreach>
 	</select>
 
-	<select id="findReviewMemberCntByCircleIds" resultType="java.util.List">
+	<select id="findReviewMemberCntByCircleIds" resultType="java.util.Map">
 		SELECT circle_id, COUNT(1) AS cnt FROM d_circle_member
 		WHERE review_status = 0 AND circle_id IN
 		<foreach collection="circleIds" item="item" open="(" separator="," close=")">

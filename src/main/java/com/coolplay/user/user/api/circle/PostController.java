@@ -1,5 +1,6 @@
 package com.coolplay.user.user.api.circle;
 
+import com.alibaba.fastjson.JSON;
 import com.coolplay.user.common.utils.PageConvertUtil;
 import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
@@ -64,6 +65,7 @@ public class PostController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Result list(@RequestBody PostModel postModel) {
         postModel.initPageInfo();
+        System.out.println(JSON.toJSONString(postModel));
 
         try {
             PageInfo<PostModel> pageInfo = this.postService.selectByFilterAndPage(postModel, postModel.getPageNum(), postModel.getPageSize());
