@@ -49,7 +49,7 @@ public class CircleMemberReviewServiceImpl extends BaseService<CircleMemberRevie
 	@Override
 	public PageInfo<CircleMemberReviewModel> selectByFilterAndPage(CircleMemberReviewModel circleMemberReviewModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<CircleMemberReviewModel> list = this.selectByFilter(circleMemberReviewModel);
 		return new PageInfo<>(list);
 	}

@@ -49,7 +49,7 @@ public class CircleAdminServiceImpl extends BaseService<CircleAdminModel> implem
 	@Override
 	public PageInfo<CircleAdminModel> selectByFilterAndPage(CircleAdminModel circleAdminModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<CircleAdminModel> list = this.selectByFilter(circleAdminModel);
 		return new PageInfo<>(list);
 	}

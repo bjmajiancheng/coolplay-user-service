@@ -54,7 +54,7 @@ public class UserLikeServiceImpl extends BaseService<UserLikeModel> implements I
 	@Override
 	public PageInfo<UserLikeModel> selectByFilterAndPage(UserLikeModel userLikeModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<UserLikeModel> list = this.selectByFilter(userLikeModel);
 		return new PageInfo<>(list);
 	}

@@ -49,7 +49,7 @@ public class CompanyCircleServiceImpl extends BaseService<CompanyCircleModel> im
 	@Override
 	public PageInfo<CompanyCircleModel> selectByFilterAndPage(CompanyCircleModel companyCircleModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<CompanyCircleModel> list = this.selectByFilter(companyCircleModel);
 		return new PageInfo<>(list);
 	}

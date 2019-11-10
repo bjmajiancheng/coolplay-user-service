@@ -54,7 +54,7 @@ public class MessageServiceImpl extends BaseService<MessageModel> implements IMe
 	@Override
 	public PageInfo<MessageModel> selectByFilterAndPage(MessageModel messageModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<MessageModel> list = this.selectByFilter(messageModel);
 		return new PageInfo<>(list);
 	}

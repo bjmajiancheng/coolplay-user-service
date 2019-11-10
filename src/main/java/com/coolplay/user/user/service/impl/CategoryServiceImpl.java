@@ -49,7 +49,7 @@ public class CategoryServiceImpl extends BaseService<CategoryModel> implements I
 	@Override
 	public PageInfo<CategoryModel> selectByFilterAndPage(CategoryModel categoryModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<CategoryModel> list = this.selectByFilter(categoryModel);
 		return new PageInfo<>(list);
 	}

@@ -34,7 +34,7 @@ public class CompanyServiceImpl extends BaseService<CompanyModel> implements ICo
     @Override
     public PageInfo<CompanyModel> selectByFilterAndPage(CompanyModel companyModel, int pageNum,
             int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.startPage(pageNum, pageSize, true, false, null);
         List<CompanyModel> list = this.selectByFilter(companyModel);
         return new PageInfo<>(list);
     }

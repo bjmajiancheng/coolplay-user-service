@@ -59,7 +59,7 @@ public class PostCommentServiceImpl extends BaseService<PostCommentModel> implem
 	@Override
 	public PageInfo<PostCommentModel> selectByFilterAndPage(PostCommentModel postCommentModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<PostCommentModel> list = this.selectByFilter(postCommentModel);
 		return new PageInfo<>(list);
 	}

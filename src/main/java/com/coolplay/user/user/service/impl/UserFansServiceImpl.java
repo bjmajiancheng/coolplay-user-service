@@ -54,7 +54,7 @@ public class UserFansServiceImpl extends BaseService<UserFansModel> implements I
 	@Override
 	public PageInfo<UserFansModel> selectByFilterAndPage(UserFansModel userFansModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<UserFansModel> list = this.selectByFilter(userFansModel);
 		return new PageInfo<>(list);
 	}

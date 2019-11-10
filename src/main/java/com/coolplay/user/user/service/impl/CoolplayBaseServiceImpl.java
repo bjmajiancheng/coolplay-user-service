@@ -51,7 +51,7 @@ public class CoolplayBaseServiceImpl extends BaseService<CoolplayBaseModel> impl
     @Override
     public PageInfo<CoolplayBaseModel> selectByFilterAndPage(CoolplayBaseModel coolplayBaseModel, int pageNum,
             int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.startPage(pageNum, pageSize, true, false, null);
         List<CoolplayBaseModel> list = this.selectByFilter(coolplayBaseModel);
         return new PageInfo<>(list);
     }

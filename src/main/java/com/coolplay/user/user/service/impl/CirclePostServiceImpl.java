@@ -49,7 +49,7 @@ public class CirclePostServiceImpl extends BaseService<CirclePostModel> implemen
 	@Override
 	public PageInfo<CirclePostModel> selectByFilterAndPage(CirclePostModel circlePostModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<CirclePostModel> list = this.selectByFilter(circlePostModel);
 		return new PageInfo<>(list);
 	}

@@ -54,7 +54,7 @@ public class SystemVersionServiceImpl extends BaseService<SystemVersionModel> im
 	@Override
 	public PageInfo<SystemVersionModel> selectByFilterAndPage(SystemVersionModel systemVersionModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<SystemVersionModel> list = this.selectByFilter(systemVersionModel);
 		return new PageInfo<>(list);
 	}

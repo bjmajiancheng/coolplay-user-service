@@ -51,7 +51,7 @@ public class CoolplayBaseLabelServiceImpl extends BaseService<CoolplayBaseLabelM
 	@Override
 	public PageInfo<CoolplayBaseLabelModel> selectByFilterAndPage(CoolplayBaseLabelModel coolplayBaseLabelModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<CoolplayBaseLabelModel> list = this.selectByFilter(coolplayBaseLabelModel);
 		return new PageInfo<>(list);
 	}

@@ -54,7 +54,7 @@ public class UserLabelServiceImpl extends BaseService<UserLabelModel> implements
 	@Override
 	public PageInfo<UserLabelModel> selectByFilterAndPage(UserLabelModel userLabelModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<UserLabelModel> list = this.selectByFilter(userLabelModel);
 		return new PageInfo<>(list);
 	}

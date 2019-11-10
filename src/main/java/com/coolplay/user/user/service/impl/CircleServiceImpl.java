@@ -50,7 +50,8 @@ public class CircleServiceImpl extends BaseService<CircleModel> implements ICirc
 
     @Override
     public PageInfo<CircleModel> selectByFilterAndPage(CircleModel circleModel, int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.startPage(pageNum, pageSize, true, false, null);
+
         List<CircleModel> list = this.selectByFilter(circleModel);
         return new PageInfo<>(list);
     }

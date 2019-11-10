@@ -54,7 +54,7 @@ public class PostServiceImpl extends BaseService<PostModel> implements IPostServ
 	@Override
 	public PageInfo<PostModel> selectByFilterAndPage(PostModel postModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<PostModel> list = this.selectByFilter(postModel);
 		return new PageInfo<>(list);
 	}

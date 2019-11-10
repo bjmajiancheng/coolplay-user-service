@@ -51,7 +51,7 @@ public class CircleLabelServiceImpl extends BaseService<CircleLabelModel> implem
 	@Override
 	public PageInfo<CircleLabelModel> selectByFilterAndPage(CircleLabelModel circleLabelModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<CircleLabelModel> list = this.selectByFilter(circleLabelModel);
 		return new PageInfo<>(list);
 	}

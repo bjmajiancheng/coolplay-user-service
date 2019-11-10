@@ -54,7 +54,7 @@ public class BannerServiceImpl extends BaseService<BannerModel> implements IBann
 	@Override
 	public PageInfo<BannerModel> selectByFilterAndPage(BannerModel bannerModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<BannerModel> list = this.selectByFilter(bannerModel);
 		return new PageInfo<>(list);
 	}

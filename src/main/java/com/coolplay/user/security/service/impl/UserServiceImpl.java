@@ -50,7 +50,7 @@ public class UserServiceImpl extends BaseService<UserModel> implements IUserServ
 
     @Override
     public PageInfo<UserModel> selectByFilterAndPage(UserModel userModel, int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.startPage(pageNum, pageSize, true, false, null);
         List<UserModel> list = selectByFilter(userModel);
         if(CollectionUtils.isNotEmpty(list)) {
             for (UserModel user : list) {

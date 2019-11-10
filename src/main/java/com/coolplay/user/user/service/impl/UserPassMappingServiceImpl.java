@@ -55,7 +55,7 @@ public class UserPassMappingServiceImpl extends BaseService<UserPassMappingModel
 	@Override
 	public PageInfo<UserPassMappingModel> selectByFilterAndPage(UserPassMappingModel userPassMappingModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<UserPassMappingModel> list = this.selectByFilter(userPassMappingModel);
 		return new PageInfo<>(list);
 	}

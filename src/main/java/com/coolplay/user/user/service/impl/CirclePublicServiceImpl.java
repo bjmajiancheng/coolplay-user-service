@@ -49,7 +49,7 @@ public class CirclePublicServiceImpl extends BaseService<CirclePublicModel> impl
 	@Override
 	public PageInfo<CirclePublicModel> selectByFilterAndPage(CirclePublicModel circlePublicModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<CirclePublicModel> list = this.selectByFilter(circlePublicModel);
 		return new PageInfo<>(list);
 	}

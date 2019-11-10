@@ -54,7 +54,7 @@ public class PostLabelServiceImpl extends BaseService<PostLabelModel> implements
 	@Override
 	public PageInfo<PostLabelModel> selectByFilterAndPage(PostLabelModel postLabelModel, int pageNum,
 		int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.startPage(pageNum, pageSize, true, false, null);
 		List<PostLabelModel> list = this.selectByFilter(postLabelModel);
 		return new PageInfo<>(list);
 	}
