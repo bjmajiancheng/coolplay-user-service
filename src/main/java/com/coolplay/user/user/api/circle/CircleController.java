@@ -666,12 +666,13 @@ public class CircleController {
         try {
             Integer currUserId = SecurityUtil.getCurrentUserId();
 
-            circleModel.setReviewStatus(1);
-            circleModel.setStatus(1);
-            circleModel.setDisabled(0);
             PageInfo<CircleModel> pageInfo = new PageInfo<CircleModel>();
             circleModel.initPageInfo();
             if (circleModel.getType() == 1) {
+                circleModel.setReviewStatus(1);
+                circleModel.setStatus(1);
+                circleModel.setDisabled(0);
+
                 List<Integer> circleIds = circleMemberService.findByMemberUserId(currUserId);
                 if (CollectionUtils.isEmpty(circleIds)) {
                     circleIds = Collections.singletonList(0);
