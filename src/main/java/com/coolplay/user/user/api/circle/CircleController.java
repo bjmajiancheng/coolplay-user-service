@@ -672,7 +672,6 @@ public class CircleController {
             PageInfo<CircleModel> pageInfo = new PageInfo<CircleModel>();
             circleModel.initPageInfo();
             if (circleModel.getType() == 1) {
-                List<Integer> memberUserIds = new ArrayList<Integer>();
                 List<Integer> circleIds = circleMemberService.findByMemberUserId(currUserId);
                 if (CollectionUtils.isEmpty(circleIds)) {
                     circleIds = Collections.singletonList(0);

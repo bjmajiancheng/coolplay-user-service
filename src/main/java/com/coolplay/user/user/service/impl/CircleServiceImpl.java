@@ -85,6 +85,10 @@ public class CircleServiceImpl extends BaseService<CircleModel> implements ICirc
             criteria.andIn("id", circleModel.getIds());
         }
 
+        if(circleModel.getUserId() != null) {
+            criteria.andEqualTo("userId", circleModel.getUserId());
+        }
+
         if (StringUtils.isNotEmpty(circleModel.getSortWithOutOrderBy())) {
             example.setOrderByClause(circleModel.getSortWithOutOrderBy());
         }
