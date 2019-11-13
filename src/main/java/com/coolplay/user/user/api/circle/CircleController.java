@@ -697,7 +697,7 @@ public class CircleController {
                     if (!userIds.contains(tmpCircle.getUserId())) {
                         userIds.add(tmpCircle.getUserId());
                     }
-                    circleIds.add(tmpCircle.getUserId());
+                    circleIds.add(tmpCircle.getId());
                 }
 
                 Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(userIds);
