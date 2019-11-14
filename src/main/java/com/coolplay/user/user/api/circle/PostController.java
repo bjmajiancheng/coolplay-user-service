@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by majiancheng on 2019/10/21.
@@ -213,7 +210,12 @@ public class PostController {
 
             List<CircleModel> circleModels = circleService.findByIds(allCircleIds);
 
-            return ResponseUtil.success(Collections.singletonMap("circleList", circleModels));
+            List<LabelModel> labelModels = labelService.find(Collections.singletonMap("isDel", 0));
+            Map<String, Object> result = new HashMap<String, Object>();
+            result.put("circleList", circleModels);
+            result.put("labelList", labelModels);
+
+            return ResponseUtil.success(result);
 
         } catch(Exception e) {
             e.printStackTrace();
