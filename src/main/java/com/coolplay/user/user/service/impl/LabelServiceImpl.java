@@ -68,10 +68,32 @@ public class LabelServiceImpl extends BaseService<LabelModel> implements ILabelS
 			criteria.andEqualTo("isDel", labelModel.getIsDel());
 		}
 
+		if(labelModel.getType() != null) {
+			criteria.andEqualTo("type", labelModel.getType());
+		}
+
+		if(labelModel.getCreatorUserId() != null) {
+			criteria.andEqualTo("creatorUserId", labelModel.getCreatorUserId());
+		}
+
 		if(StringUtils.isNotEmpty(labelModel.getSortWithOutOrderBy())) {
 			example.setOrderByClause(labelModel.getSortWithOutOrderBy());
 		}
 		return getMapper().selectByExample(example);
+	}
+
+	/**
+	 * 获取用户可用的标签集合
+	 *
+	 * @param userId
+	 * @return
+	 */
+	public List<LabelModel> findUserAvailableLabel(Integer userId) {
+		if(userId == null) {
+			return Collections.emptyList();
+		}
+
+		return labelMapper.findUserAvailableLabel(userId);
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import com.coolplay.user.common.utils.PageConvertUtil;
 import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
 import com.coolplay.user.core.model.UserModel;
+import com.coolplay.user.security.security.SecurityUser;
 import com.coolplay.user.security.utils.SecurityUtil;
 import com.coolplay.user.user.dto.CircleUserDto;
 import com.coolplay.user.user.model.*;
@@ -232,10 +233,25 @@ public class CircleController {
 
         try {
 
-            LabelModel labelModel = new LabelModel();
+            //获取系统标签
+            /*LabelModel labelModel = new LabelModel();
             labelModel.setStatus(1);
             labelModel.setIsDel(0);
+            labelModel.setType(1);
             List<LabelModel> labelList = labelService.selectByFilter(labelModel);
+
+            //获取用户新建标签
+            labelModel = new LabelModel();
+            labelModel.setStatus(1);
+            labelModel.setIsDel(0);
+            labelModel.setType(2);
+            labelModel.setCreatorUserId(SecurityUtil.getCurrentUserId());
+            List<LabelModel> userLabelList = labelService.selectByFilter(labelModel);
+            if(CollectionUtils.isNotEmpty(userLabelList)) {
+                labelList.addAll(userLabelList);
+            }*/
+
+            List<LabelModel> labelList = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId());
 
             return ResponseUtil.success(Collections.singletonMap("labelList", labelList));
 
@@ -262,10 +278,40 @@ public class CircleController {
 
             int saveCnt = circleService.saveNotNull(circleModel);
 
-            if (CollectionUtils.isNotEmpty(circleModel.getLabelIds())) {
+            /*if (CollectionUtils.isNotEmpty(circleModel.getLabelIds())) {
                 List<Integer> labelIds = circleModel.getLabelIds();
 
                 for (Integer labelId : labelIds) {
+                    CircleLabelModel circleLabelModel = new CircleLabelModel();
+                    circleLabelModel.setLabelId(labelId);
+                    circleLabelModel.setCircleId(circleModel.getId());
+
+                    circleLabelService.saveNotNull(circleLabelModel);
+                }
+            }*/
+
+            if(CollectionUtils.isNotEmpty(circleModel.getLabelList())) {
+                for(LabelModel labelModel : circleModel.getLabelList()) {
+                    Integer labelId = labelModel.getId();
+                    if(labelId == null || labelId == 0) {
+                        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+
+                        LabelModel saveLabelModel = new LabelModel();
+                        saveLabelModel.setLabelName(labelModel.getLabelName());
+                        saveLabelModel.setCreator(securityUser.getDisplayName());
+                        saveLabelModel.setUserId(securityUser.getId());
+                        saveLabelModel.setType(2);
+                        saveLabelModel.setStatus(1);
+                        saveLabelModel.setIsDel(0);
+                        saveLabelModel.setCatId(0);
+                        labelService.saveNotNull(saveLabelModel);
+
+                        labelId = saveLabelModel.getId();
+
+                    } else {
+                        labelId = labelModel.getId();
+                    }
+
                     CircleLabelModel circleLabelModel = new CircleLabelModel();
                     circleLabelModel.setLabelId(labelId);
                     circleLabelModel.setCircleId(circleModel.getId());
@@ -334,7 +380,37 @@ public class CircleController {
             int updateCnt = circleService.updateNotNull(updateCircleModel);
 
             int delCnt = circleLabelService.delByCircleId(updateCircleModel.getId());
-            if (CollectionUtils.isNotEmpty(updateCircleModel.getLabelIds())) {
+
+            if(CollectionUtils.isNotEmpty(updateCircleModel.getLabelList())) {
+                for(LabelModel labelModel : updateCircleModel.getLabelList()) {
+                    Integer labelId = labelModel.getId();
+                    if(labelId == null || labelId == 0) {
+                        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+
+                        LabelModel saveLabelModel = new LabelModel();
+                        saveLabelModel.setLabelName(labelModel.getLabelName());
+                        saveLabelModel.setCreator(securityUser.getDisplayName());
+                        saveLabelModel.setUserId(securityUser.getId());
+                        saveLabelModel.setType(2);
+                        saveLabelModel.setStatus(1);
+                        saveLabelModel.setIsDel(0);
+                        saveLabelModel.setCatId(0);
+                        labelService.saveNotNull(saveLabelModel);
+
+                        labelId = saveLabelModel.getId();
+
+                    } else {
+                        labelId = labelModel.getId();
+                    }
+
+                    CircleLabelModel circleLabelModel = new CircleLabelModel();
+                    circleLabelModel.setLabelId(labelId);
+                    circleLabelModel.setCircleId(circleModel.getId());
+
+                    circleLabelService.saveNotNull(circleLabelModel);
+                }
+            }
+            /*if (CollectionUtils.isNotEmpty(updateCircleModel.getLabelIds())) {
                 List<Integer> labelIds = updateCircleModel.getLabelIds();
 
                 for (Integer labelId : labelIds) {
@@ -344,7 +420,7 @@ public class CircleController {
 
                     circleLabelService.saveNotNull(circleLabelModel);
                 }
-            }
+            }*/
 
             return ResponseUtil.success();
 

@@ -29,6 +29,14 @@ public interface ILabelService extends IBaseService<LabelModel> {
 	public List<LabelModel> selectByFilter(LabelModel labelModel);
 
 	/**
+	 * 获取用户可用的标签集合
+	 *
+	 * @param userId
+	 * @return
+     */
+	public List<LabelModel> findUserAvailableLabel(Integer userId);
+
+	/**
 	 * 根据帖子获取标签信息
 	 *
 	 * @param postIds

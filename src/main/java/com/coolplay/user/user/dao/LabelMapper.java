@@ -24,6 +24,14 @@ public interface LabelMapper extends Mapper<LabelModel> {
 
 	public LabelModel findById(@Param("id") Integer id);
 
+	/**
+	 * 获取用户可用的标签集合
+	 *
+	 * @param userId
+	 * @return
+	 */
+	public List<LabelModel> findUserAvailableLabel(@Param("creatorUserId")Integer creatorUserId);
+
 	public List<LabelModel> findByPostIds(@Param("postIds")List<Integer> postIds);
 
 	public List<LabelModel> findByCircleIds(@Param("circleIds")List<Integer> circleIds);

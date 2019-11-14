@@ -210,7 +210,8 @@ public class PostController {
 
             List<CircleModel> circleModels = circleService.findByIds(allCircleIds);
 
-            List<LabelModel> labelModels = labelService.find(Collections.singletonMap("isDel", 0));
+            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId());
+            //List<LabelModel> labelModels = labelService.find(Collections.singletonMap("isDel", 0));
             Map<String, Object> result = new HashMap<String, Object>();
             result.put("circleList", circleModels);
             result.put("labelList", labelModels);
@@ -252,14 +253,43 @@ public class PostController {
                 }
             }
 
-            if (CollectionUtils.isNotEmpty(postModel.getLabelIds())) {
-                for (Integer labelId : postModel.getLabelIds()) {
+            if(CollectionUtils.isNotEmpty(postModel.getLabelList())) {
+                for(LabelModel labelModel : postModel.getLabelList()) {
+                    Integer labelId = labelModel.getId();
+                    if(labelId == null || labelId == 0) {
+                        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+
+                        LabelModel saveLabelModel = new LabelModel();
+                        saveLabelModel.setLabelName(labelModel.getLabelName());
+                        saveLabelModel.setCreator(securityUser.getDisplayName());
+                        saveLabelModel.setUserId(securityUser.getId());
+                        saveLabelModel.setType(2);
+                        saveLabelModel.setStatus(1);
+                        saveLabelModel.setIsDel(0);
+                        saveLabelModel.setCatId(0);
+                        labelService.saveNotNull(saveLabelModel);
+
+                        labelId = saveLabelModel.getId();
+
+                    } else {
+                        labelId = labelModel.getId();
+                    }
+
                     PostLabelModel postLabelModel = new PostLabelModel();
                     postLabelModel.setLabelId(labelId);
                     postLabelModel.setPostId(postModel.getId());
                     postLabelService.saveNotNull(postLabelModel);
                 }
             }
+
+            /*if (CollectionUtils.isNotEmpty(postModel.getLabelIds())) {
+                for (Integer labelId : postModel.getLabelIds()) {
+                    PostLabelModel postLabelModel = new PostLabelModel();
+                    postLabelModel.setLabelId(labelId);
+                    postLabelModel.setPostId(postModel.getId());
+                    postLabelService.saveNotNull(postLabelModel);
+                }
+            }*/
 
             return ResponseUtil.success();
 

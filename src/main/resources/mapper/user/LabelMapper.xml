@@ -10,6 +10,8 @@
         <result property="catId" column="cat_id"/>
         <result property="labelName" column="label_name"/>
         <result property="creator" column="creator"/>
+		<result property="creatorUserId" column="creator_user_id"/>
+		<result property="type" column="type"/>
         <result property="status" column="status"/>
         <result property="isDel" column="is_del"/>
 		<result property="ctime" column="c_time"/>
@@ -21,7 +23,7 @@
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
 	    <![CDATA[
-        id ,cat_id ,label_name ,creator ,status ,is_del ,c_time 
+        id ,cat_id ,label_name ,creator ,creator_user_id , type,status ,is_del ,c_time
 	    ]]>
 	</sql>
 
@@ -52,6 +54,11 @@
 	        WHERE
 		        id = #{id} 
 	    ]]>
+	</select>
+
+	<select id="findUserAvailableLabel" resultMap="Label">
+		SELECT <include refid="columns"/>
+		WHERE status = 1 AND is_del = 0 AND ((type = 1) OR (type = 2 AND creator_user_id = #{creatorUserId}))
 	</select>
 
 	<select id="findByPostIds" resultMap="Label">
