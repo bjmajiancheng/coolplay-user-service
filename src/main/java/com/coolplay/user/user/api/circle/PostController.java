@@ -109,25 +109,31 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(value = "/collectPost", method = RequestMethod.POST)
-    public Result collectPost(@RequestParam("id") Integer id) {
+    public Result collectPost(@RequestParam("id") Integer id, @RequestParam("type") Integer type) {
 
         try {
-            int updateCnt = postService.columnPlusNumber(id, "collect_cnt", 1);
+            if(type == 1) {
+                UserCollectModel userCollectModel = new UserCollectModel();
+                userCollectModel.setCollectType(2);
+                userCollectModel.setCollectTypeId(id);
+                userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
+                userCollectModel.setIsDel(0);
 
-            UserCollectModel userCollectModel = new UserCollectModel();
-            userCollectModel.setCollectType(2);
-            userCollectModel.setCollectTypeId(id);
-            userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
-            userCollectModel.setIsDel(0);
 
-
-            if(CollectionUtils.isEmpty(userCollectService.selectByFilter(userCollectModel))) {
-                int saveCnt = userCollectService.saveNotNull(userCollectModel);
+                if(CollectionUtils.isEmpty(userCollectService.selectByFilter(userCollectModel))) {
+                    int saveCnt = userCollectService.saveNotNull(userCollectModel);
+                }
+            } else if(type == 2) {
+                int delCnt = userCollectService.delByUserIdAndCollectTypeInfo(SecurityUtil.getCurrentUserId(), 2, id);
             }
 
-            PostModel postModel = postService.findById(id);
+            int collectCnt = userCollectService.findCntByCollectTypeAndCollectTypeId(2, id);
+            PostModel postModel = new PostModel();
+            postModel.setCollectCnt(collectCnt);
 
-            return ResponseUtil.success(Collections.singletonMap("collectCnt", postModel.getCollectCnt()));
+            postService.updateNotNull(postModel);
+
+            return ResponseUtil.success(Collections.singletonMap("collectCnt", collectCnt));
 
         } catch(Exception e) {
             e.printStackTrace();
