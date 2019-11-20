@@ -142,10 +142,7 @@ public class CoolplayBaseController {
             //操作类型 1: 收藏 2:取消收藏
 
             if(type == 1) {
-                //if(CollectionUtils.isEmpty(userCollectService.selectByFilter(userCollectModel))) {
-                    //int saveCnt = userCollectService.saveNotNull(userCollectModel);
-                    int saveCnt = userCollectService.insertIgnore(userCollectModel);
-                //}
+                int saveCnt = userCollectService.insertIgnore(userCollectModel);
             } else if(type == 2) {
                 int delCnt = userCollectService.delByUserIdAndCollectTypeInfo(currUserId, 4, id);
             }

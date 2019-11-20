@@ -102,9 +102,7 @@ public class CompamyController {
                 userCollectModel.setCollectTypeId(id);
                 userCollectModel.setIsDel(0);
 
-                if (CollectionUtils.isEmpty(userCollectService.selectByFilter(userCollectModel))) {
-                    int saveCnt = userCollectService.insertIgnore(userCollectModel);
-                }
+                int saveCnt = userCollectService.insertIgnore(userCollectModel);
                 //取消收藏
             } else if (type == 2) {
                 int delCnt = userCollectService.delByUserIdAndCollectTypeInfo(currUserId, 3, id);

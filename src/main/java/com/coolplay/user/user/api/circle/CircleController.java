@@ -159,9 +159,7 @@ public class CircleController {
                 userCollectModel.setUserId(SecurityUtil.getCurrentUserId());
                 userCollectModel.setIsDel(0);
 
-                if (CollectionUtils.isEmpty(userCollectService.selectByFilter(userCollectModel))) {
-                    int saveCnt = userCollectService.saveNotNull(userCollectModel);
-                }
+                int saveCnt = userCollectService.insertIgnore(userCollectModel);
             } else if (type == 2) {
                 int delCnt = userCollectService.delByUserIdAndCollectTypeInfo(SecurityUtil.getCurrentUserId(), 1, id);
             }
