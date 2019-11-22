@@ -107,6 +107,9 @@ public class CircleModel extends Sortable {
 	private Integer isOwner = 0;//是否是圈主
 
 	@Transient
+	private Integer isAdmin = 0;//是否是管理员
+
+	@Transient
 	private List<LabelModel> labelList = new ArrayList<LabelModel>();//标签集合
 
 	@Transient
@@ -351,6 +354,14 @@ public class CircleModel extends Sortable {
 
 	public void setIsOwner(Integer isOwner) {
 		this.isOwner = isOwner;
+	}
+
+	public Integer getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(Integer isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 
 	public List<LabelModel> getLabelList() {

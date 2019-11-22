@@ -440,6 +440,8 @@ public class CircleController {
     public Result circleDetail(@RequestParam("id") Integer id) {
 
         try {
+            int currUserId = SecurityUtil.getCurrentUserId();
+
             CircleModel circleModel = circleService.findById(id);
 
             Map<Integer, List<LabelModel>> circleLabelMap = labelService
@@ -475,6 +477,10 @@ public class CircleController {
 
             circleModel.setFansCnt(fansCnt);
             circleModel.setFollowCnt(followCnt);
+
+            List<Integer> circleIds = circleAdminService.findByAdminUserId(currUserId);
+            circleModel.setIsAdmin((circleIds.contains(circleModel.getId())) ? 1 : 0);
+            circleModel.setIsOwner((currUserId == circleModel.getUserId()) ? 1 : 0);
 
             return ResponseUtil.success(circleModel);
 
