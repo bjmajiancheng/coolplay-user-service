@@ -29,4 +29,14 @@ public interface ICircleMemberReviewService extends IBaseService<CircleMemberRev
 
 	public List<CircleMemberReviewModel> selectByFilter(CircleMemberReviewModel circleMemberReviewModel);
 
+	/**
+	 * 修改酷玩圈成员审核表
+	 *
+	 * @param circleId
+	 * @param inviteUserId
+	 * @param memberUserId
+	 * @param reviewStatus
+     * @return
+     */
+	public int updateByCircleIdAndInviteMemberUserId(Integer circleId, Integer inviteUserId, Integer memberUserId, Integer reviewStatus);
 }

@@ -24,4 +24,15 @@ public interface CircleMemberReviewMapper extends Mapper<CircleMemberReviewModel
 
 	public CircleMemberReviewModel findById(@Param("id") Integer id);
 
+	/**
+	 * 修改酷玩圈成员审核表
+	 *
+	 * @param circleId
+	 * @param inviteUserId
+	 * @param memberUserId
+	 * @param reviewStatus
+	 * @return
+	 */
+	public int updateByCircleIdAndInviteMemberUserId(@Param("circleId")Integer circleId, @Param("inviteUserId")Integer inviteUserId,
+			@Param("memberUserId")Integer memberUserId, @Param("reviewStatus")Integer reviewStatus);
 }

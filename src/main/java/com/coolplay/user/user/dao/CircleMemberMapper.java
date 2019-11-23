@@ -31,4 +31,16 @@ public interface CircleMemberMapper extends Mapper<CircleMemberModel> {
 	public List<Integer> findCircleIdsByUserIdAndCircleIds(@Param("currUserId")Integer currUserId, @Param("circleIds")List<Integer> circleIds);
 
 	public List<Map<Integer, Integer>> findReviewMemberCntByCircleIds(@Param("circleIds")List<Integer> circleIds);
+
+	/**
+	 * 更新酷玩圈成员状态信息
+	 *
+	 * @param circleId
+	 * @param memberUserId
+	 * @param reviewStatus
+	 * @param status
+	 * @return
+	 */
+	public int updateByCircleIdMemberUserId(@Param("circleId")Integer circleId, @Param("memberUserId")Integer memberUserId,
+			@Param("reviewStatus")Integer reviewStatus, @Param("status")Integer status);
 }

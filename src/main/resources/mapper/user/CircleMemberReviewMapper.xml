@@ -45,6 +45,9 @@
 		FROM d_circle_member_review WHERE id = #{id}
 	</select>
 
+	<update id="updateByCircleIdAndInviteMemberUserId">
+		UPDATE d_circle_member_review SET review_status = #{reviewStatus} WHERE circle_id = #{circleId} AND invite_user_id = #{inviteUserId} AND member_user_id = #{memberUserId}
+	</update>
 	
 </mapper>
 

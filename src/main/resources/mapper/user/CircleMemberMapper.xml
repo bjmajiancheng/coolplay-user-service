@@ -69,5 +69,9 @@
 		</foreach>
 		GROUP BY circle_id
 	</select>
+
+	<update id="updateByCircleIdMemberUserId">
+		UPDATE d_circle_member SET review_status = #{reviewStatus}, status = #{status} WHERE circle_id = #{circleId} AND member_user_id = #{memberUserId}
+	</update>
 </mapper>
 

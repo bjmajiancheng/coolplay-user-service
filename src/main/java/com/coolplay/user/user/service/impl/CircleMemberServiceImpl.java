@@ -141,4 +141,21 @@ public class CircleMemberServiceImpl extends BaseService<CircleMemberModel> impl
 
 		return reviewMemberCntMap;
 	}
+
+	/**
+	 * 更新酷玩圈成员状态信息
+	 *
+	 * @param circleId
+	 * @param memberUserId
+	 * @param reviewStatus
+	 * @param status
+	 * @return
+	 */
+	public int updateByCircleIdMemberUserId(Integer circleId, Integer memberUserId, Integer reviewStatus, Integer status) {
+		if(circleId == null || memberUserId == null || reviewStatus == null || status == null) {
+			return 0;
+		}
+
+		return circleMemberMapper.updateByCircleIdMemberUserId(circleId, memberUserId, reviewStatus, status);
+	}
 }

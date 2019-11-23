@@ -1,12 +1,17 @@
 package com.coolplay.user.user.api.user;
 
+import com.alibaba.fastjson.JSON;
 import com.coolplay.user.common.utils.PageConvertUtil;
 import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
 import com.coolplay.user.security.utils.SecurityUtil;
+import com.coolplay.user.user.dto.ReviewMessageDto;
 import com.coolplay.user.user.model.MessageModel;
+import com.coolplay.user.user.service.ICircleMemberReviewService;
+import com.coolplay.user.user.service.ICircleMemberService;
 import com.coolplay.user.user.service.IMessageService;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +25,12 @@ public class UserMessageController {
 
     @Autowired
     private IMessageService messageService;
+
+    @Autowired
+    private ICircleMemberReviewService circleMemberReviewService;
+
+    @Autowired
+    private ICircleMemberService circleMemberService;
 
     /**
      * 消息列表
@@ -71,6 +82,25 @@ public class UserMessageController {
             updateMessage.setIsAgree(isAgree);
             updateMessage.setIsRead(1);
             int updateCnt = messageService.updateNotNull(updateMessage);
+
+            if(StringUtils.isNotEmpty(messageModel.getMessageUrl())) {
+                ReviewMessageDto reviewMessageDto = JSON.parseObject(messageModel.getMessageUrl(), ReviewMessageDto.class);
+
+                //申请加圈
+                if(ReviewMessageDto.APPLICATION_CIRCLE.equals(reviewMessageDto.getType())) {
+                    Integer reviewStatus = 1;
+                    if(isAgree == 1) {
+                        reviewStatus = 2;
+                    }
+                    updateCnt = circleMemberReviewService.updateByCircleIdAndInviteMemberUserId(reviewMessageDto.getTypeId(), 0, reviewMessageDto.getApplicationUserId(), reviewStatus);
+                    Integer status = 0;
+                    if(isAgree == 1) {
+                        status = isAgree;
+                    }
+
+                    updateCnt = circleMemberService.updateByCircleIdMemberUserId(reviewMessageDto.getTypeId(), reviewMessageDto.getApplicationUserId(), 1, status);
+                }
+            }
 
             return ResponseUtil.success();
 

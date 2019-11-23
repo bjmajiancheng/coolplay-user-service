@@ -8,6 +8,7 @@ import com.coolplay.user.core.model.UserModel;
 import com.coolplay.user.security.security.SecurityUser;
 import com.coolplay.user.security.utils.SecurityUtil;
 import com.coolplay.user.user.dto.CircleUserDto;
+import com.coolplay.user.user.dto.ReviewMessageDto;
 import com.coolplay.user.user.model.*;
 import com.coolplay.user.user.service.*;
 import com.coolplay.user.security.service.IUserService;
@@ -195,6 +196,8 @@ public class CircleController {
 
             Integer currUserId = SecurityUtil.getCurrentUserId();
 
+            SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+
             CircleMemberModel circleMemberModel = new CircleMemberModel();
             circleMemberModel.setCircleId(id);
             circleMemberModel.setMemberUserId(currUserId);
@@ -210,6 +213,20 @@ public class CircleController {
             circleMemberReviewModel.setReviewStatus(0);
 
             saveCnt = circleMemberReviewService.saveNotNull(circleMemberReviewModel);
+
+            MessageModel messageModel = new MessageModel();
+            messageModel.setMessageName("申请加入圈子");
+            messageModel.setMessageContent(String.format("%s申请加入圈子-%s, 申请原因:%s, 请审批~", securityUser.getDisplayName(), circleModel.getCircleName(), applicationReason));
+            messageModel.setMessageType(1);
+            messageModel.setUserId(circleModel.getUserId());
+
+
+            ReviewMessageDto reviewMessageDto = new ReviewMessageDto();
+            reviewMessageDto.setType(ReviewMessageDto.APPLICATION_CIRCLE);
+            reviewMessageDto.setTypeId(id);
+            reviewMessageDto.setApplicationUserId(currUserId);
+            messageModel.setMessageUrl(JSON.toJSONString(reviewMessageDto));
+            messageService.saveNotNull(messageModel);
 
             return ResponseUtil.success("申请加入圈子成功");
 

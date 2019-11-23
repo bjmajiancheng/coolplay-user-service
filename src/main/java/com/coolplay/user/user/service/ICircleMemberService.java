@@ -50,4 +50,15 @@ public interface ICircleMemberService extends IBaseService<CircleMemberModel> {
 	 * @return
      */
 	public Map<Integer, Integer> findReviewMemberCntByCircleIds(List<Integer> circleIds);
+
+	/**
+	 * 更新酷玩圈成员状态信息
+	 *
+	 * @param circleId
+	 * @param memberUserId
+	 * @param reviewStatus
+	 * @param status
+     * @return
+     */
+	public int updateByCircleIdMemberUserId(Integer circleId, Integer memberUserId, Integer reviewStatus, Integer status);
 }

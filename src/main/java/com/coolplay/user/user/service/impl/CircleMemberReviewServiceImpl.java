@@ -64,4 +64,21 @@ public class CircleMemberReviewServiceImpl extends BaseService<CircleMemberRevie
 		}
 		return getMapper().selectByExample(example);
 	}
+
+	/**
+	 * 修改酷玩圈成员审核表
+	 *
+	 * @param circleId
+	 * @param inviteUserId
+	 * @param memberUserId
+	 * @param reviewStatus
+	 * @return
+	 */
+	public int updateByCircleIdAndInviteMemberUserId(Integer circleId, Integer inviteUserId, Integer memberUserId, Integer reviewStatus) {
+		if(circleId == null || inviteUserId == null || memberUserId == null || reviewStatus == null) {
+			return 0;
+		}
+
+		return circleMemberReviewMapper.updateByCircleIdAndInviteMemberUserId(circleId, inviteUserId, memberUserId, reviewStatus);
+	}
 }
