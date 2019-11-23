@@ -6,9 +6,11 @@ import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
 import com.coolplay.user.security.utils.SecurityUtil;
 import com.coolplay.user.user.dto.ReviewMessageDto;
+import com.coolplay.user.user.model.CircleModel;
 import com.coolplay.user.user.model.MessageModel;
 import com.coolplay.user.user.service.ICircleMemberReviewService;
 import com.coolplay.user.user.service.ICircleMemberService;
+import com.coolplay.user.user.service.ICircleService;
 import com.coolplay.user.user.service.IMessageService;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang.StringUtils;
@@ -31,6 +33,9 @@ public class UserMessageController {
 
     @Autowired
     private ICircleMemberService circleMemberService;
+
+    @Autowired
+    private ICircleService circleService;
 
     /**
      * 消息列表
@@ -99,6 +104,15 @@ public class UserMessageController {
                     }
 
                     updateCnt = circleMemberService.updateByCircleIdMemberUserId(reviewMessageDto.getTypeId(), reviewMessageDto.getApplicationUserId(), 1, status);
+
+                    CircleModel circleModel = circleService.findById(reviewMessageDto.getTypeId());
+                    MessageModel tmpMessage = new MessageModel();
+                    tmpMessage.setMessageName("加入圈子结果");
+                    tmpMessage.setMessageContent(String.format("您申请加入的圈子-%s, 申请%s~", circleModel, (isAgree == 1) ? "已通过": "已驳回"));
+                    tmpMessage.setMessageType(2);
+                    tmpMessage.setUserId(reviewMessageDto.getApplicationUserId());
+
+                    int saveCnt = messageService.updateNotNull(tmpMessage);
                 }
             }
 
