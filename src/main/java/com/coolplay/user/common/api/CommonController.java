@@ -1,11 +1,9 @@
 package com.coolplay.user.common.api;
 
+import com.alibaba.fastjson.JSON;
 import com.coolplay.user.common.service.IAttachmentService;
 import com.coolplay.user.common.tools.RedisCache;
-import com.coolplay.user.common.utils.CommonUtil;
-import com.coolplay.user.common.utils.MessageUtil;
-import com.coolplay.user.common.utils.ResponseUtil;
-import com.coolplay.user.common.utils.Result;
+import com.coolplay.user.common.utils.*;
 import com.coolplay.user.core.model.Attachment;
 import com.coolplay.user.security.constants.SecurityConstant;
 import com.coolplay.user.security.service.IUserService;
@@ -16,8 +14,10 @@ import com.coolplay.user.user.service.ICompanyService;
 import com.coolplay.user.user.service.ISystemVersionService;
 import com.coolplay.user.user.service.IVerifyCodeService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +36,9 @@ public class CommonController {
     private final static Integer IMAGE = 0;
 
     private final static Integer FILE = 1;
+
+    @Value("${weather.url}")
+    private String weatherUrl;
 
     @Autowired
     private IAttachmentService attachmentService;
@@ -221,6 +224,43 @@ public class CommonController {
             }
 
             return ResponseUtil.success(systemVersionMap);
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
+    /**
+     * 获取天气数据
+     *
+     * @param lat
+     * @param lon
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/weatherData", method = RequestMethod.POST)
+    public Result weatherData(@RequestParam("lat") String lat, @RequestParam("lon")String lon) {
+        try {
+            String weatherData = (String) redisCache.get(String.format(SecurityConstant.WEATHER_DATA_KEY, lat, lon));
+            if(StringUtils.isEmpty(weatherData)) {
+                HttpClientResult result = HttpClientUtil.doGet(String.format("%s?lat=%s&lon=%s", weatherUrl, lat, lon));
+
+                String content = result.getContent();
+
+                Map<String, Object> contentMap = JSON.parseObject(content, Map.class);
+
+                if(MapUtils.isNotEmpty(contentMap)) {
+                    weatherData = String.valueOf(contentMap.get("data"));
+
+                    redisCache.set(String.format(SecurityConstant.WEATHER_DATA_KEY, lat, lon), weatherData, 12 * 60 * 60);
+                } else {
+                    return ResponseUtil.error("获取天气数据异常, 请稍后重试。");
+                }
+            }
+
+            return ResponseUtil.success((Object)weatherData);
+
         } catch(Exception e) {
             e.printStackTrace();
 
