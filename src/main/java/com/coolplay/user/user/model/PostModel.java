@@ -52,6 +52,12 @@ public class PostModel extends Sortable {
 	@Column(name = "is_top")
 	private Integer isTop;//"是否置顶"
 
+	@Column(name = "longitude")
+	private BigDecimal longitude;//经度
+
+	@Column(name = "latitude")
+	private BigDecimal latitude;//纬度
+
 	@Column(name = "like_cnt")
 	private Integer likeCnt;//"喜欢人数"
 
@@ -101,6 +107,9 @@ public class PostModel extends Sortable {
 
 	@Transient
 	private Integer isLike = 0;//是否点赞, 1:是, 0:否
+
+	@Transient
+	private Integer isNearby;//是否是附近人
 
 	@Transient
 	private List<String> labelNames = new ArrayList<String>();//标签名称集合
@@ -177,7 +186,23 @@ public class PostModel extends Sortable {
 	public Integer getIsTop() {
 		return this.isTop;
 	}
-		
+
+	public BigDecimal getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(BigDecimal longitude) {
+		this.longitude = longitude;
+	}
+
+	public BigDecimal getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(BigDecimal latitude) {
+		this.latitude = latitude;
+	}
+
 	public void setLikeCnt(Integer likeCnt) {
 		this.likeCnt = likeCnt;
 	}
@@ -310,6 +335,14 @@ public class PostModel extends Sortable {
 
 	public void setIsLike(Integer isLike) {
 		this.isLike = isLike;
+	}
+
+	public Integer getIsNearby() {
+		return isNearby;
+	}
+
+	public void setIsNearby(Integer isNearby) {
+		this.isNearby = isNearby;
 	}
 
 	public List<String> getLabelNames() {

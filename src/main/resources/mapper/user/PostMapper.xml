@@ -13,7 +13,9 @@
         <result property="imgUrls" column="img_urls"/>
         <result property="videoUrl" column="video_url"/>
         <result property="videlPath" column="videl_path"/>
-        <result property="isTop" column="is_top"/>
+		<result property="isTop" column="is_top"/>
+		<result property="longitude" column="longitude"/>
+		<result property="latitude" column="latitude"/>
         <result property="likeCnt" column="like_cnt"/>
         <result property="shareCnt" column="share_cnt"/>
         <result property="commentCnt" column="comment_cnt"/>
@@ -27,7 +29,7 @@
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
 	    <![CDATA[
-        id ,post_title ,post_content ,user_id ,img_urls ,video_url ,videl_path ,is_top ,like_cnt ,share_cnt ,comment_cnt ,read_cnt ,thumb_up_cnt ,collect_cnt, is_del ,c_time
+        id ,post_title ,post_content ,user_id ,img_urls ,video_url ,videl_path ,is_top , longitude, latitude, like_cnt ,share_cnt ,comment_cnt ,read_cnt ,thumb_up_cnt ,collect_cnt, is_del ,c_time
 	    ]]>
 	</sql>
 
