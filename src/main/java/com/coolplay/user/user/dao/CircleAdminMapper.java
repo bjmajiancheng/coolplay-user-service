@@ -41,4 +41,12 @@ public interface CircleAdminMapper extends Mapper<CircleAdminModel> {
 	 * @return
 	 */
 	public List<CircleAdminModel> findByCircleId(@Param("circleId") Integer circleId);
+
+	/**
+	 * 根据圈子集合获取管理员信息
+	 *
+	 * @param circleIds
+	 * @return
+     */
+	public List<CircleAdminModel> findByCircleIds(@Param("circleIds") List<Integer> circleIds);
 }

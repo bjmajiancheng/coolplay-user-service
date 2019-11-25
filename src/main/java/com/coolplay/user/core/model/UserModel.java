@@ -121,6 +121,9 @@ public class UserModel extends Sortable {
 	private Integer isFans = 0;//是否关注 1：已关注，0未关注
 
 	@Transient
+	private Integer isCircleMember = 0;//当前用户是否是圈子成员
+
+	@Transient
 	private List<PostModel> dynamicList = new ArrayList<PostModel>();
 
 	@Transient
@@ -368,6 +371,14 @@ public class UserModel extends Sortable {
 
 	public void setIsFans(Integer isFans) {
 		this.isFans = isFans;
+	}
+
+	public Integer getIsCircleMember() {
+		return isCircleMember;
+	}
+
+	public void setIsCircleMember(Integer isCircleMember) {
+		this.isCircleMember = isCircleMember;
 	}
 
 	public List<PostModel> getDynamicList() {

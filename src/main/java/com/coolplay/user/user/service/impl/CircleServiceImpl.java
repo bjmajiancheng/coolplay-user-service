@@ -9,6 +9,8 @@ package com.coolplay.user.user.service.impl;
 
 import java.util.List;
 
+import com.coolplay.user.user.model.CircleAdminModel;
+import com.coolplay.user.user.model.CircleMemberModel;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,12 @@ public class CircleServiceImpl extends BaseService<CircleModel> implements ICirc
 
     @Autowired
     private CircleMapper circleMapper;
+
+    @Autowired
+    private CircleMemberMapper circleMemberMapper;
+
+    @Autowired
+    private CircleAdminMapper circleAdminMapper;
 
     @Override
     public CircleModel findById(Integer id) {
@@ -117,5 +125,69 @@ public class CircleServiceImpl extends BaseService<CircleModel> implements ICirc
             return Collections.emptyList();
         }
         return this.find(Collections.singletonMap("ids", ids));
+    }
+
+    /**
+     * 根据圈子ID获取管理员和成员ID集合
+     *
+     * @param circleIds
+     * @return
+     */
+    public Map<Integer, List<Integer>> getAdminOrMemberByIds(List<Integer> circleIds) {
+        if(CollectionUtils.isEmpty(circleIds)) {
+            return Collections.emptyMap();
+        }
+
+        Map<Integer, List<Integer>> circleMemberUserIdMap = new HashMap<Integer, List<Integer>>();
+
+        List<CircleMemberModel> circleMembers = circleMemberMapper.findByCircleIds(circleIds);
+        if(CollectionUtils.isNotEmpty(circleMembers)) {
+            for(CircleMemberModel circleMember : circleMembers) {
+                List<Integer> tmpUserIds = circleMemberUserIdMap.get(circleMember.getCircleId());
+                if(CollectionUtils.isEmpty(tmpUserIds)) {
+                    tmpUserIds = new ArrayList<Integer>();
+                }
+
+                if(!tmpUserIds.contains(circleMember.getMemberUserId())) {
+                    tmpUserIds.add(circleMember.getMemberUserId());
+                }
+
+                circleMemberUserIdMap.put(circleMember.getCircleId(), tmpUserIds);
+            }
+        }
+        List<CircleAdminModel> circleAdmins = circleAdminMapper.findByCircleIds(circleIds);
+        if(CollectionUtils.isNotEmpty(circleAdmins)) {
+            for(CircleAdminModel circleAdmin : circleAdmins) {
+                List<Integer> tmpUserIds = circleMemberUserIdMap.get(circleAdmin.getCircleId());
+
+                if(CollectionUtils.isEmpty(tmpUserIds)) {
+                    tmpUserIds = new ArrayList<Integer>();
+                }
+
+                if(!tmpUserIds.contains(circleAdmin.getAdminUserId())) {
+                    tmpUserIds.add(circleAdmin.getAdminUserId());
+                }
+
+                circleMemberUserIdMap.put(circleAdmin.getCircleId(), tmpUserIds);
+            }
+        }
+        List<CircleModel> circles = this.findByIds(circleIds);
+        if(CollectionUtils.isNotEmpty(circles)) {
+            for(CircleModel circleModel : circles) {
+                List<Integer> tmpUserIds = circleMemberUserIdMap.get(circleModel.getId());
+
+                if(CollectionUtils.isEmpty(tmpUserIds)) {
+                    tmpUserIds = new ArrayList<Integer>();
+                }
+
+                if(!tmpUserIds.contains(circleModel.getUserId())) {
+                    tmpUserIds.add(circleModel.getUserId());
+                }
+
+                circleMemberUserIdMap.put(circleModel.getId(), tmpUserIds);
+            }
+        }
+
+        return circleMemberUserIdMap;
     }
 }

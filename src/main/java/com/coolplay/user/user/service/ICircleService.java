@@ -32,4 +32,12 @@ public interface ICircleService extends IBaseService<CircleModel> {
 	public Map<Integer, CircleModel> findMapByIds(List<Integer> circleIds);
 
 	public List<CircleModel> findByIds(List<Integer> ids);
+
+	/**
+	 * 根据圈子ID获取管理员和成员ID集合
+	 *
+	 * @param circleIds
+	 * @return
+     */
+	public Map<Integer, List<Integer>> getAdminOrMemberByIds(List<Integer> circleIds);
 }

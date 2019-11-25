@@ -50,5 +50,14 @@
 		SELECT <include refid="columns"/>
 		FROM d_circle_admin WHERE circle_id = #{circleId}
 	</select>
+
+	<select id="findByCircleIds" resultMap="CircleAdmin">
+		SELECT <include refid="columns"/>
+		FROM d_circle_admin
+		WHERE circle_id IN
+			<foreach collection="circleIds" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</select>
 </mapper>
 

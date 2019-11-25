@@ -40,6 +40,8 @@ public class UserFansModel extends Sortable {
 	private Date ctime;//"创建时间"
 
 	//columns END
+	@Transient
+	private Integer circleId;//"圈子ID"
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -73,5 +75,12 @@ public class UserFansModel extends Sortable {
 		return this.ctime;
 	}
 
+	public Integer getCircleId() {
+		return circleId;
+	}
+
+	public void setCircleId(Integer circleId) {
+		this.circleId = circleId;
+	}
 }
 

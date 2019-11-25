@@ -8,6 +8,7 @@ import com.coolplay.user.security.service.IUserService;
 import com.coolplay.user.security.utils.SecurityUtil;
 import com.coolplay.user.user.model.CircleModel;
 import com.coolplay.user.user.model.UserFansModel;
+import com.coolplay.user.user.service.ICircleService;
 import com.coolplay.user.user.service.IUserFansService;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
@@ -32,6 +33,9 @@ public class UserFansController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private ICircleService circleService;
 
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
@@ -68,6 +72,71 @@ public class UserFansController {
                 for (UserModel fansUserModel : fansUserModels) {
                     if (followUserIds.contains(fansUserModel.getId())) {
                         fansUserModel.setIsFans(1);
+                    }
+                }
+            }
+
+            PageInfo<UserModel> fansUserPageInfo = new PageInfo<UserModel>(fansUserModels);
+            return ResponseUtil.success(PageConvertUtil.grid(fansUserPageInfo));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
+    /**
+     * 圈子加入邀请 粉丝列表
+     *
+     * @param userFansModel
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/circleInviteList", method = RequestMethod.POST)
+    public Result circleInviteList(@RequestBody UserFansModel userFansModel) {
+        userFansModel.initPageInfo();
+
+        Integer circleId = userFansModel.getCircleId();
+
+        try {
+            PageInfo<UserFansModel> pageInfo = userFansService
+                    .selectByFilterAndPage(userFansModel, userFansModel.getPageNum(), userFansModel.getPageSize());
+
+            List<UserModel> fansUserModels = new ArrayList<UserModel>();
+
+            Map<Integer, List<Integer>> circleMemberMap = circleService.getAdminOrMemberByIds(Collections.singletonList(circleId));
+            List<Integer> circleMemberIds = circleMemberMap.get(circleId);
+
+            if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
+                List<Integer> fansUserIds = new ArrayList<Integer>();
+
+                for (UserFansModel tmpUserFans : pageInfo.getList()) {
+                    fansUserIds.add(tmpUserFans.getFansUserId());
+                }
+
+                Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(fansUserIds);
+                for (UserFansModel tmpUserFans : pageInfo.getList()) {
+                    UserModel userModel = userMap.get(tmpUserFans.getFansUserId());
+                    if (userModel != null) {
+                        fansUserModels.add(userModel);
+                    }
+                }
+            }
+
+            if (CollectionUtils.isNotEmpty(fansUserModels)) {
+
+                Map<Integer, List<Integer>> followMap = userFansService
+                        .getFollowMapByFansUserIds(Collections.singletonList(SecurityUtil.getCurrentUserId()));
+
+                List<Integer> followUserIds = followMap.get(SecurityUtil.getCurrentUserId());
+                for (UserModel fansUserModel : fansUserModels) {
+                    if (followUserIds.contains(fansUserModel.getId())) {
+                        fansUserModel.setIsFans(1);
+                    }
+
+                    if(circleMemberIds.contains(fansUserModel.getId())) {
+                        fansUserModel.setIsCircleMember(1);
                     }
                 }
             }
