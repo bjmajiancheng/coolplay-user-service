@@ -40,6 +40,9 @@ public class CommonController {
     @Value("${weather.url}")
     private String weatherUrl;
 
+    @Value("${weather.picture.url}")
+    private String weatherPictureUrl;
+
     @Autowired
     private IAttachmentService attachmentService;
 
@@ -254,6 +257,43 @@ public class CommonController {
                     weatherData = String.valueOf(contentMap.get("data"));
 
                     redisCache.set(String.format(SecurityConstant.WEATHER_DATA_KEY, lat, lon), weatherData, 12 * 60 * 60);
+                } else {
+                    return ResponseUtil.error("获取天气数据异常, 请稍后重试。");
+                }
+            }
+
+            return ResponseUtil.success((Object)weatherData);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
+    /**
+     * 获取天气图片数据
+     *
+     * @param lat
+     * @param lon
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/weatherPictureData", method = RequestMethod.POST)
+    public Result weatherPictureData(@RequestParam("lat") String lat, @RequestParam("lon")String lon) {
+        try {
+            String weatherData = (String) redisCache.get(String.format(SecurityConstant.WEATHER_PICTURE_DATA_KEY, lat, lon));
+            if(StringUtils.isEmpty(weatherData)) {
+                HttpClientResult result = HttpClientUtil.doGet(String.format("%s?lat=%s&lon=%s", weatherPictureUrl, lat, lon));
+
+                String content = result.getContent();
+
+                Map<String, Object> contentMap = JSON.parseObject(content, Map.class);
+
+                if(MapUtils.isNotEmpty(contentMap)) {
+                    weatherData = String.valueOf(contentMap.get("data"));
+
+                    redisCache.set(String.format(SecurityConstant.WEATHER_PICTURE_DATA_KEY, lat, lon), weatherData, 12 * 60 * 60);
                 } else {
                     return ResponseUtil.error("获取天气数据异常, 请稍后重试。");
                 }
