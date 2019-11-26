@@ -119,7 +119,7 @@ public class CoolplayBaseModel extends Sortable {
 	private String queryStr = "";//查询文本
 
 	@Transient
-	private Integer type = 0;//查询类型, 1:基地列表, 2:地图列表
+	private Integer type = 0;//查询类型, 1:基地列表, 2:地图列表; 展示结果, 1:基地; 2:俱乐部
 
 	@Transient
 	private String companyName = "";//企业名称

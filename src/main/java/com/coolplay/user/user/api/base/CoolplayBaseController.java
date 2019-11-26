@@ -83,6 +83,8 @@ public class CoolplayBaseController {
                     tmpCoolplayBase.setDistinct(DistanceUtil
                             .getDistance(currPosX, currPosY,
                                     tmpCoolplayBase.getPosX(), tmpCoolplayBase.getPosY()));
+
+                    tmpCoolplayBase.setType(1);
                 }
             }
 
@@ -94,6 +96,57 @@ public class CoolplayBaseController {
             return ResponseUtil.error("系统异常, 请稍后重试。");
         }
     }
+
+    /*@ResponseBody
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public Result list(@RequestBody CoolplayBaseModel coolplayBaseModel) {
+
+        try {
+            coolplayBaseModel.setIsClose(0);
+            coolplayBaseModel.setIsDel(0);
+            BigDecimal currPosX = coolplayBaseModel.getPosX() == null ? BigDecimal.ZERO : coolplayBaseModel.getPosX();
+            BigDecimal currPosY = coolplayBaseModel.getPosY() == null ? BigDecimal.ZERO : coolplayBaseModel.getPosY();
+
+            coolplayBaseModel.initPageInfo();
+            PageInfo<CoolplayBaseModel> pageInfo = coolplayBaseService
+                    .selectByFilterAndPage(coolplayBaseModel, coolplayBaseModel.getPageNum(), coolplayBaseModel.getPageSize());
+            if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
+                List<Integer> companyIds = new ArrayList<Integer>();
+                List<Integer> baseIds = new ArrayList<Integer>();
+                for (CoolplayBaseModel tmpCoolplayBase : pageInfo.getList()) {
+                    if (!companyIds.contains(tmpCoolplayBase.getCompanyId())) {
+                        companyIds.add(tmpCoolplayBase.getCompanyId());
+                    }
+
+                    baseIds.add(tmpCoolplayBase.getId());
+                }
+
+                Map<Integer, CompanyModel> companyMap = companyService.findMapByCompanyIds(companyIds);
+                Map<Integer, List<LabelModel>> labelMap = labelService.findMapByBaseIds(baseIds);
+
+                for (CoolplayBaseModel tmpCoolplayBase : pageInfo.getList()) {
+                    CompanyModel companyModel = companyMap.get(tmpCoolplayBase.getCompanyId());
+                    if (companyModel != null) {
+                        tmpCoolplayBase.setCompanyName(companyModel.getCompanyName());
+                    }
+
+                    if(CollectionUtils.isNotEmpty(labelMap.get(tmpCoolplayBase.getId()))) {
+                        tmpCoolplayBase.setLabelList(labelMap.get(tmpCoolplayBase.getId()));
+                    }
+                    tmpCoolplayBase.setDistinct(DistanceUtil
+                            .getDistance(currPosX, currPosY,
+                                    tmpCoolplayBase.getPosX(), tmpCoolplayBase.getPosY()));
+                }
+            }
+
+            return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }*/
 
     /**
      * 基地详情
