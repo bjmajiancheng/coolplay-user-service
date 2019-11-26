@@ -7,6 +7,7 @@
 
 package com.coolplay.user.user.service;
 
+import com.coolplay.user.user.model.CompanyModel;
 import com.coolplay.user.user.model.CoolplayBaseModel;
 import com.github.pagehelper.PageInfo;
 import java.util.*;
@@ -37,5 +38,7 @@ public interface ICoolplayBaseService extends IBaseService<CoolplayBaseModel> {
 	 * @return
      */
 	public Map<Integer, CoolplayBaseModel> findMapByIds(List<Integer> ids);
+
+	public List<CoolplayBaseModel> findOptionDatas();
 
 }

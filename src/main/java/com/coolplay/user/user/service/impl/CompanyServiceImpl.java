@@ -83,4 +83,12 @@ public class CompanyServiceImpl extends BaseService<CompanyModel> implements ICo
 
         return companyMap;
     }
+
+    public List<CompanyModel> find(Map<String, Object> param) {
+        return companyMapper.find(param);
+    }
+
+    public List<CompanyModel> findOptionDatas() {
+        return companyMapper.findOptionDatas();
+    }
 }

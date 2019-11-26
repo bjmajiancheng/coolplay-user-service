@@ -108,6 +108,10 @@
 		FROM d_coolplay_base WHERE id = #{id}
 	</select>
 
+	<select id="findOptionDatas" resultMap="CoolplayBase">
+		SELECT id, base_name, base_full_name, company_id FROM d_coolplay_base
+		WHERE is_close = 0 and is_del = 0
+	</select>
 	
 </mapper>
 

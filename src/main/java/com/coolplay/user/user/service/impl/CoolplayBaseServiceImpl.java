@@ -106,4 +106,8 @@ public class CoolplayBaseServiceImpl extends BaseService<CoolplayBaseModel> impl
 
         return coolplayBaseMap;
     }
+
+    public List<CoolplayBaseModel> findOptionDatas() {
+        return coolplayBaseMapper.findOptionDatas();
+    }
 }

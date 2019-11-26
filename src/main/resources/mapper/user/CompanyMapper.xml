@@ -99,6 +99,9 @@
 		SELECT <include refid="columns"/> FROM d_company where id = #{id}
 	</select>
 
+	<select id="findOptionDatas" resultMap="Company">
+		SELECT id, company_full_name, company_name FROM d_company WHERE review_status = 1 AND status = 1 AND is_del = 0
+	</select>
 	
 </mapper>
 

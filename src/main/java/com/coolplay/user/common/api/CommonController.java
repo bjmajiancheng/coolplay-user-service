@@ -1,6 +1,8 @@
 package com.coolplay.user.common.api;
 
 import com.alibaba.fastjson.JSON;
+import com.coolplay.user.common.dto.BaseOption;
+import com.coolplay.user.common.dto.CompanyOption;
 import com.coolplay.user.common.service.IAttachmentService;
 import com.coolplay.user.common.tools.RedisCache;
 import com.coolplay.user.common.utils.*;
@@ -8,9 +10,11 @@ import com.coolplay.user.core.model.Attachment;
 import com.coolplay.user.security.constants.SecurityConstant;
 import com.coolplay.user.security.service.IUserService;
 import com.coolplay.user.user.model.CompanyModel;
+import com.coolplay.user.user.model.CoolplayBaseModel;
 import com.coolplay.user.user.model.SystemVersionModel;
 import com.coolplay.user.user.model.VerifyCodeModel;
 import com.coolplay.user.user.service.ICompanyService;
+import com.coolplay.user.user.service.ICoolplayBaseService;
 import com.coolplay.user.user.service.ISystemVersionService;
 import com.coolplay.user.user.service.IVerifyCodeService;
 import org.apache.commons.collections.CollectionUtils;
@@ -63,6 +67,9 @@ public class CommonController {
 
     @Autowired
     private ICompanyService companyService;
+
+    @Autowired
+    private ICoolplayBaseService coolplayBaseService;
 
     @RequestMapping(value = "/uploadFile", method = { RequestMethod.POST })
     @ResponseBody
@@ -301,6 +308,59 @@ public class CommonController {
 
             return ResponseUtil.success((Object)weatherData);
 
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
+    /**
+     * 企业基地关联数据
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/companyOptions", method = RequestMethod.POST)
+    public Result companyOptions() {
+        try{
+            List<CompanyModel> companyModels = companyService.findOptionDatas();
+            List<CoolplayBaseModel> coolplayBaseModels = coolplayBaseService.findOptionDatas();
+
+            Map<Integer, List<CoolplayBaseModel>> coolplayBaseMap = new HashMap<Integer, List<CoolplayBaseModel>>();
+            if(CollectionUtils.isNotEmpty(coolplayBaseModels)) {
+                for(CoolplayBaseModel coolplayBaseModel : coolplayBaseModels) {
+                    List<CoolplayBaseModel> coolplayBases = coolplayBaseMap.get(coolplayBaseModel.getCompanyId());
+                    if(CollectionUtils.isEmpty(coolplayBases)) {
+                        coolplayBases = new ArrayList<CoolplayBaseModel>();
+                    }
+
+                    coolplayBases.add(coolplayBaseModel);
+
+                    coolplayBaseMap.put(coolplayBaseModel.getCompanyId(), coolplayBases);
+                }
+            }
+
+            List<CompanyOption> companyOptions = new ArrayList<CompanyOption>();
+            if(CollectionUtils.isNotEmpty(companyModels)) {
+                for(CompanyModel companyModel : companyModels) {
+                    CompanyOption companyOption = new CompanyOption(companyModel.getId(), companyModel.getCompanyName());
+
+                    List<CoolplayBaseModel> tmpCoolplayBases = coolplayBaseMap.get(companyModel.getId());
+
+                    List<BaseOption> baseOptions = new ArrayList<BaseOption>();
+                    if(CollectionUtils.isNotEmpty(tmpCoolplayBases)) {
+                        for(CoolplayBaseModel tmpCoolplayBase : tmpCoolplayBases) {
+                            baseOptions.add(new BaseOption(tmpCoolplayBase.getId(), tmpCoolplayBase.getBaseName()));
+                        }
+                    }
+                    companyOption.setBaseOptions(baseOptions);
+
+                    companyOptions.add(companyOption);
+                }
+            }
+
+            return ResponseUtil.success(Collections.singletonMap("companys", companyOptions));
         } catch(Exception e) {
             e.printStackTrace();
 

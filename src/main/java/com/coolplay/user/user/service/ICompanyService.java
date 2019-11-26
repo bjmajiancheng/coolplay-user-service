@@ -21,4 +21,8 @@ public interface ICompanyService extends IBaseService<CompanyModel> {
     public List<CompanyModel> selectByFilter(CompanyModel companyModel);
 
     public Map<Integer, CompanyModel> findMapByCompanyIds(List<Integer> companyIds);
+
+    public List<CompanyModel> find(Map<String, Object> param);
+
+    public List<CompanyModel> findOptionDatas();
 }

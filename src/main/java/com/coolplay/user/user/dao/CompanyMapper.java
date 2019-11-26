@@ -24,4 +24,6 @@ public interface CompanyMapper extends Mapper<CompanyModel> {
 
 	public CompanyModel findCompanyById(@Param("id")Integer id);
 
+	public List<CompanyModel> findOptionDatas();
+
 }
