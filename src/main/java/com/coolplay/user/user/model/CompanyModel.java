@@ -9,6 +9,7 @@ package com.coolplay.user.user.model;
 
 import com.coolplay.user.common.handler.Sortable;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -67,6 +68,12 @@ public class CompanyModel extends Sortable {
 
 	@Column(name = "business_license_url")
 	private String businessLicenseUrl;//"营业执照附件"
+
+	@Column(name = "pos_x")
+	private BigDecimal posX;//基地x坐标
+
+	@Column(name = "pos_y")
+	private BigDecimal posY;//基地y坐标
 
 	@Column(name = "review_status")
 	private Integer reviewStatus;//"浏览次数"
@@ -209,7 +216,23 @@ public class CompanyModel extends Sortable {
 	public String getBusinessLicenseUrl() {
 		return this.businessLicenseUrl;
 	}
-		
+
+	public BigDecimal getPosX() {
+		return posX;
+	}
+
+	public void setPosX(BigDecimal posX) {
+		this.posX = posX;
+	}
+
+	public BigDecimal getPosY() {
+		return posY;
+	}
+
+	public void setPosY(BigDecimal posY) {
+		this.posY = posY;
+	}
+
 	public void setReviewStatus(Integer reviewStatus) {
 		this.reviewStatus = reviewStatus;
 	}

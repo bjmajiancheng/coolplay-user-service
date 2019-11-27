@@ -56,7 +56,8 @@ public class CoolplayBaseController {
 
             coolplayBaseModel.initPageInfo();
             PageInfo<CoolplayBaseModel> pageInfo = coolplayBaseService
-                    .selectByFilterAndPage(coolplayBaseModel, coolplayBaseModel.getPageNum(), coolplayBaseModel.getPageSize());
+                    .selectByFilterAndPage(coolplayBaseModel, coolplayBaseModel.getPageNum(),
+                            coolplayBaseModel.getPageSize());
             if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
                 List<Integer> companyIds = new ArrayList<Integer>();
                 List<Integer> baseIds = new ArrayList<Integer>();
@@ -77,20 +78,45 @@ public class CoolplayBaseController {
                         tmpCoolplayBase.setCompanyName(companyModel.getCompanyName());
                     }
 
-                    if(CollectionUtils.isNotEmpty(labelMap.get(tmpCoolplayBase.getId()))) {
+                    if (CollectionUtils.isNotEmpty(labelMap.get(tmpCoolplayBase.getId()))) {
                         tmpCoolplayBase.setLabelList(labelMap.get(tmpCoolplayBase.getId()));
                     }
                     tmpCoolplayBase.setDistinct(DistanceUtil
-                            .getDistance(currPosX, currPosY,
-                                    tmpCoolplayBase.getPosX(), tmpCoolplayBase.getPosY()));
+                            .getDistance(currPosX, currPosY, tmpCoolplayBase.getPosX(), tmpCoolplayBase.getPosY()));
 
                     tmpCoolplayBase.setType(1);
                 }
             }
 
+            CompanyModel companyModel = new CompanyModel();
+            companyModel.setCompanyName(coolplayBaseModel.getQueryStr());
+            companyModel.setStatus(1);
+            companyModel.setReviewStatus(1);
+            companyModel.setIsDel(0);
+            PageInfo<CompanyModel> companyModelPageInfo = companyService
+                    .selectByFilterAndPage(companyModel, coolplayBaseModel.getPageNum(), coolplayBaseModel.getPageSize());
+            List<CoolplayBaseModel> coolplayBaseModels = pageInfo.getList();
+            if(CollectionUtils.isNotEmpty(companyModelPageInfo.getList())) {
+                for(CompanyModel tmpCompanyModel : companyModelPageInfo.getList()) {
+                    CoolplayBaseModel tmpCoolplayBase = new CoolplayBaseModel();
+                    tmpCoolplayBase.setId(tmpCompanyModel.getId());
+                    tmpCoolplayBase.setCompanyName(tmpCompanyModel.getCompanyName());
+                    tmpCoolplayBase.setBaseName("");
+                    tmpCoolplayBase.setPosX(tmpCompanyModel.getPosX());
+                    tmpCoolplayBase.setPosY(tmpCompanyModel.getPosY());
+                    tmpCoolplayBase.setDistinct(DistanceUtil
+                            .getDistance(currPosX, currPosY, tmpCoolplayBase.getPosX(), tmpCoolplayBase.getPosY()));
+                    tmpCoolplayBase.setBackgroudImg("");
+
+                    coolplayBaseModels.add(tmpCoolplayBase);
+                }
+            }
+
+            pageInfo.setTotal(pageInfo.getTotal() + companyModelPageInfo.getTotal());
+
             return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -156,36 +182,35 @@ public class CoolplayBaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
-    public Result detail(@RequestParam("id")Integer id) {
+    public Result detail(@RequestParam("id") Integer id) {
 
         try {
             CoolplayBaseModel coolplayBaseModel = coolplayBaseService.findById(id);
 
             CompanyModel companyModel = companyService.findCompanyById(coolplayBaseModel.getCompanyId());
-            if(companyModel != null) {
+            if (companyModel != null) {
                 coolplayBaseModel.setCompanyName(companyModel.getCompanyName());
             }
 
             Map<Integer, List<LabelModel>> labelMap = labelService.findMapByBaseIds(Collections.singletonList(id));
-            if(CollectionUtils.isNotEmpty(labelMap.get(coolplayBaseModel.getId()))) {
+            if (CollectionUtils.isNotEmpty(labelMap.get(coolplayBaseModel.getId()))) {
                 coolplayBaseModel.setLabelList(labelMap.get(coolplayBaseModel.getId()));
             }
 
             return ResponseUtil.success(coolplayBaseModel);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
         }
     }
 
-
     @ResponseBody
     @RequestMapping(value = "/collectBase", method = RequestMethod.POST)
-    public Result collectBase(@RequestParam("id")Integer id, @RequestParam("type")Integer type) {
+    public Result collectBase(@RequestParam("id") Integer id, @RequestParam("type") Integer type) {
         Integer currUserId = SecurityUtil.getCurrentUserId();
 
-        try{
+        try {
             UserCollectModel userCollectModel = new UserCollectModel();
             userCollectModel.setCollectType(4);
             userCollectModel.setCollectTypeId(id);
@@ -194,16 +219,16 @@ public class CoolplayBaseController {
 
             //操作类型 1: 收藏 2:取消收藏
 
-            if(type == 1) {
+            if (type == 1) {
                 int saveCnt = userCollectService.insertIgnore(userCollectModel);
-            } else if(type == 2) {
+            } else if (type == 2) {
                 int delCnt = userCollectService.delByUserIdAndCollectTypeInfo(currUserId, 4, id);
             }
 
             int collectCnt = userCollectService.findCntByCollectTypeAndCollectTypeId(4, id);
 
             return ResponseUtil.success(Collections.singletonMap("collectCnt", collectCnt));
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseUtil.error("系统错误, 请稍后重试。");
         }
