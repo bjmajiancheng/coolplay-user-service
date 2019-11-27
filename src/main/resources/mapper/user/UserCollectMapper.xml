@@ -68,7 +68,7 @@
 	<select id="findBaseIdsByUserIdAndBaseIds" resultType="java.lang.Integer">
 		SELECT collect_type_id FROM d_user_collect
 		WHERE user_id = #{userId} AND collect_type = 4 AND is_del= 0 AND collect_type_id IN
-		<foreach collection="companyIds" item="item" open="(" separator="," close=")">
+		<foreach collection="baseIds" item="item" open="(" separator="," close=")">
 			#{item}
 		</foreach>
 	</select>
