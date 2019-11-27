@@ -107,6 +107,7 @@ public class CoolplayBaseController {
                     tmpCoolplayBase.setDistinct(DistanceUtil
                             .getDistance(currPosX, currPosY, tmpCoolplayBase.getPosX(), tmpCoolplayBase.getPosY()));
                     tmpCoolplayBase.setBackgroudImg("");
+                    tmpCoolplayBase.setType(2);
 
                     coolplayBaseModels.add(tmpCoolplayBase);
                 }
