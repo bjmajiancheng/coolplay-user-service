@@ -60,6 +60,15 @@ public interface IUserCollectService extends IBaseService<UserCollectModel> {
 	public List<Integer> findCompanyIdsByUserIdAndCompanyIds(Integer userId, List<Integer> companyIds);
 
 	/**
+	 * 根据用户ID和基地集合查看 用户收藏的基地
+	 *
+	 * @param userId
+	 * @param baseIds
+     * @return
+     */
+	public List<Integer> findBaseIdsByUserIdAndBaseIds(Integer userId, List<Integer> baseIds);
+
+	/**
 	 * 根据收藏类型和收藏类型业务ID 获取收藏数
 	 *
 	 * @param collectType

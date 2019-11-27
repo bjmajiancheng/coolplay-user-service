@@ -46,6 +46,15 @@ public interface UserCollectMapper extends Mapper<UserCollectModel> {
 	 */
 	public List<Integer> findCompanyIdsByUserIdAndCompanyIds(@Param("userId")Integer userId, @Param("companyIds")List<Integer> companyIds);
 
+	/**
+	 * 根据用户ID和基地集合查看 用户收藏的基地
+	 *
+	 * @param userId
+	 * @param baseIds
+	 * @return
+	 */
+	public List<Integer> findBaseIdsByUserIdAndBaseIds(@Param("userId")Integer userId, @Param("baseIds")List<Integer> baseIds);
+
 
 	public Integer findCntByCollectTypeAndCollectTypeId(@Param("collectType")Integer collectType, @Param("collectTypeId")Integer collectTypeId);
 

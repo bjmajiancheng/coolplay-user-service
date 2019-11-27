@@ -129,6 +129,9 @@ public class CoolplayBaseModel extends Sortable {
 
 	@Transient
 	private BigDecimal distinct = new BigDecimal(0);//距离
+
+	@Transient
+	private Integer isCollect = 0;//是否收藏 0:为收藏 1:已收藏
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -400,6 +403,14 @@ public class CoolplayBaseModel extends Sortable {
 
 	public void setDistinct(BigDecimal distinct) {
 		this.distinct = distinct;
+	}
+
+	public Integer getIsCollect() {
+		return isCollect;
+	}
+
+	public void setIsCollect(Integer isCollect) {
+		this.isCollect = isCollect;
 	}
 }
 

@@ -197,6 +197,11 @@ public class CoolplayBaseController {
                 coolplayBaseModel.setLabelList(labelMap.get(coolplayBaseModel.getId()));
             }
 
+            List<Integer> baseIds = userCollectService.findBaseIdsByUserIdAndBaseIds(SecurityUtil.getCurrentUserId(), Collections.singletonList(coolplayBaseModel.getId()));
+            if(CollectionUtils.isNotEmpty(baseIds) && baseIds.contains(coolplayBaseModel.getId())) {
+                coolplayBaseModel.setIsCollect(1);
+            }
+
             return ResponseUtil.success(coolplayBaseModel);
         } catch (Exception e) {
             e.printStackTrace();
