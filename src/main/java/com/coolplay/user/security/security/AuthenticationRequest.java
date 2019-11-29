@@ -16,9 +16,13 @@ public class AuthenticationRequest {
 
     private String verifyCode;
 
-    private String thirdId;
+    private String openId;
 
-    private Integer thirdType;
+    private String accessToken;
+
+    private String nickname;
+
+    private String headpic;
 
     public AuthenticationRequest() {
     }
@@ -77,19 +81,35 @@ public class AuthenticationRequest {
         this.verifyCode = verifyCode;
     }
 
-    public String getThirdId() {
-        return thirdId;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setThirdId(String thirdId) {
-        this.thirdId = thirdId;
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
-    public Integer getThirdType() {
-        return thirdType;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setThirdType(Integer thirdType) {
-        this.thirdType = thirdType;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getHeadpic() {
+        return headpic;
+    }
+
+    public void setHeadpic(String headpic) {
+        this.headpic = headpic;
     }
 }
