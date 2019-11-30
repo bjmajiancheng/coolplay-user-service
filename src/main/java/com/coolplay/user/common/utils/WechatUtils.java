@@ -48,8 +48,8 @@ public class WechatUtils {
 
     public static void main(String[] args) {
         Map<String, Object> result = WechatUtils.getWechatInfoByOpenIdAndAccessToken(
-                "o_P-GtxCZB6chKdVRilC1PyJXI-E",
-                "sM4AOVdWfPE4DxkXGEs8VJh4dzE_LY1qPYRS-hJs6ZiAlxrGOQQiM1HkI-bzZL-1gWU2-ZO6DoESE89380TACw"
+                "opkjX0Ri6DSyDh1aih9MdrWi2BGY",
+                "27_RqfLgeZODnTcKEaVgU5N8Ot2E51w_AHTjAa3qbKC8L4WQe6XY2sogTCCvgwjcP8zQ4O4oibVXxhrabOHd2WCff3zB1rewX6Ni4ls02t3qaY"
                 );
 
         System.out.println(JSON.toJSONString(result));
