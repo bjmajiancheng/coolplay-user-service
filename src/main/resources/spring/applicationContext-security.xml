@@ -15,7 +15,8 @@
     <!--<http pattern="/api/user/**" security="none"/>-->
     <http pattern="/api/user/loginByMobilePhone" security="none"/>
     <http pattern="/api/user/loginByVerifyCode" security="none"/>
-    <http pattern="/api/user/loginByThirdType" security="none"/>
+    <http pattern="/api/user/loginByWechat" security="none"/>
+    <http pattern="/api/user/loginByQQ" security="none"/>
     <http pattern="/api/user/register" security="none"/>
 
     <http pattern="/api/common/**" security="none"/>
