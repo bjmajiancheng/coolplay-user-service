@@ -380,100 +380,6 @@ public class UserController {
     }
 
     /**
-     * 根据第三方信息登录
-     *
-     * @param request
-     * @param authenticationRequest
-     * @return
-     * @throws AuthenticationException
-     */
-    /*@RequestMapping(value = "/loginByThirdType", method = RequestMethod.POST)
-    public ResponseEntity<?> authenticationRequestByThirdType(HttpServletRequest request,
-            @RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {
-        if (StringUtils.isEmpty(authenticationRequest.getThirdId()) || authenticationRequest.getThirdType() == null) {
-            return ResponseEntity.ok(HttpResponseUtil.error("请输入第三方登录信息"));
-        }
-
-        if (!CommonConstant.ALLOW_THIRD_TYPE.contains(authenticationRequest.getThirdType())) {
-            return ResponseEntity.ok(HttpResponseUtil.error("第三方登录信息输入有误"));
-        }
-
-        try {
-            UserModel userModel = userService
-                    .findUserByThirdInfo(authenticationRequest.getThirdId(), authenticationRequest.getThirdType());
-            if (userModel == null) {
-                userModel = new UserModel();
-                String uuid = UUIDUtils.generUUID();
-                userModel.setMobilePhone(uuid);
-                userModel.setUserName(uuid);
-                userModel.setMobilePhone(uuid);
-                String passwordEncode = SecurityUtil.encodeString(uuid);
-                userModel.setPassword(passwordEncode);
-                if (authenticationRequest.getThirdType() == 1) {
-                    userModel.setWechatId(authenticationRequest.getThirdId());
-                } else if (authenticationRequest.getThirdType() == 2) {
-                    userModel.setQqId(authenticationRequest.getThirdId());
-                }
-                userModel.setAccountNonLocked(true);
-                userModel.setAccountNonExpired(true);
-                userModel.setCredentialsNonExpired(true);
-                userModel.setEnabled(true);
-                userModel.setLastPasswordReset(new Date());
-
-                int insertCnt = userService.saveNotNull(userModel);
-
-                UserPassMappingModel userPassMappingModel = new UserPassMappingModel();
-                userPassMappingModel.setPassword(uuid);
-                userPassMappingModel.setPasswordEncode(passwordEncode);
-                userPassMappingService.insert(userPassMappingModel);
-            }
-
-            UserPassMappingModel userPassMappingModel = userPassMappingService
-                    .findByPasswordEncode(userModel.getPassword());
-            if (userPassMappingModel == null) {
-                return ResponseEntity.ok(HttpResponseUtil.error("系统异常, 请稍后重试"));
-            }
-
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                    userModel.getUserName(), userPassMappingModel.getPassword());
-            usernamePasswordAuthenticationToken.setDetails(new HttpAuthenticationDetails());
-
-            Authentication authentication = null;
-            try {
-                authentication = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-                if (authentication == null) {
-                    return ResponseEntity.ok(HttpResponseUtil.error("未检测到验证信息"));
-                }
-            } catch (InternalAuthenticationServiceException failed) {
-                logger.error("An internal error occurred while trying to authenticate the user.", failed);
-                return ResponseEntity.ok(HttpResponseUtil.error(failed.getMessage()));
-            } catch (AuthenticationException failed) {
-                return ResponseEntity.ok(HttpResponseUtil.error(failed.getMessage()));
-            }
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            UserDetails userDetails = (UserDetails) redisCache
-                    .get(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName());
-            if (userDetails == null) {
-                userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-                redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails);
-            }
-            String token = this.tokenUtils.generateToken(userDetails);
-            userService
-                    .updateLastLoginInfoByUserName(userModel.getUserName(), new Date(), RequestUtil.getIpAddress(request));
-
-            UserModel userDetailInfo = getUserDetailInfo(userModel.getId());
-            userDetailInfo.setToken(token);
-
-            return ResponseEntity.ok(HttpResponseUtil.success(userDetailInfo));
-        } catch(Exception e) {
-            e.printStackTrace();
-
-            return ResponseEntity.ok(ResponseUtil.error("系统异常, 请稍后重试。"));
-        }
-    }*/
-
-    /**
      * 用户注册
      *
      * @param mobilePhone
@@ -528,6 +434,51 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
 
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
+    /**
+     * 补全用户信息
+     *
+     * @param userModel
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/adjustUserInfo", method = RequestMethod.POST)
+    public Result adjustUserInfo(@RequestBody UserModel userModel) {
+
+        try {
+            int currUserId = SecurityUtil.getCurrentUserId();
+            if (userModel.getId() != currUserId) {
+                return ResponseUtil.error("无权限修改其他用户信息");
+            }
+
+            if (StringUtils.isEmpty(userModel.getVerifyCode())) {
+                return ResponseUtil.error("请输入验证码");
+            }
+            if (StringUtils
+                    .isNotEmpty((String) redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + userModel.getMobilePhone()))) {
+                if (!((String) redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + userModel.getMobilePhone()))
+                        .equals(userModel.getVerifyCode())) {
+                    return ResponseUtil.error("验证码不正确");
+                }
+            } else {
+                return ResponseUtil.error("验证码不存在或已过期");
+            }
+
+            UserModel validateUserModel = userService.findUserByMobilePhone(userModel.getMobilePhone());
+            if(validateUserModel != null) {
+                return ResponseUtil.error("该手机号已注册, 请更换手机号。");
+            }
+            userModel.setUserName(userModel.getMobilePhone());
+
+            int updateCnt = userService.updateNotNull(userModel);
+
+
+            return ResponseUtil.success("补全信息成功");
+        } catch(Exception e) {
+            e.printStackTrace();
             return ResponseUtil.error("系统异常, 请稍后重试。");
         }
     }

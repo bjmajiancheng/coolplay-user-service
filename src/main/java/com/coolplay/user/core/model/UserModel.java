@@ -129,6 +129,9 @@ public class UserModel extends Sortable {
 	@Transient
 	private String token;
 
+	@Transient
+	private String verifyCode;//验证码
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -395,6 +398,14 @@ public class UserModel extends Sortable {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getVerifyCode() {
+		return verifyCode;
+	}
+
+	public void setVerifyCode(String verifyCode) {
+		this.verifyCode = verifyCode;
 	}
 }
 

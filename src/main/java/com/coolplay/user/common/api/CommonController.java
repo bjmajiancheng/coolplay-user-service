@@ -9,14 +9,8 @@ import com.coolplay.user.common.utils.*;
 import com.coolplay.user.core.model.Attachment;
 import com.coolplay.user.security.constants.SecurityConstant;
 import com.coolplay.user.security.service.IUserService;
-import com.coolplay.user.user.model.CompanyModel;
-import com.coolplay.user.user.model.CoolplayBaseModel;
-import com.coolplay.user.user.model.SystemVersionModel;
-import com.coolplay.user.user.model.VerifyCodeModel;
-import com.coolplay.user.user.service.ICompanyService;
-import com.coolplay.user.user.service.ICoolplayBaseService;
-import com.coolplay.user.user.service.ISystemVersionService;
-import com.coolplay.user.user.service.IVerifyCodeService;
+import com.coolplay.user.user.model.*;
+import com.coolplay.user.user.service.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -70,6 +64,9 @@ public class CommonController {
 
     @Autowired
     private ICoolplayBaseService coolplayBaseService;
+
+    @Autowired
+    private IHelpService helpService;
 
     @RequestMapping(value = "/uploadFile", method = { RequestMethod.POST })
     @ResponseBody
@@ -360,7 +357,55 @@ public class CommonController {
                 }
             }
 
-            return ResponseUtil.success(Collections.singletonMap("companys", companyOptions));
+            Map<String, Object> optionMap = new HashMap<String, Object>();
+            optionMap.put("companys", companyOptions);
+            optionMap.put("bases", coolplayBaseModels);
+
+            return ResponseUtil.success(optionMap);
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
+    /**
+     * 帮助列表信息
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/helpList", method = RequestMethod.POST)
+    public Result helpList(@RequestBody HelpModel helpModel) {
+        try {
+            helpModel.setIsDel(0);
+            List<HelpModel> helpModels = helpService.selectByFilter(helpModel);
+            List<HelpModel> helpResultDatas = new ArrayList<HelpModel>();
+
+            Map<Integer, List<HelpModel>> subHelpModelMap = new HashMap<Integer, List<HelpModel>>();
+            if(CollectionUtils.isNotEmpty(helpModels)) {
+                for(HelpModel tmpHelpModel : helpModels) {
+                    if(tmpHelpModel.getParentId() == 0) {
+                        helpResultDatas.add(tmpHelpModel);
+                    } else {
+                        List<HelpModel> subHelpModels = subHelpModelMap.get(tmpHelpModel.getParentId());
+                        if(CollectionUtils.isEmpty(subHelpModels)) {
+                            subHelpModels = new ArrayList<HelpModel>();
+                        }
+                        subHelpModels.add(tmpHelpModel);
+
+                        subHelpModelMap.put(tmpHelpModel.getParentId(), subHelpModels);
+                    }
+                }
+
+                if(CollectionUtils.isNotEmpty(helpResultDatas)) {
+                    for(HelpModel tmpHelpModel : helpResultDatas) {
+                        tmpHelpModel.setSubHelpModels(subHelpModelMap.getOrDefault(tmpHelpModel.getId(), Collections.emptyList()));
+                    }
+                }
+            }
+
+            return ResponseUtil.success(helpModels);
         } catch(Exception e) {
             e.printStackTrace();
 
