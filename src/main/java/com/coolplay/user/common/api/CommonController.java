@@ -398,6 +398,15 @@ public class CommonController {
                     }
                 }
 
+                //如果分类为空, 子帮助文档不为空,则补全分类数据
+                if(CollectionUtils.isEmpty(helpResultDatas) && MapUtils.isNotEmpty(subHelpModelMap)) {
+                    List<Integer> ids = new ArrayList<Integer>(subHelpModelMap.keySet());
+                    List<HelpModel> parentHelps = helpService.find(Collections.singletonMap("ids", ids));
+                    if(CollectionUtils.isNotEmpty(parentHelps)) {
+                        helpResultDatas = parentHelps;
+                    }
+                }
+
                 if(CollectionUtils.isNotEmpty(helpResultDatas)) {
                     for(HelpModel tmpHelpModel : helpResultDatas) {
                         tmpHelpModel.setSubHelpModels(subHelpModelMap.getOrDefault(tmpHelpModel.getId(), Collections.emptyList()));
@@ -405,7 +414,7 @@ public class CommonController {
                 }
             }
 
-            return ResponseUtil.success(helpModels);
+            return ResponseUtil.success(Collections.singletonMap("helpList", helpResultDatas));
         } catch(Exception e) {
             e.printStackTrace();
 
