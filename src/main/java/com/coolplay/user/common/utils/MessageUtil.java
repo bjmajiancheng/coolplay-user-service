@@ -133,4 +133,27 @@ public class MessageUtil implements Serializable {
         return ResponseUtil.success();
     }
 
+    public static void main(String[] args) {
+        try {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("UserID", "963360");
+            params.put("Account", "Yanzhengma");
+            params.put("Password", "123@Yanma");
+            params.put("Phones", String.format("%s;", "13717689765"));
+            params.put("SendTime", "");
+            params.put("SendType", "1");
+            params.put("PostFixNumber", "");
+
+            String content = "您的短信验证码是4402.有效期180秒，您正在通过手机号重置登录密码，如非本人操作，请忽略该短信。【酷玩e族】";
+            params.put("Content", content);
+
+
+            HttpClientResult result = HttpClientUtil.doGet("http://www.mxtong.net.cn/GateWay/Services.asmx/DirectSend", params);
+            logger.info("手机号码:{}, 短信发送结果:{}", "13717689765", JSON.toJSONString(result));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

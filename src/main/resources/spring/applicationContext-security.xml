@@ -18,6 +18,7 @@
     <http pattern="/api/user/loginByWechat" security="none"/>
     <http pattern="/api/user/loginByQQ" security="none"/>
     <http pattern="/api/user/register" security="none"/>
+    <http pattern="/api/user/resetPassword" security="none"/>
 
     <http pattern="/api/common/**" security="none"/>
     <http pattern="/api/circle/post/list" security="none"/>
