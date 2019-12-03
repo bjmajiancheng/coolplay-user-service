@@ -257,7 +257,8 @@ public class CommonController {
 
                 Map<String, Object> contentMap = JSON.parseObject(content, Map.class);
 
-                if(MapUtils.isNotEmpty(contentMap)) {
+                if(MapUtils.isNotEmpty(contentMap) && result.getCode() == 200
+                        && "success".equals(String.valueOf(contentMap.get("responseCode")))) {
                     weatherData = String.valueOf(contentMap.get("data"));
 
                     redisCache.set(String.format(SecurityConstant.WEATHER_DATA_KEY, lat, lon), weatherData, 12 * 60 * 60);
@@ -294,7 +295,8 @@ public class CommonController {
 
                 Map<String, Object> contentMap = JSON.parseObject(content, Map.class);
 
-                if(MapUtils.isNotEmpty(contentMap)) {
+                if(MapUtils.isNotEmpty(contentMap) && result.getCode() == 200
+                        && "success".equals(String.valueOf(contentMap.get("responseCode")))) {
                     weatherData = String.valueOf(contentMap.get("data"));
 
                     redisCache.set(String.format(SecurityConstant.WEATHER_PICTURE_DATA_KEY, lat, lon), weatherData, 12 * 60 * 60);
