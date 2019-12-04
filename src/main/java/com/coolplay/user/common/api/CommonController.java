@@ -14,6 +14,8 @@ import com.coolplay.user.user.service.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,8 @@ public class CommonController {
     private final static Integer IMAGE = 0;
 
     private final static Integer FILE = 1;
+
+    private final static Logger logger = LoggerFactory.getLogger(CommonController.class);
 
     @Value("${weather.url}")
     private String weatherUrl;
@@ -417,6 +421,26 @@ public class CommonController {
             }
 
             return ResponseUtil.success(Collections.singletonMap("helpList", helpResultDatas));
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
+    /**
+     * 初始化天气信息
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/syncWeatherPictureData", method = RequestMethod.POST)
+    public Result syncWeatherPictureData(@RequestParam("lat") String lat, @RequestParam("lon")String lon, @RequestParam("weatherData") String weatherData) {
+        try {
+            redisCache.set(String.format(SecurityConstant.WEATHER_PICTURE_DATA_KEY, lat, lon), weatherData, 12 * 60 * 60);
+            logger.info("同步天气截图信息,lat:{}, lon:{}, weatherData:{}.", lat, lon, weatherData);
+
+            return ResponseUtil.success();
         } catch(Exception e) {
             e.printStackTrace();
 
