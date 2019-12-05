@@ -25,7 +25,7 @@ public class WeatherDataTask {
 
     private ICompanyService companyService = (ICompanyService) SpringContextUtil.getBean("companyService");
 
-    //@Value("${weather.picture.url}")
+    @Value("${weather.picture.url}")
     private String weatherPictureUrl;
 
     /**
