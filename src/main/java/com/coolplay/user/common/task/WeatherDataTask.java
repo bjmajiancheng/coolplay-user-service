@@ -57,9 +57,16 @@ public class WeatherDataTask {
         }
 
         try {
-            HttpClientResult result = HttpClientUtil.doGet(String.format("%s?latArr=%s", weatherPictureUrl, JSON.toJSONString(paramList)));
 
-            logger.info("增量同步天气图片信息, 请求参数:{}, 返回结果:{}.", JSON.toJSONString(paramList), JSON.toJSONString(result));
+            if(CollectionUtils.isNotEmpty(paramList)) {
+                String url = String.format("%s?latArr=%s", weatherPictureUrl, JSON.toJSONString(paramList));
+                HttpClientResult result = HttpClientUtil.doGet(url);
+
+                logger.info("增量同步天气图片信息, url:{}, 请求参数:{}, 返回结果:{}.", url, JSON.toJSONString(paramList), JSON.toJSONString(result));
+            } else {
+                logger.info("增量同步天气图片信息, 无增量更新信息.");
+            }
+
 
         } catch(Exception e) {
             e.printStackTrace();
@@ -99,9 +106,15 @@ public class WeatherDataTask {
         }
 
         try {
-            HttpClientResult result = HttpClientUtil.doGet(String.format("%s?latArr=%s", weatherPictureUrl, JSON.toJSONString(paramList)));
 
-            logger.info("分钟增量同步天气图片信息, 请求参数:{}, 返回结果:{}.", JSON.toJSONString(paramList), JSON.toJSONString(result));
+            if(CollectionUtils.isNotEmpty(paramList)) {
+                String url = String.format("%s?latArr=%s", weatherPictureUrl, JSON.toJSONString(paramList));
+                HttpClientResult result = HttpClientUtil.doGet(url);
+
+                logger.info("分钟增量同步天气图片信息, url:{}, 请求参数:{}, 返回结果:{}.", url, JSON.toJSONString(paramList), JSON.toJSONString(result));
+            } else {
+                logger.info("分钟增量同步天气图片信息, 无增量更新信息.");
+            }
 
         } catch(Exception e) {
             e.printStackTrace();
