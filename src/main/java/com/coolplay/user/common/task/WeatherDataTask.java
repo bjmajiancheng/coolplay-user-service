@@ -41,8 +41,8 @@ public class WeatherDataTask {
             for (CompanyModel companyModel : companyModels) {
                 if(companyModel.getPosX().floatValue() == 0 || companyModel.getPosY().floatValue() == 0) continue;
                 Map<String, Object> param = new HashMap<String, Object>();
-                param.put("lat", companyModel.getPosX().floatValue());
-                param.put("lon", companyModel.getPosY().floatValue());
+                param.put("lon", companyModel.getPosX().floatValue());
+                param.put("lat", companyModel.getPosY().floatValue());
 
                 paramList.add(param);
             }
@@ -52,8 +52,8 @@ public class WeatherDataTask {
             for (CoolplayBaseModel coolplayBaseModel : coolplayBaseModels) {
                 if(coolplayBaseModel.getPosX().floatValue() == 0 || coolplayBaseModel.getPosY().floatValue() == 0) continue;
                 Map<String, Object> param = new HashMap<String, Object>();
-                param.put("lat", coolplayBaseModel.getPosX().floatValue());
-                param.put("lon", coolplayBaseModel.getPosY().floatValue());
+                param.put("lon", coolplayBaseModel.getPosX().floatValue());
+                param.put("lat", coolplayBaseModel.getPosY().floatValue());
 
                 paramList.add(param);
             }
@@ -90,8 +90,8 @@ public class WeatherDataTask {
             for (CompanyModel companyModel : companyModels) {
                 if(companyModel.getPosX().floatValue() == 0 || companyModel.getPosY().floatValue() == 0) continue;
                 Map<String, Object> param = new HashMap<String, Object>();
-                param.put("lat", companyModel.getPosX().floatValue());
-                param.put("lon", companyModel.getPosY().floatValue());
+                param.put("lon", companyModel.getPosX().floatValue());
+                param.put("lat", companyModel.getPosY().floatValue());
 
                 paramList.add(param);
             }
@@ -101,8 +101,8 @@ public class WeatherDataTask {
             for (CoolplayBaseModel coolplayBaseModel : coolplayBaseModels) {
                 if(coolplayBaseModel.getPosX().floatValue() == 0 || coolplayBaseModel.getPosY().floatValue() == 0) continue;
                 Map<String, Object> param = new HashMap<String, Object>();
-                param.put("lat", coolplayBaseModel.getPosX().floatValue());
-                param.put("lon", coolplayBaseModel.getPosY().floatValue());
+                param.put("lon", coolplayBaseModel.getPosX().floatValue());
+                param.put("lat", coolplayBaseModel.getPosY().floatValue());
 
                 paramList.add(param);
             }
