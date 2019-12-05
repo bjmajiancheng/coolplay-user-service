@@ -110,4 +110,13 @@ public class CoolplayBaseServiceImpl extends BaseService<CoolplayBaseModel> impl
     public List<CoolplayBaseModel> findOptionDatas() {
         return coolplayBaseMapper.findOptionDatas();
     }
+
+
+    public List<CoolplayBaseModel> findByLastUpdatetime(String updateTime) {
+        if(StringUtils.isEmpty(updateTime)) {
+            return Collections.emptyList();
+        }
+
+        return coolplayBaseMapper.findByLastUpdatetime(updateTime);
+    }
 }

@@ -26,4 +26,6 @@ public interface CompanyMapper extends Mapper<CompanyModel> {
 
 	public List<CompanyModel> findOptionDatas();
 
+	public List<CompanyModel> findByLastUpdatetime(@Param("updateTime")String updateTime);
+
 }

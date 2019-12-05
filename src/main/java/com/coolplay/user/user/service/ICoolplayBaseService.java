@@ -41,4 +41,6 @@ public interface ICoolplayBaseService extends IBaseService<CoolplayBaseModel> {
 
 	public List<CoolplayBaseModel> findOptionDatas();
 
+	public List<CoolplayBaseModel> findByLastUpdatetime(String updateTime);
+
 }

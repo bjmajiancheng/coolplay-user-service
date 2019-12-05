@@ -35,12 +35,13 @@
         <result property="isClose" column="is_close"/>
         <result property="isDel" column="is_del"/>
         <result property="ctime" column="c_time"/>
+		<result property="utime" column="u_time"/>
     </resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
 	    <![CDATA[
-        id ,base_name ,base_full_name ,base_desc ,base_type ,capacity_cnt ,status ,pos_x ,pos_y ,company_id ,company_user_id ,departures_gps ,departures_height ,land_gps ,land_height ,fly_direction ,monitor_video_url ,height ,major_project ,open_time ,contact_name ,contact_phone ,contact_email ,contact_address ,backgroud_img, read_cnt ,is_close ,is_del ,c_time
+        id ,base_name ,base_full_name ,base_desc ,base_type ,capacity_cnt ,status ,pos_x ,pos_y ,company_id ,company_user_id ,departures_gps ,departures_height ,land_gps ,land_height ,fly_direction ,monitor_video_url ,height ,major_project ,open_time ,contact_name ,contact_phone ,contact_email ,contact_address ,backgroud_img, read_cnt ,is_close ,is_del ,c_time, u_time
 	    ]]>
 	</sql>
 
@@ -111,6 +112,10 @@
 	<select id="findOptionDatas" resultMap="CoolplayBase">
 		SELECT id, base_name, base_full_name, company_id FROM d_coolplay_base
 		WHERE is_close = 0 and is_del = 0
+	</select>
+
+	<select id="findByLastUpdatetime" resultMap="CoolplayBase">
+		SELECT <include refid="columns"/> FROM d_coolplay_base WHERE is_del = 0 AND u_time >= #{updateTime}
 	</select>
 	
 </mapper>

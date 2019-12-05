@@ -91,4 +91,13 @@ public class CompanyServiceImpl extends BaseService<CompanyModel> implements ICo
     public List<CompanyModel> findOptionDatas() {
         return companyMapper.findOptionDatas();
     }
+
+
+    public List<CompanyModel> findByLastUpdatetime(String updateTime) {
+        if(StringUtils.isEmpty(updateTime)) {
+            return Collections.emptyList();
+        }
+
+        return companyMapper.findByLastUpdatetime(updateTime);
+    }
 }

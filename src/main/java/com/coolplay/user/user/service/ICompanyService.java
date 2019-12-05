@@ -25,4 +25,6 @@ public interface ICompanyService extends IBaseService<CompanyModel> {
     public List<CompanyModel> find(Map<String, Object> param);
 
     public List<CompanyModel> findOptionDatas();
+
+    public List<CompanyModel> findByLastUpdatetime(String updateTime);
 }

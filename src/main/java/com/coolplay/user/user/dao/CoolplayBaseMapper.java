@@ -25,4 +25,6 @@ public interface CoolplayBaseMapper extends Mapper<CoolplayBaseModel> {
 	public CoolplayBaseModel findById(@Param("id") Integer id);
 
 	public List<CoolplayBaseModel> findOptionDatas();
+
+	public List<CoolplayBaseModel> findByLastUpdatetime(@Param("updateTime")String updateTime);
 }

@@ -28,13 +28,14 @@
         <result property="status" column="status"/>
         <result property="rejectReason" column="reject_reason"/>
         <result property="isDel" column="is_del"/>
-        <result property="ctime" column="c_time"/>
+		<result property="ctime" column="c_time"/>
+		<result property="utime" column="u_time"/>
     </resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
 	    <![CDATA[
-        id ,company_full_name ,company_name ,contact_name ,contact_address ,contact_mobile ,company_desc , company_type ,major_project ,company_email ,legal_name ,legal_idcard ,idcard_positive_photo ,idcard_negative_photo ,business_license_url , pos_x, pos_y, review_status ,read_cnt ,status ,reject_reason ,is_del ,c_time
+        id ,company_full_name ,company_name ,contact_name ,contact_address ,contact_mobile ,company_desc , company_type ,major_project ,company_email ,legal_name ,legal_idcard ,idcard_positive_photo ,idcard_negative_photo ,business_license_url , pos_x, pos_y, review_status ,read_cnt ,status ,reject_reason ,is_del ,c_time, u_time
 	    ]]>
 	</sql>
 
@@ -103,6 +104,10 @@
 
 	<select id="findOptionDatas" resultMap="Company">
 		SELECT id, company_full_name, company_name FROM d_company WHERE review_status = 1 AND status = 1 AND is_del = 0
+	</select>
+
+	<select id="findByLastUpdatetime" resultMap="Company">
+		SELECT <include refid="columns"/> FROM d_company where is_del = 0 AND u_time >= #{updateTime}
 	</select>
 	
 </mapper>
