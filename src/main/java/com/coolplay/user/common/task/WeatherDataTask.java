@@ -26,8 +26,8 @@ public class WeatherDataTask {
 
     private ICompanyService companyService = (ICompanyService) SpringContextUtil.getBean("companyService");
 
-    @Value("${weather.picture.url}")
-    private String weatherPictureUrl;
+    @Value("${weather.picture.batch.url}")
+    private String weatherPictureBatchUrl;
 
     /**
      * 同步天气图片信息
@@ -62,7 +62,7 @@ public class WeatherDataTask {
         try {
 
             if(CollectionUtils.isNotEmpty(paramList)) {
-                String url = String.format("%s?latArr=%s", weatherPictureUrl, URLEncoder.encode(JSON.toJSONString(paramList), "UTF-8"));
+                String url = String.format("%s?latArr=%s", weatherPictureBatchUrl, URLEncoder.encode(JSON.toJSONString(paramList), "UTF-8"));
                 HttpClientResult result = HttpClientUtil.doGet(url);
 
                 logger.info("增量同步天气图片信息, url:{}, 请求参数:{}, 返回结果:{}.", url, JSON.toJSONString(paramList), JSON.toJSONString(result));
@@ -111,7 +111,7 @@ public class WeatherDataTask {
         try {
 
             if(CollectionUtils.isNotEmpty(paramList)) {
-                String url = String.format("%s?latArr=%s", weatherPictureUrl, URLEncoder.encode(JSON.toJSONString(paramList), "UTF-8"));
+                String url = String.format("%s?latArr=%s", weatherPictureBatchUrl, URLEncoder.encode(JSON.toJSONString(paramList), "UTF-8"));
                 HttpClientResult result = HttpClientUtil.doGet(url);
 
                 logger.info("分钟增量同步天气图片信息, url:{}, 请求参数:{}, 返回结果:{}.", url, JSON.toJSONString(paramList), JSON.toJSONString(result));
