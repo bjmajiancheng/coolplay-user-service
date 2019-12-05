@@ -7,49 +7,34 @@
     <bean id="weatherDataTask" class="com.coolplay.user.common.task.WeatherDataTask">
     </bean>
 
-    <!-- 增量更新商品信息定时任务 -->
-    <bean id="weatherDataTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="name" value="work_default_name1"/>
-        <property name="group" value="work_default1"/>
-        <property name="jobDetail">
-            <bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-                <property name="group" value="job_work1"/>
-                <property name="name" value="job_work_name1"/>
-                <!--false表示等上一个任务执行完后再开启新的任务 -->
-                <property name="concurrent" value="false"/>
-                <property name="targetObject">
-                    <ref bean="weatherDataTask"/>
-                </property>
-                <property name="targetMethod">
-                    <value>syncWeacherPictureInfo</value>
-                </property>
-            </bean>
-        </property>
-        <property name="cronExpression">
-            <value>0 0/6 * * *</value> <!-- Cron表达式“0 0/10 * * * ?”意为：每天5分钟触发 一次。  -->
-        </property>
+    <!-- 增量更新天气信息 -->
+    <bean id="weatherDataFactoryBean" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="weatherDataTask"></property>
+        <property name="targetMethod" value="syncWeatherPictureInfo"></property>
+        <property name="concurrent" value="false"></property>
     </bean>
 
+    <bean id="weatherDataTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="weatherDataFactoryBean"></property>
+        <property name="cronExpression" value="0 0 0/6 * * ?"></property>
+    </bean>
+
+    <!-- 增量每分钟更新天气信息 -->
+    <bean id="minuteWeatherDataFactoryBean" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 设置任务执行对象 -->
+        <property name="targetObject" ref="weatherDataTask"></property>
+        <!-- 设置任务执行对象中对应的执行方法 -->
+        <property name="targetMethod" value="syncMinuteWeatherPictureInfo"></property>
+        <!-- 设置任务是否可并发执行，默认为不并发 -->
+        <property name="concurrent" value="false"></property>
+    </bean>
+
+    <!-- 2.任务触发器 -->
     <bean id="minuteWeatherDataTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="name" value="work_default_name2"/>
-        <property name="group" value="work_default2"/>
-        <property name="jobDetail">
-            <bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-                <property name="group" value="job_work2"/>
-                <property name="name" value="job_work_name2"/>
-                <!--false表示等上一个任务执行完后再开启新的任务 -->
-                <property name="concurrent" value="false"/>
-                <property name="targetObject">
-                    <ref bean="weatherDataTask"/>
-                </property>
-                <property name="targetMethod">
-                    <value>syncMinuteWeacherPictureInfo</value>
-                </property>
-            </bean>
-        </property>
-        <property name="cronExpression">
-            <value>0 0/1 * * * ?</value> <!-- Cron表达式“0 0/10 * * * ?”意为：每天5分钟触发 一次。  -->
-        </property>
+        <!-- 设置任务详细信息 -->
+        <property name="jobDetail" ref="minuteWeatherDataFactoryBean"></property>
+        <!-- 设置quartz任务执行表达式 ,每隔三秒执行一次任务-->
+        <property name="cronExpression" value="0 0/1 * * * ?"></property>
     </bean>
 
     <!-- 调度工厂 -->

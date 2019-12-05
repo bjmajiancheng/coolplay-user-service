@@ -25,13 +25,13 @@ public class WeatherDataTask {
 
     private ICompanyService companyService = (ICompanyService) SpringContextUtil.getBean("companyService");
 
-    @Value("${weather.picture.url}")
+    //@Value("${weather.picture.url}")
     private String weatherPictureUrl;
 
     /**
      * 同步天气图片信息
      */
-    public void syncWeacherPictureInfo() {
+    public void syncWeatherPictureInfo() {
         List<CompanyModel> companyModels = companyService.find(Collections.singletonMap("isDel", 0));
         List<CoolplayBaseModel> coolplayBaseModels = coolplayBaseService.find(Collections.singletonMap("isDel", 0));
 
@@ -69,7 +69,7 @@ public class WeatherDataTask {
     /**
      * 每分钟同步天气图片信息
      */
-    public void syncMinuteWeacherPictureInfo() {
+    public void syncMinuteWeatherPictureInfo() {
         String preMinuteStr = DateUtil.DateToString(DateUtil.addMinute(new Date(), -1), DateStyle.YYYY_MM_DD_HH_MM_SS);
 
         List<CompanyModel> companyModels = companyService.findByLastUpdatetime(preMinuteStr);
