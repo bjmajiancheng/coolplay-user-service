@@ -437,7 +437,7 @@ public class CommonController {
     @RequestMapping(value = "/syncWeatherPictureData", method = RequestMethod.POST)
     public Result syncWeatherPictureData(@RequestParam("lat") String lat, @RequestParam("lon")String lon, @RequestParam("weatherData") String weatherData) {
         try {
-            redisCache.set(String.format(SecurityConstant.WEATHER_PICTURE_DATA_KEY, lat, lon), JSON.parseObject(weatherData, Map.class), 12 * 60 * 60);
+            redisCache.set(String.format(SecurityConstant.WEATHER_PICTURE_DATA_KEY, lat, lon), weatherData, 12 * 60 * 60);
             logger.info("同步天气截图信息,lat:{}, lon:{}, weatherData:{}.", lat, lon, weatherData);
 
             return ResponseUtil.success();
