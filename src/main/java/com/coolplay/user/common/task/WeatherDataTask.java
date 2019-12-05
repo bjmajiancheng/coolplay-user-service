@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -38,9 +39,10 @@ public class WeatherDataTask {
         List<Map<String, Object>> paramList = new ArrayList<Map<String, Object>>();
         if (CollectionUtils.isNotEmpty(companyModels)) {
             for (CompanyModel companyModel : companyModels) {
+                if(companyModel.getPosX().floatValue() == 0 || companyModel.getPosY().floatValue() == 0) continue;
                 Map<String, Object> param = new HashMap<String, Object>();
-                param.put("lat", companyModel.getPosX());
-                param.put("lon", companyModel.getPosY());
+                param.put("lat", companyModel.getPosX().floatValue());
+                param.put("lon", companyModel.getPosY().floatValue());
 
                 paramList.add(param);
             }
@@ -48,9 +50,10 @@ public class WeatherDataTask {
 
         if (CollectionUtils.isNotEmpty(coolplayBaseModels)) {
             for (CoolplayBaseModel coolplayBaseModel : coolplayBaseModels) {
+                if(coolplayBaseModel.getPosX().floatValue() == 0 || coolplayBaseModel.getPosY().floatValue() == 0) continue;
                 Map<String, Object> param = new HashMap<String, Object>();
-                param.put("lat", coolplayBaseModel.getPosX());
-                param.put("lon", coolplayBaseModel.getPosY());
+                param.put("lat", coolplayBaseModel.getPosX().floatValue());
+                param.put("lon", coolplayBaseModel.getPosY().floatValue());
 
                 paramList.add(param);
             }
@@ -59,7 +62,7 @@ public class WeatherDataTask {
         try {
 
             if(CollectionUtils.isNotEmpty(paramList)) {
-                String url = String.format("%s?latArr=%s", weatherPictureUrl, JSON.toJSONString(paramList));
+                String url = String.format("%s?latArr=%s", weatherPictureUrl, URLEncoder.encode(JSON.toJSONString(paramList), "UTF-8"));
                 HttpClientResult result = HttpClientUtil.doGet(url);
 
                 logger.info("增量同步天气图片信息, url:{}, 请求参数:{}, 返回结果:{}.", url, JSON.toJSONString(paramList), JSON.toJSONString(result));
@@ -77,19 +80,18 @@ public class WeatherDataTask {
      * 每分钟同步天气图片信息
      */
     public void syncMinuteWeatherPictureInfo() {
-        String preMinuteStr = DateUtil.DateToString(DateUtil.addMinute(new Date(), -1), DateStyle.YYYY_MM_DD_HH_MM_SS);
+        String preMinuteStr = DateUtil.DateToString(DateUtil.addMinute(new Date(), -5), DateStyle.YYYY_MM_DD_HH_MM_SS);
 
         List<CompanyModel> companyModels = companyService.findByLastUpdatetime(preMinuteStr);
         List<CoolplayBaseModel> coolplayBaseModels = coolplayBaseService.findByLastUpdatetime(preMinuteStr);
-        //List<CompanyModel> companyModels = companyService.find(Collections.singletonMap("isDel", 0));
-        //List<CoolplayBaseModel> coolplayBaseModels = coolplayBaseService.find(Collections.singletonMap("isDel", 0));
 
         List<Map<String, Object>> paramList = new ArrayList<Map<String, Object>>();
         if (CollectionUtils.isNotEmpty(companyModels)) {
             for (CompanyModel companyModel : companyModels) {
+                if(companyModel.getPosX().floatValue() == 0 || companyModel.getPosY().floatValue() == 0) continue;
                 Map<String, Object> param = new HashMap<String, Object>();
-                param.put("lat", companyModel.getPosX());
-                param.put("lon", companyModel.getPosY());
+                param.put("lat", companyModel.getPosX().floatValue());
+                param.put("lon", companyModel.getPosY().floatValue());
 
                 paramList.add(param);
             }
@@ -97,9 +99,10 @@ public class WeatherDataTask {
 
         if (CollectionUtils.isNotEmpty(coolplayBaseModels)) {
             for (CoolplayBaseModel coolplayBaseModel : coolplayBaseModels) {
+                if(coolplayBaseModel.getPosX().floatValue() == 0 || coolplayBaseModel.getPosY().floatValue() == 0) continue;
                 Map<String, Object> param = new HashMap<String, Object>();
-                param.put("lat", coolplayBaseModel.getPosX());
-                param.put("lon", coolplayBaseModel.getPosY());
+                param.put("lat", coolplayBaseModel.getPosX().floatValue());
+                param.put("lon", coolplayBaseModel.getPosY().floatValue());
 
                 paramList.add(param);
             }
@@ -108,7 +111,7 @@ public class WeatherDataTask {
         try {
 
             if(CollectionUtils.isNotEmpty(paramList)) {
-                String url = String.format("%s?latArr=%s", weatherPictureUrl, JSON.toJSONString(paramList));
+                String url = String.format("%s?latArr=%s", weatherPictureUrl, URLEncoder.encode(JSON.toJSONString(paramList), "UTF-8"));
                 HttpClientResult result = HttpClientUtil.doGet(url);
 
                 logger.info("分钟增量同步天气图片信息, url:{}, 请求参数:{}, 返回结果:{}.", url, JSON.toJSONString(paramList), JSON.toJSONString(result));
