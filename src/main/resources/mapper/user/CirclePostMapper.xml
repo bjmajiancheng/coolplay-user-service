@@ -8,14 +8,15 @@
     <resultMap id="CirclePost" type="com.coolplay.user.user.model.CirclePostModel">
         <result property="id" column="id"/>
         <result property="circleId" column="circle_id"/>
-        <result property="postId" column="post_id"/>
+		<result property="postId" column="post_id"/>
+		<result property="isTop" column="is_top"/>
         <result property="ctime" column="c_time"/>
     </resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
 	    <![CDATA[
-        id ,circle_id ,post_id ,c_time 
+        id, circle_id, post_id, is_top, c_time
 	    ]]>
 	</sql>
 
@@ -39,5 +40,18 @@
 		SELECT count(1) as cnt FROM d_circle_post where circle_id = #{circleId}
 	</select>
 
+	<select id="findByPostIdAndOwnerId" resultMap="CirclePost">
+		SELECT cp.id, cp.circle_id, cp.post_id, cp.is_top, cp.c_time FROM d_circle_post cp
+		INNER JOIN d_circle c ON cp.circle_id = c.id
+		WHERE cp.post_id = #{postId} AND c.user_id = #{userId} AND cp.is_top = #{isTop} AND c.disabled = 0
+	</select>
+
+	<update id="updateTopByCircleIdsPostId">
+		UPDATE d_circle_post SET is_top = #{isTop}
+		WHERE post_id = #{postId} AND circle_id IN
+		<foreach collection="circleIds" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
 </mapper>
 

@@ -37,4 +37,15 @@ public interface ICirclePostService extends IBaseService<CirclePostModel> {
      */
 	public int findPostCntByCircleId(Integer circleId);
 
+	/**
+	 * 根据帖子Id、圈主和是否置顶获取关联关系
+	 *
+	 * @param id
+	 * @param currentUserId
+	 * @param isTop
+     * @return
+     */
+	public List<CirclePostModel> findByPostIdAndOwnerId(Integer id, Integer currentUserId, Integer isTop);
+
+	public int updateTopByCircleIdsPostId(List<Integer> circleIds, Integer postId, Integer isTop);
 }

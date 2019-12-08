@@ -410,17 +410,57 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(value = "/updateTopPost", method = RequestMethod.POST)
-    public Result updateTopPost(@RequestParam("id")Integer id, @RequestParam("isTop")Integer isTop) {
+    public Result updateTopPost(@RequestParam("id")Integer id, @RequestParam("isTop")Integer isTop, @RequestParam("circleIds") List<Integer> circleIds) {
 
         try {
-            PostModel postModel = new PostModel();
-            postModel.setId(id);
-            postModel.setIsTop(isTop);
 
-            int updateCnt = postService.updateNotNull(postModel);
+            if(CollectionUtils.isEmpty(circleIds)) {
+                return ResponseUtil.error("请选择要置顶的圈子");
+            }
+
+            int updateCnt = circlePostService.updateTopByCircleIdsPostId(circleIds, id, isTop);
 
             return ResponseUtil.success();
 
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/topPostCircleList", method = RequestMethod.POST)
+    public Result topPostCircleList(@RequestParam("id") Integer id, @RequestParam("isTop")Integer isTop) {
+
+        try{
+
+            List<CircleModel> circleList = new ArrayList<CircleModel>();
+            if(isTop == 1) {//置顶类型
+                //获取未置顶圈子
+                List<CirclePostModel> circlePosts = circlePostService.findByPostIdAndOwnerId(id, SecurityUtil.getCurrentUserId(), 0);
+                if(CollectionUtils.isNotEmpty(circlePosts)) {
+                    List<Integer> circleIds = new ArrayList<Integer>();
+                    for(CirclePostModel circlePost : circlePosts) {
+                        circleIds.add(circlePost.getCircleId());
+                    }
+
+                    circleList = circleService.findByIds(circleIds);
+                }
+            } else if(isTop == 0) {//取消置顶类型
+                //获取已置顶圈子
+                List<CirclePostModel> circlePosts = circlePostService.findByPostIdAndOwnerId(id, SecurityUtil.getCurrentUserId(), 1);
+                if(CollectionUtils.isNotEmpty(circlePosts)) {
+                    List<Integer> circleIds = new ArrayList<Integer>();
+                    for(CirclePostModel circlePost : circlePosts) {
+                        circleIds.add(circlePost.getCircleId());
+                    }
+
+                    circleList = circleService.findByIds(circleIds);
+                }
+            }
+
+            return ResponseUtil.success(Collections.singletonMap("circleList", circleList));
         } catch(Exception e) {
             e.printStackTrace();
 

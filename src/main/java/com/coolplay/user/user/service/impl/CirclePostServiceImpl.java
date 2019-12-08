@@ -9,6 +9,7 @@ package com.coolplay.user.user.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.coolplay.user.user.model.CirclePostModel;
@@ -74,5 +75,30 @@ public class CirclePostServiceImpl extends BaseService<CirclePostModel> implemen
 	public int findPostCntByCircleId(Integer circleId) {
 
 		return circlePostMapper.findPostCntByCircleId(circleId);
+	}
+
+	/**
+	 * 根据帖子Id、圈主和是否置顶获取关联关系
+	 *
+	 * @param id
+	 * @param currentUserId
+	 * @param isTop
+	 * @return
+	 */
+	public List<CirclePostModel> findByPostIdAndOwnerId(Integer id, Integer currentUserId, Integer isTop) {
+		if(id == null || currentUserId == null || isTop == null) {
+			return Collections.emptyList();
+		}
+
+		return circlePostMapper.findByPostIdAndOwnerId(id, currentUserId, isTop);
+	}
+
+	@Override
+	public int updateTopByCircleIdsPostId(List<Integer> circleIds, Integer postId, Integer isTop) {
+		if(CollectionUtils.isEmpty(circleIds)) {
+			return 0;
+		}
+
+		return circlePostMapper.updateTopByCircleIdsPostId(circleIds, postId, isTop);
 	}
 }
