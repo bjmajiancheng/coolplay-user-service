@@ -107,7 +107,7 @@ public class PostCommentServiceImpl extends BaseService<PostCommentModel> implem
 				postComment.setCommentHeadImage(commentUserModel.getHeadImage());
 			}
 
-			if(postComment.getCommentLevel() == 0) {
+			if(postComment.getCommentLevel() == 1) {
 				rootPostComments.add(postComment);
 			} else {
 				List<PostCommentModel> childPostComments = childPostCommentMap.get(postComment.getPostCommentId());
@@ -125,6 +125,6 @@ public class PostCommentServiceImpl extends BaseService<PostCommentModel> implem
 			rootPostComment.setCommentList(childPostCommentMap.get(rootPostComment.getId()));
 		}
 
-		return postComments;
+		return rootPostComments;
 	}
 }

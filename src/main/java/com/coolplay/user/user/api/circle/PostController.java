@@ -420,6 +420,11 @@ public class PostController {
 
             int updateCnt = circlePostService.updateTopByCircleIdsPostId(circleIds, id, isTop);
 
+            PostModel postModel = new PostModel();
+            postModel.setId(id);
+            postModel.setIsTop(isTop);
+            postService.updateNotNull(postModel);
+
             return ResponseUtil.success();
 
         } catch(Exception e) {
