@@ -203,12 +203,29 @@ public class PostController {
             List<Integer> allCircleIds = new ArrayList<Integer>();
             List<Integer> circleIds = circleMemberService.findByMemberUserId(SecurityUtil.getCurrentUserId());
             if (CollectionUtils.isNotEmpty(circleIds)) {
-                allCircleIds.addAll(circleIds);
+                for(Integer circleId : circleIds) {
+                    if(!allCircleIds.contains(circleId)) {
+                        allCircleIds.add(circleId);
+                    }
+                }
             }
 
             circleIds = circleAdminService.findByAdminUserId(SecurityUtil.getCurrentUserId());
             if (CollectionUtils.isNotEmpty(circleIds)) {
-                allCircleIds.addAll(circleIds);
+                for(Integer circleId : circleIds) {
+                    if(!allCircleIds.contains(circleId)) {
+                        allCircleIds.add(circleId);
+                    }
+                }
+            }
+
+            circleIds = circleService.findByUserId(SecurityUtil.getCurrentUserId());
+            if (CollectionUtils.isNotEmpty(circleIds)) {
+                for(Integer circleId : circleIds) {
+                    if(!allCircleIds.contains(circleId)) {
+                        allCircleIds.add(circleId);
+                    }
+                }
             }
 
             List<CircleModel> circleModels = circleService.findByIds(allCircleIds);

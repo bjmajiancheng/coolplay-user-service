@@ -52,6 +52,15 @@
 			<if test="rejectReason != null">
 				AND reject_reason = #{rejectReason}
 			</if>
+			<if test="reviewStatus != null">
+				AND review_status = #{reviewStatus}
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+			<if test="disabled != null">
+				AND disabled = #{disabled}
+			</if>
 			<if test="ids != null">
 				AND id IN
 				<foreach collection="ids" item="item" open="(" separator="," close=")">
@@ -72,6 +81,10 @@
 		FROM d_circle WHERE id = #{id}
 	</select>
 
+	<select id="findByUserId" resultType="java.lang.Integer">
+		SELECT id FROM d_circle
+		WHERE user_id = #{userId} AND review_status = 1 AND status = 1 AND disabled = 0
+	</select>
 	
 </mapper>
 

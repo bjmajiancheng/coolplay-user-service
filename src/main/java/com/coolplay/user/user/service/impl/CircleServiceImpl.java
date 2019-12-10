@@ -124,7 +124,13 @@ public class CircleServiceImpl extends BaseService<CircleModel> implements ICirc
         if(CollectionUtils.isEmpty(ids)) {
             return Collections.emptyList();
         }
-        return this.find(Collections.singletonMap("ids", ids));
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("ids", ids);
+        param.put("reviewStatus", 1);
+        param.put("status", 1);
+        param.put("disabled", 0);
+
+        return this.find(param);
     }
 
     /**
@@ -189,5 +195,20 @@ public class CircleServiceImpl extends BaseService<CircleModel> implements ICirc
         }
 
         return circleMemberUserIdMap;
+    }
+
+    /**
+     *
+     * 根据圈主ID获取圈子集合
+     *
+     * @param userId
+     * @return
+     */
+    public List<Integer> findByUserId(Integer userId) {
+        if(userId == null || userId == 0) {
+            return Collections.emptyList();
+        }
+
+        return circleMapper.findByUserId(userId);
     }
 }
