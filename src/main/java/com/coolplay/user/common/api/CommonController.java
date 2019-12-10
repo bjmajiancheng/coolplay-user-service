@@ -88,7 +88,7 @@ public class CommonController {
             // 定义允许上传的文件扩展名
             HashMap<String, String> extMap = new HashMap<String, String>();
             extMap.put(dirName,
-                    "doc,docx,xls,xlsx,ppt,pptx,txt,zip,rar,gz,bz2,gif,jpg,jpeg,png,bmp,swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb");
+                    "doc,docx,xls,xlsx,ppt,pptx,txt,zip,rar,gz,bz2,gif,jpg,jpeg,png,bmp,swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb,mp4");
 
             Attachment attachment = attachmentService
                     .uploadFileAttachement(request, file, dirName, maxSize, extMap, FILE);
@@ -139,7 +139,7 @@ public class CommonController {
                 // 定义允许上传的文件扩展名
                 HashMap<String, String> extMap = new HashMap<String, String>();
                 extMap.put(dirName,
-                        "doc,docx,xls,xlsx,ppt,pptx,txt,zip,rar,gz,bz2,gif,jpg,jpeg,png,bmp,swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb");
+                        "doc,docx,xls,xlsx,ppt,pptx,txt,zip,rar,gz,bz2,gif,jpg,jpeg,png,bmp,swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb,mp4");
 
                 Attachment attachment = attachmentService
                         .uploadFileAttachement(request, multipartFile, dirName, maxSize, extMap, FILE);
