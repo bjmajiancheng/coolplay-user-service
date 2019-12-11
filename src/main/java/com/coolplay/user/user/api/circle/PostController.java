@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -141,10 +142,10 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(value = "/postDetail", method = RequestMethod.POST)
-    public Result postDetail(@RequestParam("id") Integer id) {
+    public Result postDetail(HttpServletResponse response, @RequestParam("id") Integer id) {
 
         try {
-            return this.detail(id);
+            return this.detail(response, id);
         } catch(Exception e) {
             e.printStackTrace();
 
@@ -322,9 +323,11 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
-    public Result detail(@RequestParam("id") Integer id) {
+    public Result detail(HttpServletResponse response, @RequestParam("id") Integer id) {
 
         try {
+            response.addHeader("Access-Control-Allow-Origin", "*");
+
             PostModel postModel = postService.findById(id);
             if (postModel != null) {
                 UserModel userModel = userService.findById(postModel.getUserId());
@@ -376,12 +379,12 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(value = "/sharePost", method = RequestMethod.POST)
-    public Result sharePost(@RequestParam("id") Integer id) {
+    public Result sharePost(HttpServletResponse response, @RequestParam("id") Integer id) {
 
         try {
             int updateCnt = postService.columnPlusNumber(id, "share_cnt", 1);
 
-            return this.detail(id);
+            return this.detail(response, id);
 
         } catch(Exception e) {
             e.printStackTrace();

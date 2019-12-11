@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -454,9 +455,11 @@ public class CircleController {
      */
     @ResponseBody
     @RequestMapping(value = "/circleDetail", method = RequestMethod.POST)
-    public Result circleDetail(@RequestParam("id") Integer id) {
+    public Result circleDetail(HttpServletResponse response, @RequestParam("id") Integer id) {
 
         try {
+            response.addHeader("Access-Control-Allow-Origin", "*");
+
             int currUserId = SecurityUtil.getCurrentUserId();
 
             CircleModel circleModel = circleService.findById(id);
