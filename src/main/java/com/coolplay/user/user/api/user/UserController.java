@@ -9,6 +9,7 @@ import com.coolplay.user.security.constants.SecurityConstant;
 import com.coolplay.user.security.security.AuthenticationRequest;
 import com.coolplay.user.security.security.CoolplayUserCache;
 import com.coolplay.user.security.security.HttpAuthenticationDetails;
+import com.coolplay.user.security.security.SecurityUser;
 import com.coolplay.user.security.service.IUserService;
 import com.coolplay.user.security.utils.SecurityUtil;
 import com.coolplay.user.security.utils.TokenUtils;
@@ -671,14 +672,43 @@ public class UserController {
             int updateCnt = userService.updateNotNull(userModel);
 
             int delCnt = userLabelService.delByUserId(userModel.getId());
-            if (CollectionUtils.isNotEmpty(userModel.getLabelIds())) {
+
+            if(CollectionUtils.isNotEmpty(userModel.getLabelList())) {
+                for(LabelModel labelModel : userModel.getLabelList()) {
+                    Integer labelId = labelModel.getId();
+                    if(labelId == null || labelId == 0) {
+                        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+
+                        LabelModel saveLabelModel = new LabelModel();
+                        saveLabelModel.setLabelName(labelModel.getLabelName());
+                        saveLabelModel.setCreator(securityUser.getDisplayName());
+                        saveLabelModel.setUserId(securityUser.getId());
+                        saveLabelModel.setType(2);
+                        saveLabelModel.setStatus(1);
+                        saveLabelModel.setIsDel(0);
+                        saveLabelModel.setCatId(0);
+                        labelService.saveNotNull(saveLabelModel);
+
+                        labelId = saveLabelModel.getId();
+
+                    } else {
+                        labelId = labelModel.getId();
+                    }
+
+                    UserLabelModel userLabelModel = new UserLabelModel();
+                    userLabelModel.setLabelId(labelId);
+                    userLabelModel.setUserId(userModel.getId());
+                    userLabelService.saveNotNull(userLabelModel);
+                }
+            }
+            /*if (CollectionUtils.isNotEmpty(userModel.getLabelIds())) {
                 for (Integer labelId : userModel.getLabelIds()) {
                     UserLabelModel userLabelModel = new UserLabelModel();
                     userLabelModel.setUserId(currUserId);
                     userLabelModel.setLabelId(labelId);
                     userLabelService.saveNotNull(userLabelModel);
                 }
-            }
+            }*/
 
             UserModel userDetailInfo = getUserDetailInfo(userModel.getId());
 
