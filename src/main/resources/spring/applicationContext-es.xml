@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="esTemplate" class="com.wutuobang.search.message.EsTemplate" init-method="init">
+        <property name="esHost" value="${elasticsearch_cluster_nodes}" />
+        <property name="esCluster" value="${elasticsearch_cluster_name}" />
+    </bean>
+
+    <bean id="esTemplateClient" class="com.wutuobang.search.message.EsTemplateClient">
+        <constructor-arg name="esTemplateMap">
+            <map>
+                <entry key="default" value-ref="esTemplate"/>
+                <entry key="es_order_status" value-ref="esTemplate"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+</beans>
