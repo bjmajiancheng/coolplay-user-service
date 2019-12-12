@@ -315,7 +315,7 @@ public class CircleController {
                         LabelModel saveLabelModel = new LabelModel();
                         saveLabelModel.setLabelName(labelModel.getLabelName());
                         saveLabelModel.setCreator(securityUser.getDisplayName());
-                        saveLabelModel.setUserId(securityUser.getId());
+                        saveLabelModel.setCreatorUserId(securityUser.getId());
                         saveLabelModel.setType(2);
                         saveLabelModel.setStatus(1);
                         saveLabelModel.setIsDel(0);
@@ -406,7 +406,7 @@ public class CircleController {
                         LabelModel saveLabelModel = new LabelModel();
                         saveLabelModel.setLabelName(labelModel.getLabelName());
                         saveLabelModel.setCreator(securityUser.getDisplayName());
-                        saveLabelModel.setUserId(securityUser.getId());
+                        saveLabelModel.setCreatorUserId(securityUser.getId());
                         saveLabelModel.setType(2);
                         saveLabelModel.setStatus(1);
                         saveLabelModel.setIsDel(0);
