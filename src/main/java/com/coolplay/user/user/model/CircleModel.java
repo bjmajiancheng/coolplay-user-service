@@ -137,6 +137,9 @@ public class CircleModel extends Sortable {
 	private Integer fansCnt = 0;//圈主粉丝人数
 
 	@Transient
+	private Integer postId;//帖子ID
+
+	@Transient
 	private List<CirclePublicModel> circlePublics = new ArrayList<CirclePublicModel>();//圈子公告集合
 
 	@Transient
@@ -437,6 +440,14 @@ public class CircleModel extends Sortable {
 
 	public void setFansCnt(Integer fansCnt) {
 		this.fansCnt = fansCnt;
+	}
+
+	public Integer getPostId() {
+		return postId;
+	}
+
+	public void setPostId(Integer postId) {
+		this.postId = postId;
 	}
 
 	public List<CirclePublicModel> getCirclePublics() {

@@ -211,4 +211,29 @@ public class CircleServiceImpl extends BaseService<CircleModel> implements ICirc
 
         return circleMapper.findByUserId(userId);
     }
+
+
+    public Map<Integer,List<CircleModel>> findMapByPostIds(List<Integer> postIds) {
+        if(CollectionUtils.isEmpty(postIds)) {
+            return Collections.emptyMap();
+        }
+
+        Map<Integer, List<CircleModel>> circleMap = new HashMap<Integer, List<CircleModel>>();
+        List<CircleModel> circleModels = circleMapper.findByPostIds(postIds);
+        if(CollectionUtils.isNotEmpty(circleModels)) {
+            for(CircleModel circleModel : circleModels) {
+                List<CircleModel> tmpCircles = circleMap.get(circleModel.getPostId());
+
+                if(CollectionUtils.isEmpty(tmpCircles)) {
+                    tmpCircles = new ArrayList<CircleModel>();
+                }
+
+                tmpCircles.add(circleModel);
+
+                circleMap.put(circleModel.getPostId(), tmpCircles);
+            }
+        }
+
+        return circleMap;
+    }
 }

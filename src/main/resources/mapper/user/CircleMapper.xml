@@ -26,6 +26,7 @@
         <result property="companyId" column="company_id"/>
         <result property="disabled" column="disabled"/>
         <result property="ctime" column="c_time"/>
+		<result property="postId" column="post_id"/>
     </resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -85,6 +86,16 @@
 		SELECT id FROM d_circle
 		WHERE user_id = #{userId} AND review_status = 1 AND status = 1 AND disabled = 0
 	</select>
-	
+
+	<select id="findByPostIds" resultMap="Circle" >
+		SELECT c.id, c.circle_name, cp.post_id
+		FROM d_circle c INNER JOIN d_circle_post cp ON c.id = cp.circle_id
+		WHERE cp.post_id IN
+			<foreach collection="postIds" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		AND c.review_status = 1 and c.status = 1 and c.disabled = 0
+	</select>
+
 </mapper>
 

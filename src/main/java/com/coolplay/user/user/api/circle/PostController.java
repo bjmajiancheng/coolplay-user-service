@@ -349,6 +349,12 @@ public class PostController {
                     postModel.setLabelList(labelModels);
                 }
 
+                Map<Integer, List<CircleModel>> circleMap = this.circleService.findMapByPostIds(Collections.singletonList(id));
+                List<CircleModel> circleModels = circleMap.get(id);
+                if(CollectionUtils.isNotEmpty(circleModels)) {
+                    postModel.setCircleList(circleModels);
+                }
+
                 List<Integer> userLikePostIds = userLikeService
                         .findPostIdsByUserIdAndPostIds(SecurityUtil.getCurrentUserId(),
                                 Collections.singletonList(postModel.getId()));
