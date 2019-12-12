@@ -122,7 +122,13 @@ public class PostCommentServiceImpl extends BaseService<PostCommentModel> implem
 		}
 
 		for(PostCommentModel rootPostComment : rootPostComments) {
-			rootPostComment.setCommentList(childPostCommentMap.get(rootPostComment.getId()));
+			List<PostCommentModel> secondComments = childPostCommentMap.get(rootPostComment.getId());
+			if(CollectionUtils.isNotEmpty(secondComments)) {
+				for(PostCommentModel secondComment : secondComments) {
+					secondComment.setCommentList(childPostCommentMap.get(secondComment.getId()));
+				}
+			}
+			rootPostComment.setCommentList(secondComments);
 		}
 
 		return rootPostComments;
