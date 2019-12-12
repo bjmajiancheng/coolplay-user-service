@@ -10,6 +10,7 @@ import com.coolplay.user.user.service.IBannerService;
 import com.coolplay.user.user.service.ICircleService;
 import com.coolplay.user.user.service.ICoolplayBaseService;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,6 +79,11 @@ public class IndexController {
             int pageSize = 3;
             coolplayBaseModel.setSort_("readCnt_desc");
             PageInfo<CoolplayBaseModel> pageInfo = this.coolplayBaseService.selectByFilterAndPage(coolplayBaseModel, pageNo, pageSize);
+            if(CollectionUtils.isNotEmpty(pageInfo.getList())) {
+                for(CoolplayBaseModel baseModel : pageInfo.getList()) {
+                    baseModel.setType(1);
+                }
+            }
 
             return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
 
