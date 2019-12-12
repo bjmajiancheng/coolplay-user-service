@@ -73,6 +73,9 @@ public class UserServiceImpl extends BaseService<UserModel> implements IUserServ
         if (StringUtils.isNotEmpty(userModel.getUserName())) {
             criteria.andLike("userName", "%" + userModel.getUserName() + "%");
         }
+        if (CollectionUtils.isNotEmpty(userModel.getUserIds())) {
+            criteria.andIn("id", userModel.getUserIds());
+        }
         if (StringUtils.isNotEmpty(userModel.getSortWithOutOrderBy())) {
             example.setOrderByClause(userModel.getSortWithOutOrderBy());
         }
@@ -135,5 +138,10 @@ public class UserServiceImpl extends BaseService<UserModel> implements IUserServ
 
     public UserModel findById(Integer id) {
         return userMapper.findById(id);
+    }
+
+
+    public List<Integer> findByLabelName(String labelName) {
+        return userMapper.findByLabelName(labelName);
     }
 }

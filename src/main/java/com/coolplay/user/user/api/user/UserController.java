@@ -15,6 +15,7 @@ import com.coolplay.user.security.utils.SecurityUtil;
 import com.coolplay.user.security.utils.TokenUtils;
 import com.coolplay.user.user.model.*;
 import com.coolplay.user.user.service.*;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -822,6 +823,34 @@ public class UserController {
             return ResponseUtil.success(userModel);
 
         } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public Result list(@RequestBody UserModel userModel) {
+
+        try {
+            if(userModel.getType() == 1) {
+                userModel.setNickName(userModel.getQueryStr());
+            } else if(userModel.getType() == 2) {
+                List<Integer> userIds = userService.findByLabelName("%" + userModel.getQueryStr() + "%");
+                userModel.setUserIds(userIds);
+            } else {
+                Map map = new HashMap();
+                map.put("total", 0);
+                map.put("rows", Collections.emptyList());
+
+                return ResponseUtil.success(map);
+            }
+
+            PageInfo<UserModel> pageInfo = this.userService.selectByFilterAndPage(userModel, userModel.getPageNum(), userModel.getPageSize());
+
+            return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+        } catch(Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");

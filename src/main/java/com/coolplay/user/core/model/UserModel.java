@@ -132,6 +132,15 @@ public class UserModel extends Sortable {
 	@Transient
 	private String verifyCode;//验证码
 
+	@Transient
+	private String queryStr;//查询文本
+
+	@Transient
+	private Integer type;//查询类型，1：昵称，2：标签
+
+	@Transient
+	private List<Integer> userIds;//用户集合
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -406,6 +415,30 @@ public class UserModel extends Sortable {
 
 	public void setVerifyCode(String verifyCode) {
 		this.verifyCode = verifyCode;
+	}
+
+	public String getQueryStr() {
+		return queryStr;
+	}
+
+	public void setQueryStr(String queryStr) {
+		this.queryStr = queryStr;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public List<Integer> getUserIds() {
+		return userIds;
+	}
+
+	public void setUserIds(List<Integer> userIds) {
+		this.userIds = userIds;
 	}
 }
 
