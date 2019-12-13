@@ -1,0 +1,57 @@
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "ngram_analyzer": {
+          "tokenizer": "ngram_tokenizer"
+        }
+      },
+      "tokenizer": {
+        "ngram_tokenizer": {
+          "type": "ngram",
+          "min_gram": 1,
+          "max_gram": 200,
+          "token_chars": [
+            "letter",
+            "digit",
+            "whitespace"
+          ]
+        }
+      }
+    },
+    "number_of_shards": 5,
+    "number_of_replicas": 0,
+    "max_result_window":100000000
+  },
+  "mappings": {
+    "es_circle": {
+      "_all": {
+        "enabled": false
+      },
+      "dynamic": false,
+      "_source": {
+        "enabled": "true"
+      },
+      "properties": {
+        "id": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "circleName": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "labelNames": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "ctimeStramp": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

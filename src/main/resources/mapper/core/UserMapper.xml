@@ -29,7 +29,8 @@
 		<result property="enabled" column="enabled"/>
 		<result property="allowMessage" column="allow_message"/>
         <result property="lastPasswordReset" column="last_password_reset"/>
-        <result property="ctime" column="c_time"/>
+		<result property="ctime" column="c_time"/>
+		<result property="utime" column="u_time"/>
     </resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->

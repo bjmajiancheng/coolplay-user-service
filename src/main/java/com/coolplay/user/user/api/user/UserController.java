@@ -669,7 +669,7 @@ public class UserController {
 
                 userModel.setIdCardImages(sb.toString());
             }
-
+            userModel.setUtime(new Date());
             int updateCnt = userService.updateNotNull(userModel);
 
             int delCnt = userLabelService.delByUserId(userModel.getId());
