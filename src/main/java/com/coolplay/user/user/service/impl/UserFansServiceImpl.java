@@ -156,4 +156,18 @@ public class UserFansServiceImpl extends BaseService<UserFansModel> implements I
 	public List<UserFansModel> findByUserIdAndFansUserId(Integer userId, Integer fansUserId) {
 		return userFansMapper.findByUserIdAndFansUserId(userId, fansUserId);
 	}
+
+	/**
+	 * 根据粉丝用户ID获取关注列表
+	 *
+	 * @param fansUserId
+	 * @return
+	 */
+	public List<Integer> findByFansUserId(Integer fansUserId) {
+		if(fansUserId == null) {
+			return Collections.emptyList();
+		}
+
+		return userFansMapper.findByFansUserId(fansUserId);
+	}
 }

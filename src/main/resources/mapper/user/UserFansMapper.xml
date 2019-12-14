@@ -55,6 +55,11 @@
 		SELECT <include refid="columns"/> FROM d_user_fans
 		WHERE user_id = #{userId} AND fans_user_id = #{fansUserId}
 	</select>
+
+	<select id="findByFansUserId" resultType="java.lang.Integer">
+		SELECT user_id FROM d_user_fans
+		WHERE fans_user_id = #{fansUserId}
+	</select>
 	
 </mapper>
 

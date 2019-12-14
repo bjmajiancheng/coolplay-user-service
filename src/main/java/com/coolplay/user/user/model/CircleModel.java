@@ -150,7 +150,10 @@ public class CircleModel extends Sortable {
 
 	@Transient
 	private List<Integer> ids = new ArrayList<Integer>();//圈子ID集合
-		
+
+	@Transient
+	private int isFollow = 0;//是否已关注圈主
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -480,6 +483,14 @@ public class CircleModel extends Sortable {
 
 	public void setIds(List<Integer> ids) {
 		this.ids = ids;
+	}
+
+	public void setIsFollow(int isFollow) {
+		this.isFollow = isFollow;
+	}
+
+	public int getIsFollow() {
+		return isFollow;
 	}
 }
 

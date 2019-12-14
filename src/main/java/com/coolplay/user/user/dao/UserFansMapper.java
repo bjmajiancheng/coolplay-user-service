@@ -53,4 +53,6 @@ public interface UserFansMapper extends Mapper<UserFansModel> {
 	public int delByUserIdAndFansUserId(@Param("userId")Integer userId, @Param("fansUserId")Integer fansUserId);
 
 	public List<UserFansModel> findByUserIdAndFansUserId(@Param("userId")Integer userId, @Param("fansUserId")Integer fansUserId);
+
+	public List<Integer> findByFansUserId(@Param("fansUserId")Integer fansUserId);
 }

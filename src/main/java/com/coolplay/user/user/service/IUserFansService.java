@@ -65,4 +65,12 @@ public interface IUserFansService extends IBaseService<UserFansModel> {
 	public int delByUserIdAndFansUserId(Integer userId, Integer fansUserId);
 
 	public List<UserFansModel> findByUserIdAndFansUserId(Integer userId, Integer fansUserId);
+
+	/**
+	 * 根据粉丝用户ID获取关注列表
+	 *
+	 * @param fansUserId
+	 * @return
+     */
+	public List<Integer> findByFansUserId(Integer fansUserId);
 }

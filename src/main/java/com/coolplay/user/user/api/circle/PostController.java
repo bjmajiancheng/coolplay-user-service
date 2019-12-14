@@ -66,6 +66,9 @@ public class PostController {
     @Autowired
     private IIndexSaveService indexSaveService;
 
+    @Autowired
+    private IUserFansService userFansService;
+
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Result list(@RequestBody PostModel postModel) {

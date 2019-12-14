@@ -259,24 +259,6 @@ public class CircleController {
 
         try {
 
-            //获取系统标签
-            /*LabelModel labelModel = new LabelModel();
-            labelModel.setStatus(1);
-            labelModel.setIsDel(0);
-            labelModel.setType(1);
-            List<LabelModel> labelList = labelService.selectByFilter(labelModel);
-
-            //获取用户新建标签
-            labelModel = new LabelModel();
-            labelModel.setStatus(1);
-            labelModel.setIsDel(0);
-            labelModel.setType(2);
-            labelModel.setCreatorUserId(SecurityUtil.getCurrentUserId());
-            List<LabelModel> userLabelList = labelService.selectByFilter(labelModel);
-            if(CollectionUtils.isNotEmpty(userLabelList)) {
-                labelList.addAll(userLabelList);
-            }*/
-
             List<LabelModel> labelList = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), CommonConstant.CIRCLE_LABEL_CATEGORY);
 
             return ResponseUtil.success(Collections.singletonMap("labelList", labelList));
@@ -303,18 +285,6 @@ public class CircleController {
             circleModel.setStatus(0);
 
             int saveCnt = circleService.saveNotNull(circleModel);
-
-            /*if (CollectionUtils.isNotEmpty(circleModel.getLabelIds())) {
-                List<Integer> labelIds = circleModel.getLabelIds();
-
-                for (Integer labelId : labelIds) {
-                    CircleLabelModel circleLabelModel = new CircleLabelModel();
-                    circleLabelModel.setLabelId(labelId);
-                    circleLabelModel.setCircleId(circleModel.getId());
-
-                    circleLabelService.saveNotNull(circleLabelModel);
-                }
-            }*/
 
             List<String> labelNames = new ArrayList<String>();
             if(CollectionUtils.isNotEmpty(circleModel.getLabelList())) {
@@ -527,12 +497,15 @@ public class CircleController {
             int fansCnt = userFansService.findCntByUserId(circleModel.getUserId());
             int followCnt = userFansService.findCntByFansUserId(circleModel.getUserId());
 
+            List<Integer> userIds = userFansService.findByFansUserId(currUserId);
+
             circleModel.setFansCnt(fansCnt);
             circleModel.setFollowCnt(followCnt);
 
             List<Integer> circleIds = circleAdminService.findByAdminUserId(currUserId);
             circleModel.setIsAdmin((circleIds.contains(circleModel.getId())) ? 1 : 0);
             circleModel.setIsOwner((currUserId == circleModel.getUserId()) ? 1 : 0);
+            circleModel.setIsFollow(userIds.contains(circleModel.getUserId()) ? 1 : 0);
 
             return ResponseUtil.success(circleModel);
 
