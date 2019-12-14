@@ -9,10 +9,9 @@
 
     <http pattern="/static/**" security="none"/>
     <http pattern="/upload/**" security="none"/>
-    <http pattern="/api/token/**" security="none"/>
+    <!--<http pattern="/api/token/**" security="none"/>
     <http pattern="/api/noneAuth/**" security="none"/>
     <http pattern="/api/index/**" security="none"/>
-    <!--<http pattern="/api/user/**" security="none"/>-->
     <http pattern="/api/user/loginByMobilePhone" security="none"/>
     <http pattern="/api/user/loginByVerifyCode" security="none"/>
     <http pattern="/api/user/loginByWechat" security="none"/>
@@ -27,7 +26,7 @@
     <http pattern="/api/circle/circle/list" security="none"/>
     <http pattern="/api/circle/circle/circleDetail" security="none"/>
     <http pattern="/api/base/coolplayBase/list" security="none"/>
-    <http pattern="/api/base/coolplayBase/detail" security="none"/>
+    <http pattern="/api/base/coolplayBase/detail" security="none"/>-->
 
     <http pattern="/index.jsp" security="none"/>
     <http pattern="/favicon.ico" security="none"/>
@@ -72,6 +71,25 @@
         <custom-filter ref="osHttpAuthenticationTokenFilter" position="PRE_AUTH_FILTER"/>
         <intercept-url pattern="/api/exception" access="permitAll"/>
         <intercept-url pattern="/api/logout" access="permitAll"/>
+        <intercept-url pattern="/api/token/**" access="permitAll"/>
+        <intercept-url pattern="/api/noneAuth/**" access="permitAll"/>
+        <intercept-url pattern="/api/index/**" access="permitAll"/>
+        <intercept-url pattern="/api/user/loginByMobilePhone" access="permitAll"/>
+        <intercept-url pattern="/api/user/loginByVerifyCode" access="permitAll"/>
+        <intercept-url pattern="/api/user/loginByWechat" access="permitAll"/>
+        <intercept-url pattern="/api/user/loginByQQ" access="permitAll"/>
+        <intercept-url pattern="/api/user/register" access="permitAll"/>
+        <intercept-url pattern="/api/user/updatePassword" access="permitAll"/>
+
+        <intercept-url pattern="/api/common/**" access="permitAll"/>
+        <intercept-url pattern="/api/circle/post/list" access="permitAll"/>
+        <intercept-url pattern="/api/circle/post/postDetail" access="permitAll"/>
+        <intercept-url pattern="/api/circle/post/detail" access="permitAll"/>
+        <intercept-url pattern="/api/circle/circle/list" access="permitAll"/>
+        <intercept-url pattern="/api/circle/circle/circleDetail" access="permitAll"/>
+        <intercept-url pattern="/api/base/coolplayBase/list" access="permitAll"/>
+        <intercept-url pattern="/api/base/coolplayBase/detail" access="permitAll"/>
+
         <intercept-url pattern="/**" access="isAuthenticated()"/>
         <!-- 加载权限拦截 -->
         <custom-filter ref="filterSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR"/>

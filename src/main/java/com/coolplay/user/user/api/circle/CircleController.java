@@ -465,7 +465,7 @@ public class CircleController {
             CircleModel circleModel = circleService.findById(id);
 
             Map<Integer, List<LabelModel>> circleLabelMap = labelService
-                    .findMapByCircleIds(Collections.singletonList(circleModel.getId()));
+                    .findMapByCircleIds(Collections.singletonList(id));
 
             if (CollectionUtils.isNotEmpty(circleLabelMap.get(circleModel.getId()))) {
                 circleModel.setLabelList(circleLabelMap.get(circleModel.getId()));
