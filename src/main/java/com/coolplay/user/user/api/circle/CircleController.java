@@ -702,6 +702,13 @@ public class CircleController {
                 circleMemberReviewModel.setReviewStatus(0);
                 circleMemberReviewModel.setApplicationReason(applicationReason);
 
+                int saveCnt = circleMemberReviewService.saveNotNull(circleMemberReviewModel);
+
+                CircleMemberModel circleMemberModel = new CircleMemberModel();
+                circleMemberModel.setCircleId(id);
+                circleMemberModel.setMemberUserId(userId);
+                circleMemberService.saveNotNull(circleMemberModel);
+
                 Map<Integer, UserModel> userModelMap = userService
                         .findUserMapByUserIds(Arrays.asList(new Integer[] { SecurityUtil.getCurrentUserId(), userId }));
 
@@ -723,7 +730,7 @@ public class CircleController {
                 reviewMessageDto.setUserId(userId);
                 messageModel.setMessageUrl(JSON.toJSONString(reviewMessageDto));
 
-                int saveCnt = messageService.saveNotNull(messageModel);
+                saveCnt = messageService.saveNotNull(messageModel);
 
             } else { //普通成员邀请加入圈子
                 CircleMemberReviewModel circleMemberReviewModel = new CircleMemberReviewModel();
