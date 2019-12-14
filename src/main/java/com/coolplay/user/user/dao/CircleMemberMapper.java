@@ -45,4 +45,6 @@ public interface CircleMemberMapper extends Mapper<CircleMemberModel> {
 			@Param("reviewStatus")Integer reviewStatus, @Param("status")Integer status);
 
 	public int delByCircleIdAndMemberUserId(@Param("circleId")Integer circleId, @Param("memberUserId")Integer memberUserId);
+
+	public List<Integer> findMemberUserIdsByCircleId(@Param("circleId")Integer circleId);
 }

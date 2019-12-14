@@ -47,5 +47,7 @@ public interface ICircleAdminService extends IBaseService<CircleAdminModel> {
      */
 	public List<CircleAdminModel> findByCircleId(Integer circleId);
 
+	public List<Integer> findAdminUserIdsByCircleId(Integer circleId);
+
 	public int delByCircleIdAndAdminUserId(Integer circleId, Integer adminUserId);
 }

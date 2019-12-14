@@ -205,7 +205,20 @@ public class CircleController {
                 return ResponseUtil.error("圈子为私密圈, 不能申请加入, 只能被成员邀请");
             }
 
-            Integer currUserId = SecurityUtil.getCurrentUserId();
+            int currUserId = SecurityUtil.getCurrentUserId();
+
+            if(circleModel.getUserId() == currUserId) {
+                return ResponseUtil.error("您已是圈子圈主, 无法加入圈子.");
+            }
+            List<Integer> adminUserIds = circleAdminService.findAdminUserIdsByCircleId(id);
+            if(adminUserIds.contains(currUserId)) {
+                return ResponseUtil.error("您已是圈子管理员, 无法加入圈子.");
+            }
+
+            List<Integer> memberUserIds = circleMemberService.findMemberUserIdsByCircleId(id);
+            if(memberUserIds.contains(currUserId)) {
+                return ResponseUtil.error("您已是圈子成员, 无法加入圈子.");
+            }
 
             SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
 

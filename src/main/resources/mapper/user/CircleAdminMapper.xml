@@ -60,6 +60,10 @@
 			</foreach>
 	</select>
 
+	<select id="findAdminUserIdsByCircleId" resultType="java.lang.Integer">
+		SELECt admin_user_id FROM d_circle_admin WHERE circle_id = #{circleId}
+	</select>
+
 	<delete id="delByCircleIdAndAdminUserId">
 		DELETE FROM d_circle_admin where circle_id = #{circleId} AND admin_user_id = #{adminUserId}
 	</delete>

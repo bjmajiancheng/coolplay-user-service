@@ -51,4 +51,6 @@ public interface CircleAdminMapper extends Mapper<CircleAdminModel> {
 	public List<CircleAdminModel> findByCircleIds(@Param("circleIds") List<Integer> circleIds);
 
 	public int delByCircleIdAndAdminUserId(@Param("circleId")Integer circleId, @Param("adminUserId")Integer adminUserId);
+
+	public List<Integer> findAdminUserIdsByCircleId(@Param("circleId")Integer circleId);
 }

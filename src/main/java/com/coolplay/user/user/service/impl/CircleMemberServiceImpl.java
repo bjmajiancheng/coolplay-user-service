@@ -167,4 +167,12 @@ public class CircleMemberServiceImpl extends BaseService<CircleMemberModel> impl
 
 		return circleMemberMapper.delByCircleIdAndMemberUserId(circleId, memberUserId);
 	}
+
+	public List<Integer> findMemberUserIdsByCircleId(Integer circleId) {
+		if(circleId == null) {
+			return Collections.emptyList();
+		}
+
+		return circleMemberMapper.findMemberUserIdsByCircleId(circleId);
+	}
 }

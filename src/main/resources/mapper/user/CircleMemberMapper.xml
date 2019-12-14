@@ -77,5 +77,9 @@
 	<delete id="delByCircleIdAndMemberUserId">
 		DELETE FROM d_circle_member WHERE circle_id = #{circleId} AND member_user_id = #{memberUserId}
 	</delete>
+
+	<select id="findMemberUserIdsByCircleId" resultType="java.lang.Integer">
+		SELECT member_user_id FROM d_circle_member WHERE circle_id = #{circleId}
+	</select>
 </mapper>
 

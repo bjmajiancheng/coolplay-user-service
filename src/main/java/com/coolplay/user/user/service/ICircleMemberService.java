@@ -63,4 +63,6 @@ public interface ICircleMemberService extends IBaseService<CircleMemberModel> {
 	public int updateByCircleIdMemberUserId(Integer circleId, Integer memberUserId, Integer reviewStatus, Integer status);
 
 	public int delByCircleIdAndMemberUserId(Integer circleId, Integer memberUserId);
+
+	public List<Integer> findMemberUserIdsByCircleId(Integer circleId);
 }
