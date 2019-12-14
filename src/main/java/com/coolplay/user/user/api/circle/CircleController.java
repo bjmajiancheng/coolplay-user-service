@@ -680,13 +680,6 @@ public class CircleController {
         try {
             CircleModel circleModel = circleService.findById(id);
 
-            CircleMemberReviewModel circleMemberReviewModel = new CircleMemberReviewModel();
-            circleMemberReviewModel.setCircleId(id);
-            circleMemberReviewModel.setInviteUserId(SecurityUtil.getCurrentUserId());
-            circleMemberReviewModel.setMemberUserId(userId);
-            circleMemberReviewModel.setReviewStatus(0);
-            circleMemberReviewModel.setApplicationReason(applicationReason);
-
             List<CircleAdminModel> circleAdmins = circleAdminService.findByCircleId(id);
             List<Integer> circleAdminUserIds = new ArrayList<Integer>();
             for (CircleAdminModel circleAdmin : circleAdmins) {
@@ -698,19 +691,29 @@ public class CircleController {
                 circleAdminUserIds.add(circleModel.getUserId());
             }
 
-            Map<Integer, UserModel> userModelMap = userService
-                    .findUserMapByUserIds(Arrays.asList(new Integer[] { SecurityUtil.getCurrentUserId(), userId }));
+            int currUserId = SecurityUtil.getCurrentUserId();
 
-            UserModel inviteUserModel = userModelMap.get(SecurityUtil.getCurrentUserId());
-            UserModel memberUserModel = userModelMap.get(userId);
-            String inviteUserNickName = inviteUserModel == null ? "" : inviteUserModel.getNickName();
-            String memberUserNickName = memberUserModel == null ? "" : memberUserModel.getNickName();
+            //管理员邀请加入圈子
+            if(circleAdminUserIds.contains(currUserId)) {
+                CircleMemberReviewModel circleMemberReviewModel = new CircleMemberReviewModel();
+                circleMemberReviewModel.setCircleId(id);
+                circleMemberReviewModel.setInviteUserId(SecurityUtil.getCurrentUserId());
+                circleMemberReviewModel.setMemberUserId(userId);
+                circleMemberReviewModel.setReviewStatus(0);
+                circleMemberReviewModel.setApplicationReason(applicationReason);
 
-            for (Integer adminUserId : circleAdminUserIds) {
+                Map<Integer, UserModel> userModelMap = userService
+                        .findUserMapByUserIds(Arrays.asList(new Integer[] { SecurityUtil.getCurrentUserId(), userId }));
+
+                UserModel inviteUserModel = userModelMap.get(SecurityUtil.getCurrentUserId());
+                UserModel memberUserModel = userModelMap.get(userId);
+                String inviteUserNickName = inviteUserModel == null ? "" : inviteUserModel.getNickName();
+                String memberUserNickName = memberUserModel == null ? "" : memberUserModel.getNickName();
+
                 MessageModel messageModel = new MessageModel();
-                messageModel.setUserId(adminUserId);
+                messageModel.setUserId(userId);
                 messageModel.setMessageName("邀请加入" + circleModel.getCircleName() + "圈申请");
-                messageModel.setMessageContent(inviteUserNickName + "邀请"+ memberUserNickName +"加入" + circleModel.getCircleName() + "圈，是否同意");
+                messageModel.setMessageContent(inviteUserNickName + "邀请你加入" + circleModel.getCircleName() + "圈，是否同意");
                 messageModel.setMessageType(1);
 
                 ReviewMessageDto reviewMessageDto = new ReviewMessageDto();
@@ -721,9 +724,42 @@ public class CircleController {
                 messageModel.setMessageUrl(JSON.toJSONString(reviewMessageDto));
 
                 int saveCnt = messageService.saveNotNull(messageModel);
-            }
 
-            int saveCnt = circleMemberReviewService.saveNotNull(circleMemberReviewModel);
+            } else { //普通成员邀请加入圈子
+                CircleMemberReviewModel circleMemberReviewModel = new CircleMemberReviewModel();
+                circleMemberReviewModel.setCircleId(id);
+                circleMemberReviewModel.setInviteUserId(SecurityUtil.getCurrentUserId());
+                circleMemberReviewModel.setMemberUserId(userId);
+                circleMemberReviewModel.setReviewStatus(0);
+                circleMemberReviewModel.setApplicationReason(applicationReason);
+
+                Map<Integer, UserModel> userModelMap = userService
+                        .findUserMapByUserIds(Arrays.asList(new Integer[] { SecurityUtil.getCurrentUserId(), userId }));
+
+                UserModel inviteUserModel = userModelMap.get(SecurityUtil.getCurrentUserId());
+                UserModel memberUserModel = userModelMap.get(userId);
+                String inviteUserNickName = inviteUserModel == null ? "" : inviteUserModel.getNickName();
+                String memberUserNickName = memberUserModel == null ? "" : memberUserModel.getNickName();
+
+                for (Integer adminUserId : circleAdminUserIds) {
+                    MessageModel messageModel = new MessageModel();
+                    messageModel.setUserId(adminUserId);
+                    messageModel.setMessageName("邀请加入" + circleModel.getCircleName() + "圈申请");
+                    messageModel.setMessageContent(inviteUserNickName + "邀请"+ memberUserNickName +"加入" + circleModel.getCircleName() + "圈，是否同意");
+                    messageModel.setMessageType(1);
+
+                    ReviewMessageDto reviewMessageDto = new ReviewMessageDto();
+                    reviewMessageDto.setType(ReviewMessageDto.INVITE_CIRCLE);
+                    reviewMessageDto.setTypeId(id);
+                    reviewMessageDto.setApplicationUserId(SecurityUtil.getCurrentUserId());
+                    reviewMessageDto.setUserId(userId);
+                    messageModel.setMessageUrl(JSON.toJSONString(reviewMessageDto));
+
+                    int saveCnt = messageService.saveNotNull(messageModel);
+                }
+
+                int saveCnt = circleMemberReviewService.saveNotNull(circleMemberReviewModel);
+            }
 
             return ResponseUtil.success();
 
