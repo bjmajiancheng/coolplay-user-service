@@ -76,7 +76,7 @@
 		SELECT p.id ,p.post_title ,p.post_content ,p.user_id ,p.img_urls ,p.video_url ,p.videl_path ,p.is_top ,p.like_cnt ,p.share_cnt ,p.comment_cnt ,p.read_cnt ,p.thumb_up_cnt ,p.collect_cnt, p.is_del ,p.c_time
 		FROM d_post p
 		INNER JOIN d_circle_post cp ON p.id = cp.post_id
-		WHERE cp.circle_id = #{circleId} AND p.is_del = 0
+		WHERE cp.circle_id = #{circleId} AND p.is_del = 0 ORDER BY cp.is_top DESC, p.c_time DESC
 	</select>
 
 	<select id="findByIds" resultMap="Post">

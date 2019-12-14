@@ -623,6 +623,10 @@ public class CircleController {
             @RequestParam("adminUserIds") List<Integer> adminUserIds) {
 
         try {
+            if(adminUserIds.size() > 1) {
+                return ResponseUtil.error("当前仅允许设置一个管理员.");
+            }
+
             int delCnt = circleAdminService.delByCircleId(id);
 
             if (CollectionUtils.isNotEmpty(adminUserIds)) {
@@ -634,6 +638,8 @@ public class CircleController {
                     circleAdminService.saveNotNull(circleAdminModel);
                 }
             }
+
+
 
             return ResponseUtil.success();
 
