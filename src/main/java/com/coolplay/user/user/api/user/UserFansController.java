@@ -70,7 +70,7 @@ public class UserFansController {
 
                 List<Integer> followUserIds = followMap.get(SecurityUtil.getCurrentUserId());
                 for (UserModel fansUserModel : fansUserModels) {
-                    if (followUserIds.contains(fansUserModel.getId())) {
+                    if (CollectionUtils.isEmpty(followUserIds) && followUserIds.contains(fansUserModel.getId())) {
                         fansUserModel.setIsFans(1);
                     }
                 }
@@ -131,11 +131,11 @@ public class UserFansController {
 
                 List<Integer> followUserIds = followMap.get(SecurityUtil.getCurrentUserId());
                 for (UserModel fansUserModel : fansUserModels) {
-                    if (followUserIds.contains(fansUserModel.getId())) {
+                    if (CollectionUtils.isNotEmpty(followUserIds) && followUserIds.contains(fansUserModel.getId())) {
                         fansUserModel.setIsFans(1);
                     }
 
-                    if(circleMemberIds.contains(fansUserModel.getId())) {
+                    if(CollectionUtils.isNotEmpty(circleMemberIds) && circleMemberIds.contains(fansUserModel.getId())) {
                         fansUserModel.setIsCircleMember(1);
                     }
                 }
@@ -273,7 +273,7 @@ public class UserFansController {
 
                 List<Integer> followUserIds = followMap.get(SecurityUtil.getCurrentUserId());
                 for (UserModel userModel : userModels) {
-                    if (followUserIds.contains(userModel.getId())) {
+                    if (CollectionUtils.isNotEmpty(followUserIds) && followUserIds.contains(userModel.getId())) {
                         userModel.setIsFans(1);
                     }
                 }
