@@ -14,11 +14,18 @@ public class ReviewMessageDto implements Serializable {
      */
     public static final String APPLICATION_CIRCLE = "application_circle";
 
+    /**
+     * 邀请加圈
+     */
+    public static final String INVITE_CIRCLE = "invite_circle";
+
     private String type;//申请类型
 
     private Integer typeId;//申请业务ID
 
     private Integer applicationUserId;//申请人
+
+    private Integer userId;//被邀请人
 
     public String getType() {
         return type;
@@ -42,5 +49,13 @@ public class ReviewMessageDto implements Serializable {
 
     public void setApplicationUserId(Integer applicationUserId) {
         this.applicationUserId = applicationUserId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

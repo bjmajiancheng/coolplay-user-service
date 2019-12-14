@@ -59,7 +59,13 @@ public class MessageModel extends Sortable {
 
 	@Transient
 	private String ctimeStr;//"创建时间"
-		
+
+	@Transient
+	private String yesBtn = "";
+
+	@Transient
+	private String noBtn = "";
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -141,6 +147,22 @@ public class MessageModel extends Sortable {
 
 	public void setCtimeStr(String ctimeStr) {
 		this.ctimeStr = ctimeStr;
+	}
+
+	public void setYesBtn(String yesBtn) {
+		this.yesBtn = yesBtn;
+	}
+
+	public String getYesBtn() {
+		return yesBtn;
+	}
+
+	public void setNoBtn(String noBtn) {
+		this.noBtn = noBtn;
+	}
+
+	public String getNoBtn() {
+		return noBtn;
 	}
 }
 

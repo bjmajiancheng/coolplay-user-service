@@ -236,6 +236,7 @@ public class CircleController {
             reviewMessageDto.setType(ReviewMessageDto.APPLICATION_CIRCLE);
             reviewMessageDto.setTypeId(id);
             reviewMessageDto.setApplicationUserId(currUserId);
+            reviewMessageDto.setUserId(currUserId);
             messageModel.setMessageUrl(JSON.toJSONString(reviewMessageDto));
             messageService.saveNotNull(messageModel);
 
@@ -695,9 +696,16 @@ public class CircleController {
             for (Integer adminUserId : circleAdminUserIds) {
                 MessageModel messageModel = new MessageModel();
                 messageModel.setUserId(adminUserId);
-                messageModel.setMessageName("加入" + circleModel.getCircleName() + "圈申请");
+                messageModel.setMessageName("邀请加入" + circleModel.getCircleName() + "圈申请");
                 messageModel.setMessageContent(inviteUserNickName + "邀请"+ memberUserNickName +"加入" + circleModel.getCircleName() + "圈，是否同意");
                 messageModel.setMessageType(1);
+
+                ReviewMessageDto reviewMessageDto = new ReviewMessageDto();
+                reviewMessageDto.setType(ReviewMessageDto.INVITE_CIRCLE);
+                reviewMessageDto.setTypeId(id);
+                reviewMessageDto.setApplicationUserId(SecurityUtil.getCurrentUserId());
+                reviewMessageDto.setUserId(userId);
+                messageModel.setMessageUrl(JSON.toJSONString(reviewMessageDto));
 
                 int saveCnt = messageService.saveNotNull(messageModel);
             }

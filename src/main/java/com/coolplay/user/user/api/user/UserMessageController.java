@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.coolplay.user.common.utils.PageConvertUtil;
 import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
+import com.coolplay.user.core.model.UserModel;
+import com.coolplay.user.security.service.IUserService;
 import com.coolplay.user.security.utils.SecurityUtil;
 import com.coolplay.user.user.dto.ReviewMessageDto;
 import com.coolplay.user.user.model.CircleModel;
@@ -13,6 +15,7 @@ import com.coolplay.user.user.service.ICircleMemberService;
 import com.coolplay.user.user.service.ICircleService;
 import com.coolplay.user.user.service.IMessageService;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,6 +40,9 @@ public class UserMessageController {
     @Autowired
     private ICircleService circleService;
 
+    @Autowired
+    private IUserService userService;
+
     /**
      * 消息列表
      *
@@ -54,6 +60,22 @@ public class UserMessageController {
 
             PageInfo<MessageModel> pageInfo = messageService
                     .selectByFilterAndPage(messageModel, messageModel.getPageNum(), messageModel.getPageSize());
+
+            /*if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
+                for(MessageModel tmpMessage : pageInfo.getList()) {
+                    if(tmpMessage.getMessageType() == 2 && StringUtils.isNotEmpty(tmpMessage.getMessageUrl())) {
+                        ReviewMessageDto reviewMessageDto = JSON.parseObject(tmpMessage.getMessageUrl(), ReviewMessageDto.class);
+
+                        if(ReviewMessageDto.APPLICATION_CIRCLE.equals(reviewMessageDto.getType())) {
+                            tmpMessage.setYesBtn("通过");
+                            tmpMessage.setNoBtn("驳回");
+                        } else if(ReviewMessageDto.INVITE_CIRCLE.equals(reviewMessageDto.getType())) {
+                            tmpMessage.setYesBtn("接受");
+                            tmpMessage.setNoBtn("拒绝");
+                        }
+                    }
+                }
+            }*/
 
             return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
 
@@ -97,7 +119,8 @@ public class UserMessageController {
                     if(isAgree == 1) {
                         reviewStatus = 2;
                     }
-                    updateCnt = circleMemberReviewService.updateByCircleIdAndInviteMemberUserId(reviewMessageDto.getTypeId(), 0, reviewMessageDto.getApplicationUserId(), reviewStatus);
+                    updateCnt = circleMemberReviewService.updateByCircleIdAndInviteMemberUserId(reviewMessageDto.getTypeId(),
+                            reviewMessageDto.getUserId(), reviewMessageDto.getApplicationUserId(), reviewStatus);
                     Integer status = 0;
                     if(isAgree == 1) {
                         status = isAgree;
@@ -108,7 +131,32 @@ public class UserMessageController {
                     CircleModel circleModel = circleService.findById(reviewMessageDto.getTypeId());
                     MessageModel tmpMessage = new MessageModel();
                     tmpMessage.setMessageName("加入圈子结果");
-                    tmpMessage.setMessageContent(String.format("您申请加入的圈子-%s, 申请%s~", circleModel, (isAgree == 1) ? "已通过": "已驳回"));
+                    tmpMessage.setMessageContent(String.format("您申请加入的圈子-%s, 申请%s~", circleModel, (isAgree == 1) ? "已同意": "已拒绝"));
+                    tmpMessage.setMessageType(2);
+                    tmpMessage.setUserId(reviewMessageDto.getApplicationUserId());
+
+                    int saveCnt = messageService.updateNotNull(tmpMessage);
+                } else if(ReviewMessageDto.INVITE_CIRCLE.equals(reviewMessageDto.getType())) {
+                    Integer reviewStatus = 1;
+                    if(isAgree == 1) {
+                        reviewStatus = 2;
+                    }
+
+                    updateCnt = circleMemberReviewService.updateByCircleIdAndInviteMemberUserId(reviewMessageDto.getTypeId(),
+                            reviewMessageDto.getApplicationUserId(), reviewMessageDto.getUserId(), reviewStatus);
+                    Integer status = 0;
+                    if(isAgree == 1) {
+                        status = isAgree;
+                    }
+
+                    updateCnt = circleMemberService.updateByCircleIdMemberUserId(reviewMessageDto.getTypeId(), reviewMessageDto.getUserId(), 1, status);
+
+                    UserModel userModel = userService.findById(reviewMessageDto.getUserId());
+
+                    CircleModel circleModel = circleService.findById(reviewMessageDto.getTypeId());
+                    MessageModel tmpMessage = new MessageModel();
+                    tmpMessage.setMessageName("邀请加入圈子结果");
+                    tmpMessage.setMessageContent(String.format("您邀请 %s 加入的圈子-%s, 申请%s~", userModel.getNickName(), circleModel, (isAgree == 1) ? "已同意": "已拒绝"));
                     tmpMessage.setMessageType(2);
                     tmpMessage.setUserId(reviewMessageDto.getApplicationUserId());
 

@@ -28,13 +28,4 @@ public class CommonConstant {
     /** 帖子标签分类 */
     public final static int POST_LABEL_CATEGORY = 5;
 
-    /**
-     * 消息类型设置
-     */
-    /**  */
-    /*public final static String MESSAGE_TYPE_ = "";
-    public final static String MESSAGE_TYPE_ = "";
-    public final static String MESSAGE_TYPE_ = "";
-    public final static String MESSAGE_TYPE_ = "";
-    public final static String MESSAGE_TYPE_ = "";*/
 }
