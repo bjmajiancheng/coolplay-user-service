@@ -382,8 +382,11 @@ public class CommonController {
      */
     @ResponseBody
     @RequestMapping(value = "/helpList", method = RequestMethod.POST)
-    public Result helpList(@RequestBody HelpModel helpModel) {
+    public Result helpList(@RequestParam("helpTitle") String helpTitle) {
         try {
+
+            HelpModel helpModel = new HelpModel();
+            helpModel.setHelpTitle(helpTitle);
             helpModel.setIsDel(0);
             List<HelpModel> helpModels = helpService.selectByFilter(helpModel);
             List<HelpModel> helpResultDatas = new ArrayList<HelpModel>();
