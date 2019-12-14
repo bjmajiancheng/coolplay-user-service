@@ -850,4 +850,19 @@ public class UserController {
             return ResponseUtil.error("系统异常, 请稍后重试。");
         }
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/labelList", method = RequestMethod.POST)
+    public Result labelList() {
+
+        try{
+            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId());
+
+            return ResponseUtil.success(Collections.singletonMap("labelList", labelModels));
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
 }
