@@ -58,7 +58,7 @@
 
 	<select id="findUserAvailableLabel" resultMap="Label">
 		SELECT <include refid="columns"/> FROM d_label
-		WHERE status = 1 AND is_del = 0 AND ((type = 1) OR (type = #{type} AND creator_user_id = #{creatorUserId}))
+		WHERE status = 1 AND is_del = 0 AND cat_id = #{catId} AND ((type = 1) OR (type = 2 AND creator_user_id = #{creatorUserId}))
 	</select>
 
 	<select id="findByPostIds" resultMap="Label">

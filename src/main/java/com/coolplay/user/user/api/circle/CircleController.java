@@ -15,6 +15,7 @@ import com.coolplay.user.security.service.IUserService;
 import com.github.pagehelper.PageInfo;
 import com.wutuobang.search.bean.EsCircleBean;
 import com.wutuobang.search.bean.EsPostBean;
+import com.wutuobang.search.constant.Constant;
 import com.wutuobang.search.service.IIndexSaveService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -275,7 +276,7 @@ public class CircleController {
                 labelList.addAll(userLabelList);
             }*/
 
-            List<LabelModel> labelList = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), 3);
+            List<LabelModel> labelList = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), Constant.CIRCLE_LABEL_CATEGORY);
 
             return ResponseUtil.success(Collections.singletonMap("labelList", labelList));
 
@@ -328,7 +329,7 @@ public class CircleController {
                         saveLabelModel.setType(2);
                         saveLabelModel.setStatus(1);
                         saveLabelModel.setIsDel(0);
-                        saveLabelModel.setCatId(0);
+                        saveLabelModel.setCatId(Constant.CIRCLE_LABEL_CATEGORY);
                         labelService.saveNotNull(saveLabelModel);
 
                         labelId = saveLabelModel.getId();
@@ -430,7 +431,7 @@ public class CircleController {
                         saveLabelModel.setType(2);
                         saveLabelModel.setStatus(1);
                         saveLabelModel.setIsDel(0);
-                        saveLabelModel.setCatId(0);
+                        saveLabelModel.setCatId(Constant.CIRCLE_LABEL_CATEGORY);
                         labelService.saveNotNull(saveLabelModel);
 
                         labelId = saveLabelModel.getId();

@@ -30,7 +30,7 @@ public interface LabelMapper extends Mapper<LabelModel> {
 	 * @param creatorUserId
 	 * @return
 	 */
-	public List<LabelModel> findUserAvailableLabel(@Param("creatorUserId")Integer creatorUserId, @Param("type")Integer type);
+	public List<LabelModel> findUserAvailableLabel(@Param("creatorUserId")Integer creatorUserId, @Param("catId")Integer catId);
 
 	public List<LabelModel> findByPostIds(@Param("postIds")List<Integer> postIds);
 

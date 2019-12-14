@@ -12,6 +12,7 @@ import com.coolplay.user.user.model.*;
 import com.coolplay.user.user.service.*;
 import com.github.pagehelper.PageInfo;
 import com.wutuobang.search.bean.EsPostBean;
+import com.wutuobang.search.constant.Constant;
 import com.wutuobang.search.service.IIndexSaveService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -236,7 +237,7 @@ public class PostController {
 
             List<CircleModel> circleModels = circleService.findByIds(allCircleIds);
 
-            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), 4);
+            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), Constant.POST_LABEL_CATEGORY);
             //List<LabelModel> labelModels = labelService.find(Collections.singletonMap("isDel", 0));
             Map<String, Object> result = new HashMap<String, Object>();
             result.put("circleList", circleModels);
@@ -295,7 +296,7 @@ public class PostController {
                         saveLabelModel.setType(2);
                         saveLabelModel.setStatus(1);
                         saveLabelModel.setIsDel(0);
-                        saveLabelModel.setCatId(0);
+                        saveLabelModel.setCatId(Constant.POST_LABEL_CATEGORY);
                         labelService.saveNotNull(saveLabelModel);
 
                         labelId = saveLabelModel.getId();

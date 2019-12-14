@@ -16,6 +16,7 @@ import com.coolplay.user.security.utils.TokenUtils;
 import com.coolplay.user.user.model.*;
 import com.coolplay.user.user.service.*;
 import com.github.pagehelper.PageInfo;
+import com.wutuobang.search.constant.Constant;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -110,7 +111,7 @@ public class UserController {
                     .get(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName());
             if (userDetails == null) {
                 userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-                redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails);
+                redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
             }
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
@@ -180,7 +181,7 @@ public class UserController {
                     .get(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName());
             if (userDetails == null) {
                 userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-                redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails);
+                redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
             }
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
@@ -274,7 +275,7 @@ public class UserController {
                     .get(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName());
             if (userDetails == null) {
                 userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-                redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails);
+                redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
             }
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
@@ -364,7 +365,7 @@ public class UserController {
                     .get(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName());
             if (userDetails == null) {
                 userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-                redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails);
+                redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
             }
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
@@ -687,7 +688,7 @@ public class UserController {
                         saveLabelModel.setType(2);
                         saveLabelModel.setStatus(1);
                         saveLabelModel.setIsDel(0);
-                        saveLabelModel.setCatId(0);
+                        saveLabelModel.setCatId(Constant.USER_LABEL_CATEGORY);
                         labelService.saveNotNull(saveLabelModel);
 
                         labelId = saveLabelModel.getId();
@@ -856,7 +857,8 @@ public class UserController {
     public Result labelList() {
 
         try{
-            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), 2);
+            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(),
+                    Constant.USER_LABEL_CATEGORY);
 
             return ResponseUtil.success(Collections.singletonMap("labelList", labelModels));
         } catch(Exception e) {

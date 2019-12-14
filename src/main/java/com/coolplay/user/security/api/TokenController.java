@@ -104,7 +104,7 @@ public class TokenController {
                 .get(SecurityConstant.USER_CACHE_PREFIX + authenticationRequest.getUsername());
         if (userDetails == null)  {
             userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + authenticationRequest.getUsername(), userDetails);
+            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + authenticationRequest.getUsername(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
         }
         String token = this.tokenUtils.generateToken(userDetails);
         userService.updateLastLoginInfoByUserName(authenticationRequest.getUsername(), new Date(),

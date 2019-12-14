@@ -34,7 +34,7 @@ public interface ILabelService extends IBaseService<LabelModel> {
 	 * @param userId
 	 * @return
      */
-	public List<LabelModel> findUserAvailableLabel(Integer userId, Integer type);
+	public List<LabelModel> findUserAvailableLabel(Integer userId, Integer catId);
 
 	/**
 	 * 根据帖子获取标签信息

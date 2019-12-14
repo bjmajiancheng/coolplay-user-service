@@ -88,12 +88,12 @@ public class LabelServiceImpl extends BaseService<LabelModel> implements ILabelS
 	 * @param userId
 	 * @return
 	 */
-	public List<LabelModel> findUserAvailableLabel(Integer userId, Integer type) {
+	public List<LabelModel> findUserAvailableLabel(Integer userId, Integer catId) {
 		if(userId == null) {
 			return Collections.emptyList();
 		}
 
-		return labelMapper.findUserAvailableLabel(userId, type);
+		return labelMapper.findUserAvailableLabel(userId, catId);
 	}
 
 	@Override
