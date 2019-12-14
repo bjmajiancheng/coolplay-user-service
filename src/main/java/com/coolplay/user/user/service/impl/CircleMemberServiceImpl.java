@@ -158,4 +158,13 @@ public class CircleMemberServiceImpl extends BaseService<CircleMemberModel> impl
 
 		return circleMemberMapper.updateByCircleIdMemberUserId(circleId, memberUserId, reviewStatus, status);
 	}
+
+
+	public int delByCircleIdAndMemberUserId(Integer circleId, Integer memberUserId) {
+		if(circleId == null || memberUserId == null) {
+			return 0;
+		}
+
+		return circleMemberMapper.delByCircleIdAndMemberUserId(circleId, memberUserId);
+	}
 }

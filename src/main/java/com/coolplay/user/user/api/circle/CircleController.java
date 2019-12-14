@@ -542,8 +542,8 @@ public class CircleController {
             List<Integer> userIds = new ArrayList<Integer>();
 
             List<CircleUserDto> circleUserDtos = new ArrayList<CircleUserDto>();
-            circleUserDtos.add(new CircleUserDto(id, circleModel.getUserId(), 1, 0));
-            userIds.add(circleModel.getUserId());
+            /*circleUserDtos.add(new CircleUserDto(id, circleModel.getUserId(), 1, 0));
+            userIds.add(circleModel.getUserId());*/
 
             if (CollectionUtils.isNotEmpty(circleAdminModels)) {
                 for (CircleAdminModel circleAdminModel : circleAdminModels) {
@@ -827,6 +827,50 @@ public class CircleController {
         } catch (Exception e) {
             e.printStackTrace();
 
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
+    /**
+     * 移除圈子成员
+     *
+     * @param circleId
+     * @param memberUserId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/removeCircleMember", method = RequestMethod.POST)
+    public Result removeCircleMember(@RequestParam("circleId")Integer circleId, @RequestParam("memberUserId")Integer memberUserId) {
+
+        try{
+            if(circleId == null || memberUserId == null) {
+                return ResponseUtil.error("系统输入异常, 请稍后重试");
+            }
+
+            CircleModel circleModel = circleService.findById(circleId);
+            if(circleModel == null ) {
+                return ResponseUtil.error("系统输入异常, 请稍后重试");
+            }
+
+            List<CircleAdminModel> circleAdmins = circleAdminService.findByCircleId(circleId);
+            List<Integer> userIds = new ArrayList<Integer>();
+            userIds.add(circleModel.getUserId());
+            if(CollectionUtils.isNotEmpty(circleAdmins)) {
+                for(CircleAdminModel circleAdmin : circleAdmins) {
+                    userIds.add(circleAdmin.getAdminUserId());
+                }
+            }
+
+            if(!userIds.contains(SecurityUtil.getCurrentUserId())) {
+                return ResponseUtil.error("您不是圈主或管理员, 无权进行踢人操作.");
+            }
+
+            int delCnt = circleMemberService.delByCircleIdAndMemberUserId(circleId, memberUserId);
+            delCnt = circleAdminService.delByCircleIdAndAdminUserId(circleId, memberUserId);
+
+            return ResponseUtil.success();
+        } catch(Exception e) {
+            e.printStackTrace();
             return ResponseUtil.error("系统异常, 请稍后重试。");
         }
     }

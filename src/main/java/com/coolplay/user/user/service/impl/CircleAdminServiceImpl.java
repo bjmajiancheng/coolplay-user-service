@@ -88,4 +88,12 @@ public class CircleAdminServiceImpl extends BaseService<CircleAdminModel> implem
 
 		return circleAdminMapper.findByCircleId(circleId);
 	}
+
+	public int delByCircleIdAndAdminUserId(Integer circleId, Integer adminUserId) {
+		if(circleId == null || adminUserId == null) {
+			return 0;
+		}
+
+		return circleAdminMapper.delByCircleIdAndAdminUserId(circleId, adminUserId);
+	}
 }

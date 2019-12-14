@@ -59,5 +59,9 @@
 				#{item}
 			</foreach>
 	</select>
+
+	<delete id="delByCircleIdAndAdminUserId">
+		DELETE FROM d_circle_admin where circle_id = #{circleId} AND admin_user_id = #{adminUserId}
+	</delete>
 </mapper>
 
