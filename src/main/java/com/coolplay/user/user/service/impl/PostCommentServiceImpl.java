@@ -94,6 +94,10 @@ public class PostCommentServiceImpl extends BaseService<PostCommentModel> implem
 			if(!commentUserIds.contains(postCommentModel.getCommentUserId())) {
 				commentUserIds.add(postCommentModel.getCommentUserId());
 			}
+
+			if(!commentUserIds.contains(postCommentModel.getReplyUserId())) {
+				commentUserIds.add(postCommentModel.getReplyUserId());
+			}
 		}
 
 		Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(commentUserIds);
@@ -105,6 +109,12 @@ public class PostCommentServiceImpl extends BaseService<PostCommentModel> implem
 			if(commentUserModel != null) {
 				postComment.setCommentNickName(commentUserModel.getNickName());
 				postComment.setCommentHeadImage(commentUserModel.getHeadImage());
+			}
+
+			UserModel replyUserModel = userMap.get(postComment.getReplyUserId());
+			if(replyUserModel != null) {
+				postComment.setReplyNickName(replyUserModel.getNickName());
+				postComment.setReplyHeadImage(replyUserModel.getHeadImage());
 			}
 
 			if(postComment.getCommentLevel() == 1) {

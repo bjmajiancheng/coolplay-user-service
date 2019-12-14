@@ -85,6 +85,7 @@
         <intercept-url pattern="/api/circle/post/list" access="permitAll"/>
         <intercept-url pattern="/api/circle/post/postDetail" access="permitAll"/>
         <intercept-url pattern="/api/circle/post/detail" access="permitAll"/>
+        <intercept-url pattern="/api/circle/post/getCommentList" access="permitAll"/>
         <intercept-url pattern="/api/circle/circle/list" access="permitAll"/>
         <intercept-url pattern="/api/circle/circle/circleDetail" access="permitAll"/>
         <intercept-url pattern="/api/base/coolplayBase/list" access="permitAll"/>

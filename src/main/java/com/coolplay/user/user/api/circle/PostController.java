@@ -406,6 +406,27 @@ public class PostController {
         }
     }
 
+    /**
+     * 根据帖子获取帖子评论信息
+     *
+     * @param postId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getCommentList", method = RequestMethod.POST)
+    public Result getPostComments(@RequestParam("postId") Integer postId) {
+        try {
+            List<PostCommentModel> postComments = postCommentService.findByPostId(postId);
+
+            return ResponseUtil.success(Collections.singletonMap("commentList", postComments));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
     @ResponseBody
     @RequestMapping(value = "/sharePost", method = RequestMethod.POST)
     public Result sharePost(HttpServletResponse response, @RequestParam("id") Integer id) {

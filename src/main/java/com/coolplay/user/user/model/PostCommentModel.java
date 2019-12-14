@@ -43,6 +43,9 @@ public class PostCommentModel extends Sortable {
 	@Column(name = "post_comment_id")
 	private Integer postCommentId;//"当评论级别为2时，指定回复帖子ID"
 
+	@Column(name = "reply_user_id")
+	private Integer replyUserId;//"回复人"
+
 	@Column(name = "is_del")
 	private Integer isDel;//"是否删除（0：未删除，1：已删除）"
 
@@ -59,6 +62,12 @@ public class PostCommentModel extends Sortable {
 
 	@Transient
 	private String commentHeadImage = "";
+
+	@Transient
+	private String replyNickName = "";
+
+	@Transient
+	private String replyHeadImage = "";
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -107,7 +116,15 @@ public class PostCommentModel extends Sortable {
 	public Integer getPostCommentId() {
 		return this.postCommentId;
 	}
-		
+
+	public Integer getReplyUserId() {
+		return replyUserId;
+	}
+
+	public void setReplyUserId(Integer replyUserId) {
+		this.replyUserId = replyUserId;
+	}
+
 	public void setIsDel(Integer isDel) {
 		this.isDel = isDel;
 	}
@@ -146,6 +163,22 @@ public class PostCommentModel extends Sortable {
 
 	public void setCommentHeadImage(String commentHeadImage) {
 		this.commentHeadImage = commentHeadImage;
+	}
+
+	public String getReplyNickName() {
+		return replyNickName;
+	}
+
+	public void setReplyNickName(String replyNickName) {
+		this.replyNickName = replyNickName;
+	}
+
+	public String getReplyHeadImage() {
+		return replyHeadImage;
+	}
+
+	public void setReplyHeadImage(String replyHeadImage) {
+		this.replyHeadImage = replyHeadImage;
 	}
 }
 
