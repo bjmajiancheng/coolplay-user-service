@@ -50,6 +50,11 @@
 	<delete id="delByUserIdAndFansUserId">
 		DELETE FROM d_user_fans where user_id = #{userId} AND fans_user_id = #{fansUserId}
 	</delete>
+
+	<select id="findByUserIdAndFansUserId" resultMap="UserFans">
+		SELECT <include refid="columns"/> FROM d_user_fans
+		WHERE user_id = #{userId} AND fans_user_id = #{fansUserId}
+	</select>
 	
 </mapper>
 

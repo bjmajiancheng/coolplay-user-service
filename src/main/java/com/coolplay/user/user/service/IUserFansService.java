@@ -63,4 +63,6 @@ public interface IUserFansService extends IBaseService<UserFansModel> {
      * @return
      */
 	public int delByUserIdAndFansUserId(Integer userId, Integer fansUserId);
+
+	public List<UserFansModel> findByUserIdAndFansUserId(Integer userId, Integer fansUserId);
 }

@@ -151,4 +151,9 @@ public class UserFansServiceImpl extends BaseService<UserFansModel> implements I
 
 		return userFansMapper.delByUserIdAndFansUserId(userId, fansUserId);
 	}
+
+
+	public List<UserFansModel> findByUserIdAndFansUserId(Integer userId, Integer fansUserId) {
+		return userFansMapper.findByUserIdAndFansUserId(userId, fansUserId);
+	}
 }

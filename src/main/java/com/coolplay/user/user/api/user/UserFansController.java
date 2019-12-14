@@ -191,6 +191,12 @@ public class UserFansController {
         }
 
         try {
+            //根据用户 和 粉丝获取数据
+            List<UserFansModel> userFansList = userFansService.findByUserIdAndFansUserId(userId, SecurityUtil.getCurrentUserId());
+            if(CollectionUtils.isNotEmpty(userFansList)) {
+                return ResponseUtil.error("此账户已关注, 禁止重复关注。");
+            }
+
             UserFansModel userFansModel = new UserFansModel();
             userFansModel.setUserId(userId);
             userFansModel.setFansUserId(SecurityUtil.getCurrentUserId());
