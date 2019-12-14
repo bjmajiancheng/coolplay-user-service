@@ -48,7 +48,7 @@
           "type": "string",
           "index": "not_analyzed"
         },
-        "ctimeStramp": {
+        "ctimeStamp": {
           "type": "integer"
         }
       }

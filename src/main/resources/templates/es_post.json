@@ -51,7 +51,7 @@
         "location": {
           "type": "geo_point"
         },
-        "ctimeStramp": {
+        "ctimeStamp": {
           "type": "integer"
         }
       }
