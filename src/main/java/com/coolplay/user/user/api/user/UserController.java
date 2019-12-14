@@ -835,14 +835,20 @@ public class UserController {
     public Result list(@RequestBody UserModel userModel) {
 
         try {
-            userModel.setNickName(userModel.getQueryStr());
+            List<Integer> labelUserIds = userService.findByLabelName("%" + userModel.getQueryStr() + "%");
 
-            List<Integer> userIds = userService.findByLabelName("%" + userModel.getQueryStr() + "%");
-            userModel.setUserIds(userIds);
+            //模糊查询
+            List<Integer> userIds = userService.findByNickName("%" + userModel.getQueryStr() + "%");
 
-            /*PageInfo<UserModel> pageInfo = this.userService.selectByFilterAndPage(userModel, userModel.getPageNum(), userModel.getPageSize());*/
+            Set<Integer> allUserIds = new HashSet<Integer>();
+            if(CollectionUtils.isNotEmpty(labelUserIds)) {
+                allUserIds.addAll(labelUserIds);
+            }
+            if(CollectionUtils.isNotEmpty(userIds)) {
+                allUserIds.addAll(userIds);
+            }
 
-            PageInfo<UserModel> pageInfo = this.userService.selectByNickNameAndUserIds(userModel.getQueryStr(), userIds, userModel.getPageNum(), userModel.getPageSize());
+            PageInfo<UserModel> pageInfo = this.userService.selectByUserIds(new ArrayList<Integer>(allUserIds), userModel.getPageNum(), userModel.getPageSize());
 
             return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
         } catch(Exception e) {

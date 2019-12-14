@@ -5,6 +5,7 @@ import com.coolplay.user.core.model.UserModel;
 import com.coolplay.user.security.dto.FunctionDto;
 import com.github.pagehelper.PageInfo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -49,5 +50,7 @@ public interface IUserService extends IBaseService<UserModel> {
 
     public List<Integer> findByLabelName(String labelName);
 
-    public PageInfo<UserModel> selectByNickNameAndUserIds(String queryStr, List<Integer> userIds, Integer pageNum, Integer pageSize);
+    public List<Integer> findByNickName(String nickName);
+
+    public PageInfo<UserModel> selectByUserIds(List<Integer> integers, Integer pageNum, Integer pageSize);
 }

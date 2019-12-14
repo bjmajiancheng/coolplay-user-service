@@ -146,6 +146,10 @@
 		INNER JOIN d_label l ON l.id = ul.label_id
 		WHERE l.label_name LIKE '${labelName}' AND l.is_del = 0 AND l.status = 1
 	</select>
+
+	<select id="findByNickName" resultType="java.lang.Integer">
+		SELECT user_id FROM d_user WHERE nick_name LIKE '${nickName}'
+	</select>
 	
 </mapper>
 

@@ -62,13 +62,14 @@ public class UserServiceImpl extends BaseService<UserModel> implements IUserServ
 
 
     @Override
-    public PageInfo<UserModel> selectByNickNameAndUserIds(String queryStr, List<Integer> userIds, Integer pageNum, Integer pageSize) {
+    public PageInfo<UserModel> selectByUserIds(List<Integer> userIds, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize, true, false, null);
         Example example = new Example(UserModel.class);
         Example.Criteria criteria = example.createCriteria();
 
-        criteria.orLike("nickName", "%" + queryStr + "%");
-        criteria.orIn("id", userIds);
+        if(CollectionUtils.isNotEmpty(userIds)) {
+            criteria.andIn("id", userIds);
+        }
         criteria.andEqualTo("enabled", 1);
 
         List<UserModel> list = getMapper().selectByExample(example);
@@ -164,5 +165,9 @@ public class UserServiceImpl extends BaseService<UserModel> implements IUserServ
 
     public List<Integer> findByLabelName(String labelName) {
         return userMapper.findByLabelName(labelName);
+    }
+
+    public List<Integer> findByNickName(String nickName) {
+        return userMapper.findByNickName(nickName);
     }
 }
