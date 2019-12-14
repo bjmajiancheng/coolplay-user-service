@@ -273,7 +273,7 @@ public class CircleController {
                 labelList.addAll(userLabelList);
             }*/
 
-            List<LabelModel> labelList = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId());
+            List<LabelModel> labelList = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), 3);
 
             return ResponseUtil.success(Collections.singletonMap("labelList", labelList));
 

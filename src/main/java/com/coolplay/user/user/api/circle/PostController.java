@@ -236,7 +236,7 @@ public class PostController {
 
             List<CircleModel> circleModels = circleService.findByIds(allCircleIds);
 
-            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId());
+            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), 4);
             //List<LabelModel> labelModels = labelService.find(Collections.singletonMap("isDel", 0));
             Map<String, Object> result = new HashMap<String, Object>();
             result.put("circleList", circleModels);

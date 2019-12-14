@@ -856,7 +856,7 @@ public class UserController {
     public Result labelList() {
 
         try{
-            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId());
+            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), 2);
 
             return ResponseUtil.success(Collections.singletonMap("labelList", labelModels));
         } catch(Exception e) {
