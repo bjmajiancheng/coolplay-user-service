@@ -132,6 +132,8 @@ public class CircleController {
                         tmpCircleModel.setIsCollect(1);
                     }
 
+                    circleModel.setIsOwner((SecurityUtil.getCurrentUserId() == circleModel.getUserId()) ? 1 : 0);
+
                     Integer reviewMemberCnt = reviewMemberCntMap.get(tmpCircleModel.getId());
                     if (reviewMemberCnt != null) {
                         tmpCircleModel.setReviewMemberCnt(reviewMemberCnt);
