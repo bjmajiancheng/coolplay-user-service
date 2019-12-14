@@ -55,7 +55,7 @@
         <property name="jobDetail" ref="minuteEsBaseDataFactoryBean"></property>
         <!-- 设置quartz任务执行表达式 ,每隔三秒执行一次任务-->
         <property name="cronExpression" value="0 0/1 * * * ?"></property>
-    </bean>s
+    </bean>
 
     <!-- 调度工厂 -->
     <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
