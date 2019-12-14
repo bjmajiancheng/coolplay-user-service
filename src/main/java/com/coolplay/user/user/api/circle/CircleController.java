@@ -13,6 +13,9 @@ import com.coolplay.user.user.model.*;
 import com.coolplay.user.user.service.*;
 import com.coolplay.user.security.service.IUserService;
 import com.github.pagehelper.PageInfo;
+import com.wutuobang.search.bean.EsCircleBean;
+import com.wutuobang.search.bean.EsPostBean;
+import com.wutuobang.search.service.IIndexSaveService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +73,9 @@ public class CircleController {
 
     @Autowired
     private IUserFansService userFansService;
+
+    @Autowired
+    private IIndexSaveService indexSaveService;
 
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
@@ -306,6 +312,7 @@ public class CircleController {
                 }
             }*/
 
+            List<String> labelNames = new ArrayList<String>();
             if(CollectionUtils.isNotEmpty(circleModel.getLabelList())) {
                 for(LabelModel labelModel : circleModel.getLabelList()) {
                     Integer labelId = labelModel.getId();
@@ -328,6 +335,8 @@ public class CircleController {
                         labelId = labelModel.getId();
                     }
 
+                    labelNames.add(labelModel.getLabelName());
+
                     CircleLabelModel circleLabelModel = new CircleLabelModel();
                     circleLabelModel.setLabelId(labelId);
                     circleLabelModel.setCircleId(circleModel.getId());
@@ -335,6 +344,14 @@ public class CircleController {
                     circleLabelService.saveNotNull(circleLabelModel);
                 }
             }
+
+            EsCircleBean esCircleBean = new EsCircleBean();
+            esCircleBean.setId(String.valueOf(circleModel.getId()));
+            esCircleBean.setCircleName(circleModel.getCircleName());
+            esCircleBean.setUserId(circleModel.getUserId());
+            esCircleBean.setCtimeStamp((int)(new Date().getTime() / 1000));
+            esCircleBean.setLabelNames(labelNames);
+            indexSaveService.upsertIndexData("es_circle", esCircleBean.getId(), JSON.toJSONString(esCircleBean));
 
             return ResponseUtil.success();
 
@@ -397,6 +414,7 @@ public class CircleController {
 
             int delCnt = circleLabelService.delByCircleId(updateCircleModel.getId());
 
+            List<String> labelNames = new ArrayList<String>();
             if(CollectionUtils.isNotEmpty(updateCircleModel.getLabelList())) {
                 for(LabelModel labelModel : updateCircleModel.getLabelList()) {
                     Integer labelId = labelModel.getId();
@@ -424,6 +442,8 @@ public class CircleController {
                     circleLabelModel.setCircleId(circleModel.getId());
 
                     circleLabelService.saveNotNull(circleLabelModel);
+
+                    labelNames.add(labelModel.getLabelName());
                 }
             }
             /*if (CollectionUtils.isNotEmpty(updateCircleModel.getLabelIds())) {
@@ -437,6 +457,14 @@ public class CircleController {
                     circleLabelService.saveNotNull(circleLabelModel);
                 }
             }*/
+
+            EsCircleBean esCircleBean = new EsCircleBean();
+            esCircleBean.setId(String.valueOf(circleModel.getId()));
+            esCircleBean.setCircleName(circleModel.getCircleName());
+            esCircleBean.setUserId(circleModel.getUserId());
+            esCircleBean.setCtimeStamp((int)(new Date().getTime() / 1000));
+            esCircleBean.setLabelNames(labelNames);
+            indexSaveService.upsertIndexData("es_circle", esCircleBean.getId(), JSON.toJSONString(esCircleBean));
 
             return ResponseUtil.success();
 

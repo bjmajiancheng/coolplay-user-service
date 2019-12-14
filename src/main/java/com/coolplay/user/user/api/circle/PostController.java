@@ -11,6 +11,8 @@ import com.coolplay.user.security.utils.SecurityUtil;
 import com.coolplay.user.user.model.*;
 import com.coolplay.user.user.service.*;
 import com.github.pagehelper.PageInfo;
+import com.wutuobang.search.bean.EsPostBean;
+import com.wutuobang.search.service.IIndexSaveService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,6 +60,9 @@ public class PostController {
 
     @Autowired
     private IPostCommentService postCommentService;
+
+    @Autowired
+    private IIndexSaveService indexSaveService;
 
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
@@ -274,8 +279,11 @@ public class PostController {
                 }
             }
 
+            List<String> labelNames = new ArrayList<String>();
             if(CollectionUtils.isNotEmpty(postModel.getLabelList())) {
                 for(LabelModel labelModel : postModel.getLabelList()) {
+                    labelNames.add(labelModel.getLabelName());
+
                     Integer labelId = labelModel.getId();
                     if(labelId == null || labelId == 0) {
                         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
@@ -302,6 +310,19 @@ public class PostController {
                     postLabelService.saveNotNull(postLabelModel);
                 }
             }
+
+            Map<String, Object> location = new HashMap<String, Object>();
+            location.put("lon", postModel.getLongitude());
+            location.put("lat", postModel.getLatitude());
+            EsPostBean esPostBean = new EsPostBean();
+            esPostBean.setId(String.valueOf(postModel.getId()));
+            esPostBean.setPostTitle(postModel.getPostTitle());
+            esPostBean.setUserId(postModel.getUserId());
+            esPostBean.setCtimeStamp((int)(new Date().getTime() / 1000));
+            esPostBean.setLocation(location);
+            esPostBean.setLabelNames(labelNames);
+            indexSaveService.upsertIndexData("es_post", esPostBean.getId(), JSON.toJSONString(esPostBean));
+
 
             /*if (CollectionUtils.isNotEmpty(postModel.getLabelIds())) {
                 for (Integer labelId : postModel.getLabelIds()) {
