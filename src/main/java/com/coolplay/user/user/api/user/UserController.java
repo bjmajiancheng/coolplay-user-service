@@ -688,7 +688,7 @@ public class UserController {
                         saveLabelModel.setType(2);
                         saveLabelModel.setStatus(1);
                         saveLabelModel.setIsDel(0);
-                        saveLabelModel.setCatId(Constant.USER_LABEL_CATEGORY);
+                        saveLabelModel.setCatId(CommonConstant.USER_LABEL_CATEGORY);
                         labelService.saveNotNull(saveLabelModel);
 
                         labelId = saveLabelModel.getId();
@@ -858,7 +858,7 @@ public class UserController {
 
         try{
             List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(),
-                    Constant.USER_LABEL_CATEGORY);
+                    CommonConstant.USER_LABEL_CATEGORY);
 
             return ResponseUtil.success(Collections.singletonMap("labelList", labelModels));
         } catch(Exception e) {

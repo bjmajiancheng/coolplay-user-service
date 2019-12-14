@@ -1,6 +1,7 @@
 package com.coolplay.user.user.api.circle;
 
 import com.alibaba.fastjson.JSON;
+import com.coolplay.user.common.constant.CommonConstant;
 import com.coolplay.user.common.utils.PageConvertUtil;
 import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
@@ -237,7 +238,7 @@ public class PostController {
 
             List<CircleModel> circleModels = circleService.findByIds(allCircleIds);
 
-            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), Constant.POST_LABEL_CATEGORY);
+            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), CommonConstant.POST_LABEL_CATEGORY);
             //List<LabelModel> labelModels = labelService.find(Collections.singletonMap("isDel", 0));
             Map<String, Object> result = new HashMap<String, Object>();
             result.put("circleList", circleModels);
@@ -296,7 +297,7 @@ public class PostController {
                         saveLabelModel.setType(2);
                         saveLabelModel.setStatus(1);
                         saveLabelModel.setIsDel(0);
-                        saveLabelModel.setCatId(Constant.POST_LABEL_CATEGORY);
+                        saveLabelModel.setCatId(CommonConstant.POST_LABEL_CATEGORY);
                         labelService.saveNotNull(saveLabelModel);
 
                         labelId = saveLabelModel.getId();

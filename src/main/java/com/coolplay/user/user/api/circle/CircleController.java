@@ -1,6 +1,7 @@
 package com.coolplay.user.user.api.circle;
 
 import com.alibaba.fastjson.JSON;
+import com.coolplay.user.common.constant.CommonConstant;
 import com.coolplay.user.common.utils.PageConvertUtil;
 import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
@@ -276,7 +277,7 @@ public class CircleController {
                 labelList.addAll(userLabelList);
             }*/
 
-            List<LabelModel> labelList = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), Constant.CIRCLE_LABEL_CATEGORY);
+            List<LabelModel> labelList = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(), CommonConstant.CIRCLE_LABEL_CATEGORY);
 
             return ResponseUtil.success(Collections.singletonMap("labelList", labelList));
 
@@ -329,7 +330,7 @@ public class CircleController {
                         saveLabelModel.setType(2);
                         saveLabelModel.setStatus(1);
                         saveLabelModel.setIsDel(0);
-                        saveLabelModel.setCatId(Constant.CIRCLE_LABEL_CATEGORY);
+                        saveLabelModel.setCatId(CommonConstant.CIRCLE_LABEL_CATEGORY);
                         labelService.saveNotNull(saveLabelModel);
 
                         labelId = saveLabelModel.getId();
@@ -431,7 +432,7 @@ public class CircleController {
                         saveLabelModel.setType(2);
                         saveLabelModel.setStatus(1);
                         saveLabelModel.setIsDel(0);
-                        saveLabelModel.setCatId(Constant.CIRCLE_LABEL_CATEGORY);
+                        saveLabelModel.setCatId(CommonConstant.CIRCLE_LABEL_CATEGORY);
                         labelService.saveNotNull(saveLabelModel);
 
                         labelId = saveLabelModel.getId();
