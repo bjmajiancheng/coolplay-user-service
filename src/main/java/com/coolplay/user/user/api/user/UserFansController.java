@@ -70,7 +70,7 @@ public class UserFansController {
 
                 List<Integer> followUserIds = followMap.get(SecurityUtil.getCurrentUserId());
                 for (UserModel fansUserModel : fansUserModels) {
-                    if (CollectionUtils.isEmpty(followUserIds) && followUserIds.contains(fansUserModel.getId())) {
+                    if (CollectionUtils.isNotEmpty(followUserIds) && followUserIds.contains(fansUserModel.getId())) {
                         fansUserModel.setIsFans(1);
                     }
                 }
