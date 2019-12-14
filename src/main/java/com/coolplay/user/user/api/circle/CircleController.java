@@ -95,7 +95,7 @@ public class CircleController {
                 List<Integer> userIds = new ArrayList<Integer>();
                 List<Integer> circleIds = new ArrayList<Integer>();
                 for (CircleModel tmpCircleModel : circleModels) {
-                    if (userIds.contains(tmpCircleModel.getUserId())) {
+                    if (!userIds.contains(tmpCircleModel.getUserId())) {
                         userIds.add(tmpCircleModel.getUserId());
                     }
 
