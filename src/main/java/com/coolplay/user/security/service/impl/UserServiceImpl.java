@@ -60,6 +60,27 @@ public class UserServiceImpl extends BaseService<UserModel> implements IUserServ
         return new PageInfo<>(list);
     }
 
+
+    @Override
+    public PageInfo<UserModel> selectByNickNameAndUserIds(String queryStr, List<Integer> userIds, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true, false, null);
+        Example example = new Example(UserModel.class);
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.orLike("nickName", "%" + queryStr + "%");
+        criteria.orIn("id", userIds);
+        criteria.andEqualTo("enabled", 1);
+
+        List<UserModel> list = getMapper().selectByExample(example);
+
+        if(CollectionUtils.isNotEmpty(list)) {
+            for (UserModel user : list) {
+                user.setPassword("");
+            }
+        }
+        return new PageInfo<>(list);
+    }
+
     @Override
     public List<UserModel> selectByFilter(UserModel userModel) {
         Example example = new Example(UserModel.class);

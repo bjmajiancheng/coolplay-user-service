@@ -834,20 +834,14 @@ public class UserController {
     public Result list(@RequestBody UserModel userModel) {
 
         try {
-            if(userModel.getType() == 1) {
-                userModel.setNickName(userModel.getQueryStr());
-            } else if(userModel.getType() == 2) {
-                List<Integer> userIds = userService.findByLabelName("%" + userModel.getQueryStr() + "%");
-                userModel.setUserIds(userIds);
-            } else {
-                Map map = new HashMap();
-                map.put("total", 0);
-                map.put("rows", Collections.emptyList());
+            userModel.setNickName(userModel.getQueryStr());
 
-                return ResponseUtil.success(map);
-            }
+            List<Integer> userIds = userService.findByLabelName("%" + userModel.getQueryStr() + "%");
+            userModel.setUserIds(userIds);
 
-            PageInfo<UserModel> pageInfo = this.userService.selectByFilterAndPage(userModel, userModel.getPageNum(), userModel.getPageSize());
+            /*PageInfo<UserModel> pageInfo = this.userService.selectByFilterAndPage(userModel, userModel.getPageNum(), userModel.getPageSize());*/
+
+            PageInfo<UserModel> pageInfo = this.userService.selectByNickNameAndUserIds(userModel.getQueryStr(), userIds, userModel.getPageNum(), userModel.getPageSize());
 
             return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
         } catch(Exception e) {

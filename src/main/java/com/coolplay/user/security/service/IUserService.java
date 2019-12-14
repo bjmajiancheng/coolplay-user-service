@@ -48,4 +48,6 @@ public interface IUserService extends IBaseService<UserModel> {
     public UserModel findById(Integer id);
 
     public List<Integer> findByLabelName(String labelName);
+
+    public PageInfo<UserModel> selectByNickNameAndUserIds(String queryStr, List<Integer> userIds, Integer pageNum, Integer pageSize);
 }
