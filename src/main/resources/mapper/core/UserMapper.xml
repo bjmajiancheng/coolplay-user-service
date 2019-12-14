@@ -148,7 +148,7 @@
 	</select>
 
 	<select id="findByNickName" resultType="java.lang.Integer">
-		SELECT user_id FROM d_user WHERE nick_name LIKE '${nickName}'
+		SELECT id FROM d_user WHERE nick_name LIKE '${nickName}'
 	</select>
 	
 </mapper>
