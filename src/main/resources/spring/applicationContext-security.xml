@@ -35,6 +35,8 @@
                 class="com.coolplay.user.security.security.HttpAuthenticationEntryPoint">
     </beans:bean>
 
+    <beans:bean id="multiBodyFilter"
+                class="com.coolplay.user.security.security.MultiBodyFilter"/>
 
     <!-- 自定义登录失败handler -->
     <beans:bean id="osHttpAuthenticationFailureHandler"
