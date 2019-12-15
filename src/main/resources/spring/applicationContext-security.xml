@@ -99,7 +99,7 @@
         <!-- 修饰头部 -->
         <custom-filter ref="headerFilter" after="FIRST"/>
         <!-- 打印请求头信息 -->
-        <!--<custom-filter ref="multiBodyFilter" before="FIRST"/>-->
+        <custom-filter ref="multiBodyFilter" after="LAST"/>
         <!-- 权限认证失败后 -->
         <access-denied-handler ref="osHttpAccessDeniedHandler"/>
 
