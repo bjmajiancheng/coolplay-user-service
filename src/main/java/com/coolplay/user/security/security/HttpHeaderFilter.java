@@ -23,8 +23,8 @@ public class HttpHeaderFilter implements Filter {
         //response.setHeader("Access-Control-Allow-Headers",
         //"Origin, X-Requested-With, Content-Type, Accept, " + tokenHeader);
 
-        System.out.println(String.format("前端 请求时间:%s, 请求URL:%s, 请求参数:%s.",
-                DateUtil.DateToString(new Date(), DateStyle.YYYY_MM_DD_HH_MM_SS), req.getRemoteAddr(),
+        System.out.println(String.format("前端 请求时间:%s, 请求参数:%s.",
+                DateUtil.DateToString(new Date(), DateStyle.YYYY_MM_DD_HH_MM_SS),
                 JSON.toJSONString(req.getParameterMap())));
         chain.doFilter(req, res);
     }
