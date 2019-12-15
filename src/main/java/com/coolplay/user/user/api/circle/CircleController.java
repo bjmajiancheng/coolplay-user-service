@@ -238,20 +238,27 @@ public class CircleController {
 
             saveCnt = circleMemberReviewService.saveNotNull(circleMemberReviewModel);
 
-            MessageModel messageModel = new MessageModel();
-            messageModel.setMessageName("申请加入圈子");
-            messageModel.setMessageContent(String.format("%s申请加入圈子-%s, 申请原因:%s, 请审批~", securityUser.getDisplayName(), circleModel.getCircleName(), applicationReason));
-            messageModel.setMessageType(1);
-            messageModel.setUserId(circleModel.getUserId());
+            Set<Integer> allAdminUserIds = new HashSet<Integer>();
+            allAdminUserIds.add(circleModel.getUserId());
+            if(CollectionUtils.isNotEmpty(adminUserIds)) {
+                allAdminUserIds.addAll(adminUserIds);
+            }
 
+            for(Integer adminUserId : allAdminUserIds) {
+                MessageModel messageModel = new MessageModel();
+                messageModel.setMessageName("申请加入圈子");
+                messageModel.setMessageContent(String.format("%s申请加入圈子-%s, 申请原因:%s, 请审批~", securityUser.getDisplayName(), circleModel.getCircleName(), applicationReason));
+                messageModel.setMessageType(1);
+                messageModel.setUserId(adminUserId);
 
-            ReviewMessageDto reviewMessageDto = new ReviewMessageDto();
-            reviewMessageDto.setType(ReviewMessageDto.APPLICATION_CIRCLE);
-            reviewMessageDto.setTypeId(id);
-            reviewMessageDto.setApplicationUserId(currUserId);
-            reviewMessageDto.setUserId(currUserId);
-            messageModel.setMessageUrl(JSON.toJSONString(reviewMessageDto));
-            messageService.saveNotNull(messageModel);
+                ReviewMessageDto reviewMessageDto = new ReviewMessageDto();
+                reviewMessageDto.setType(ReviewMessageDto.APPLICATION_CIRCLE);
+                reviewMessageDto.setTypeId(id);
+                reviewMessageDto.setApplicationUserId(currUserId);
+                reviewMessageDto.setUserId(currUserId);
+                messageModel.setMessageUrl(JSON.toJSONString(reviewMessageDto));
+                messageService.saveNotNull(messageModel);
+            }
 
             return ResponseUtil.success("申请加入圈子成功");
 
@@ -699,7 +706,7 @@ public class CircleController {
                 circleMemberReviewModel.setCircleId(id);
                 circleMemberReviewModel.setInviteUserId(SecurityUtil.getCurrentUserId());
                 circleMemberReviewModel.setMemberUserId(userId);
-                circleMemberReviewModel.setReviewStatus(0);
+                circleMemberReviewModel.setReviewStatus(2);
                 circleMemberReviewModel.setApplicationReason(applicationReason);
 
                 int saveCnt = circleMemberReviewService.saveNotNull(circleMemberReviewModel);
@@ -726,13 +733,6 @@ public class CircleController {
                 saveCnt = messageService.saveNotNull(messageModel);
 
             } else { //普通成员邀请加入圈子
-                CircleMemberReviewModel circleMemberReviewModel = new CircleMemberReviewModel();
-                circleMemberReviewModel.setCircleId(id);
-                circleMemberReviewModel.setInviteUserId(SecurityUtil.getCurrentUserId());
-                circleMemberReviewModel.setMemberUserId(userId);
-                circleMemberReviewModel.setReviewStatus(0);
-                circleMemberReviewModel.setApplicationReason(applicationReason);
-
                 Map<Integer, UserModel> userModelMap = userService
                         .findUserMapByUserIds(Arrays.asList(new Integer[] { SecurityUtil.getCurrentUserId(), userId }));
 
@@ -758,6 +758,12 @@ public class CircleController {
                     int saveCnt = messageService.saveNotNull(messageModel);
                 }
 
+                CircleMemberReviewModel circleMemberReviewModel = new CircleMemberReviewModel();
+                circleMemberReviewModel.setCircleId(id);
+                circleMemberReviewModel.setInviteUserId(SecurityUtil.getCurrentUserId());
+                circleMemberReviewModel.setMemberUserId(userId);
+                circleMemberReviewModel.setReviewStatus(0);
+                circleMemberReviewModel.setApplicationReason(applicationReason);
                 int saveCnt = circleMemberReviewService.saveNotNull(circleMemberReviewModel);
 
                 CircleMemberModel circleMemberModel = new CircleMemberModel();
