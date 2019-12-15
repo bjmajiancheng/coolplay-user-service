@@ -182,11 +182,11 @@ public class PostController {
                 }
             } else if(type == 2){
                 int updateCnt = postService.columnPlusNumber(id, "like_cnt", -1);
+
                 List<UserLikeModel> userLikeModels = userLikeService.selectByFilter(userLikeModel);
                 if(CollectionUtils.isNotEmpty(userLikeModels)) {
                     for(UserLikeModel tmpUserLikeModel : userLikeModels) {
-                        tmpUserLikeModel.setIsDel(1);
-                        userLikeService.updateNotNull(tmpUserLikeModel);
+                        userLikeService.delete(tmpUserLikeModel);
                     }
                 }
             }

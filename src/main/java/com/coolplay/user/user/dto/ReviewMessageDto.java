@@ -19,6 +19,7 @@ public class ReviewMessageDto implements Serializable {
      */
     public static final String INVITE_CIRCLE = "invite_circle";
 
+
     private String type;//申请类型
 
     private Integer typeId;//申请业务ID
