@@ -26,8 +26,6 @@ import java.io.IOException;
  */
 public class HttpAuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final static Logger logger = LoggerFactory.getLogger(HttpAuthenticationTokenFilter.class);
-
     @Value("${security.token.header}")
     private String tokenHeader;
 

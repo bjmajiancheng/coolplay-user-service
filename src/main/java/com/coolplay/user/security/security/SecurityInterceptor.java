@@ -23,8 +23,6 @@ public class SecurityInterceptor extends AbstractSecurityInterceptor implements
                          FilterChain chain) throws IOException, ServletException {
         FilterInvocation fi = new FilterInvocation(request, response, chain);
 
-        System.out.println("222222222" + JSON.toJSONString(request.getParameterMap()));
-
         invoke(fi);
     }
 

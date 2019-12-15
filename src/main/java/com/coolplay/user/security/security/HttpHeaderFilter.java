@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class HttpHeaderFilter implements Filter {
 
-    private final static Logger logger = LoggerFactory.getLogger(HttpAuthenticationTokenFilter.class);
+    private final static Logger logger = LoggerFactory.getLogger(HttpHeaderFilter.class);
 
     @Value("${security.token.header}")
     private String tokenHeader;
@@ -22,7 +22,7 @@ public class HttpHeaderFilter implements Filter {
         //response.setHeader("Access-Control-Allow-Headers",
         //"Origin, X-Requested-With, Content-Type, Accept, " + tokenHeader);
 
-        System.out.println("11111111111" + JSON.toJSONString(req.getParameterMap()));
+        logger.info("前端请求参数:{}.", JSON.toJSONString(req.getParameterMap()));
         chain.doFilter(req, res);
     }
 
