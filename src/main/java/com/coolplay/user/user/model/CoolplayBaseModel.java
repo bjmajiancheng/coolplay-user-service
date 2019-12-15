@@ -135,6 +135,9 @@ public class CoolplayBaseModel extends Sortable {
 
 	@Transient
 	private Integer isCollect = 0;//是否收藏 0:为收藏 1:已收藏
+
+	@Transient
+	private Integer baseId;//基地ID
 		
 	public void setId(Integer id) {
 		this.id = id;
@@ -422,6 +425,14 @@ public class CoolplayBaseModel extends Sortable {
 
 	public void setIsCollect(Integer isCollect) {
 		this.isCollect = isCollect;
+	}
+
+	public Integer getBaseId() {
+		return baseId;
+	}
+
+	public void setBaseId(Integer baseId) {
+		this.baseId = baseId;
 	}
 }
 

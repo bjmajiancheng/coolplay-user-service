@@ -51,6 +51,10 @@ public class CoolplayBaseController {
         try {
             coolplayBaseModel.setIsClose(0);
             coolplayBaseModel.setIsDel(0);
+
+            coolplayBaseModel.setCompanyId(coolplayBaseModel.getCompanyId());
+            coolplayBaseModel.setId(coolplayBaseModel.getBaseId());
+
             BigDecimal currPosX = coolplayBaseModel.getPosX() == null ? BigDecimal.ZERO : coolplayBaseModel.getPosX();
             BigDecimal currPosY = coolplayBaseModel.getPosY() == null ? BigDecimal.ZERO : coolplayBaseModel.getPosY();
 
@@ -93,6 +97,7 @@ public class CoolplayBaseController {
             companyModel.setStatus(1);
             companyModel.setReviewStatus(1);
             companyModel.setIsDel(0);
+            companyModel.setId(coolplayBaseModel.getCompanyId());
             PageInfo<CompanyModel> companyModelPageInfo = companyService
                     .selectByFilterAndPage(companyModel, coolplayBaseModel.getPageNum(), coolplayBaseModel.getPageSize());
             List<CoolplayBaseModel> coolplayBaseModels = pageInfo.getList();

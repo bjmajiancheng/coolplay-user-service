@@ -131,8 +131,12 @@ public class PostController {
                 userCollectModel.setIsDel(0);
 
                 int saveCnt = userCollectService.insertIgnore(userCollectModel);
+
+                int updateCnt = postService.columnPlusNumber(id, "collect_cnt", 1);
             } else if(type == 2) {
                 int delCnt = userCollectService.delByUserIdAndCollectTypeInfo(SecurityUtil.getCurrentUserId(), 2, id);
+
+                int updateCnt = postService.columnPlusNumber(id, "collect_cnt", -1);
             }
 
             int collectCnt = userCollectService.findCntByCollectTypeAndCollectTypeId(2, id);
@@ -399,6 +403,7 @@ public class PostController {
                     postModel.setCommentList(postComments);
                 }
             }
+            int updateCnt = postService.columnPlusNumber(id, "read_cnt", 1);
 
             return ResponseUtil.success(postModel);
 
@@ -453,6 +458,8 @@ public class PostController {
         try {
             postCommentModel.setCommentUserId(SecurityUtil.getCurrentUserId());
             postCommentService.saveNotNull(postCommentModel);
+
+            int updateCnt = postService.columnPlusNumber(postCommentModel.getPostId(), "comment_cnt", 1);
 
             return ResponseUtil.success();
 

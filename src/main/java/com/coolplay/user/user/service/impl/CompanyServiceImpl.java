@@ -60,6 +60,10 @@ public class CompanyServiceImpl extends BaseService<CompanyModel> implements ICo
             criteria.andEqualTo("isDel", companyModel.getIsDel());
         }
 
+        if(companyModel.getId() != null) {
+            criteria.andEqualTo("id", companyModel.getId());
+        }
+
         if(StringUtils.isNotEmpty(companyModel.getSortWithOutOrderBy())) {
             example.setOrderByClause(companyModel.getSortWithOutOrderBy());
         }
