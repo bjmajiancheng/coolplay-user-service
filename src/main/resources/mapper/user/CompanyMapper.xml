@@ -23,6 +23,7 @@
 		<result property="businessLicenseUrl" column="business_license_url"/>
 		<result property="posX" column="pos_x"/>
 		<result property="posY" column="pos_y"/>
+		<result property="backgroudImg" column="backgroud_img"/>
         <result property="reviewStatus" column="review_status"/>
         <result property="readCnt" column="read_cnt"/>
         <result property="status" column="status"/>
@@ -35,7 +36,7 @@
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
 	    <![CDATA[
-        id ,company_full_name ,company_name ,contact_name ,contact_address ,contact_mobile ,company_desc , company_type ,major_project ,company_email ,legal_name ,legal_idcard ,idcard_positive_photo ,idcard_negative_photo ,business_license_url , pos_x, pos_y, review_status ,read_cnt ,status ,reject_reason ,is_del ,c_time, u_time
+        id ,company_full_name ,company_name ,contact_name ,contact_address ,contact_mobile ,company_desc , company_type ,major_project ,company_email ,legal_name ,legal_idcard ,idcard_positive_photo ,idcard_negative_photo ,business_license_url , pos_x, pos_y, backgroud_img, review_status ,read_cnt ,status ,reject_reason ,is_del ,c_time, u_time
 	    ]]>
 	</sql>
 

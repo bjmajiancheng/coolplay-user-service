@@ -75,6 +75,9 @@ public class CompanyModel extends Sortable {
 	@Column(name = "pos_y")
 	private BigDecimal posY;//基地y坐标
 
+	@Column(name = "backgroud_img")
+	private String backgroudImg;//背景图片
+
 	@Column(name = "review_status")
 	private Integer reviewStatus;//"浏览次数"
 
@@ -234,6 +237,14 @@ public class CompanyModel extends Sortable {
 
 	public void setPosY(BigDecimal posY) {
 		this.posY = posY;
+	}
+
+	public String getBackgroudImg() {
+		return backgroudImg;
+	}
+
+	public void setBackgroudImg(String backgroudImg) {
+		this.backgroudImg = backgroudImg;
 	}
 
 	public void setReviewStatus(Integer reviewStatus) {
