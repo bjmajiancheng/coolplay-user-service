@@ -29,19 +29,10 @@ public class MultiBodyFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String parameters = "";
 
-        if (BaseWebUtils.isFormPost(httpServletRequest)){
+        if (BaseWebUtils.isJsonPost(httpServletRequest)) {
             httpServletRequest = new MultiReadHttpServletRequest(httpServletRequest);
 
             parameters = BaseWebUtils.getParameters(httpServletRequest);
-        }else if (isPost(httpServletRequest)){
-            //文件上传请求，没必要缓存请求
-            if (request.getContentType().contains(MediaType.MULTIPART_FORM_DATA_VALUE)){
-
-            }else {
-                httpServletRequest = new MultiReadHttpServletRequest(httpServletRequest);
-
-                parameters = BaseWebUtils.getParameters(httpServletRequest);
-            }
         }
 
         System.out.println(String.format("前端 请求时间:[%s], 请求链接:[%s], 请求参数:%s, 请求body: %s.",

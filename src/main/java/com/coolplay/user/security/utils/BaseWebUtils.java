@@ -15,6 +15,8 @@ public class BaseWebUtils {
 
     private static final String FORM_CONTENT_TYPE = "application/x-www-form-urlencoded";
 
+    private static final String JSON_CONTENT_TYPE = "application/json";
+
 
     public static String getParameters(HttpServletRequest request){
         InputStream is = null;
@@ -39,6 +41,12 @@ public class BaseWebUtils {
     public static boolean isFormPost(HttpServletRequest request) {
         String contentType = request.getContentType();
         return (contentType != null && contentType.contains(FORM_CONTENT_TYPE) &&
+                HttpMethod.POST.matches(request.getMethod()));
+    }
+
+    public static boolean isJsonPost(HttpServletRequest request) {
+        String contentType = request.getContentType();
+        return (contentType != null && contentType.contains(JSON_CONTENT_TYPE) &&
                 HttpMethod.POST.matches(request.getMethod()));
     }
 }
