@@ -35,11 +35,8 @@
                 class="com.coolplay.user.security.security.HttpAuthenticationEntryPoint">
     </beans:bean>
 
-    <!--<beans:bean id="multiBodyFilter"
-                class="com.coolplay.user.security.security.MultiBodyFilter"/>-->
-
-    <!--<beans:bean id="loggerFilter"
-                class="com.coolplay.user.security.security.LoggerFilter"/>-->
+    <beans:bean id="multiBodyFilter"
+                class="com.coolplay.user.security.security.MultiBodyFilter"/>
 
     <!-- 自定义登录失败handler -->
     <beans:bean id="osHttpAuthenticationFailureHandler"
@@ -101,6 +98,8 @@
         <custom-filter ref="filterSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR"/>
         <!-- 修饰头部 -->
         <custom-filter ref="headerFilter" after="FIRST"/>
+        <!-- 打印请求头信息 -->
+        <custom-filter ref="multiBodyFilter" before="FIRST"/>
         <!-- 权限认证失败后 -->
         <access-denied-handler ref="osHttpAccessDeniedHandler"/>
 
