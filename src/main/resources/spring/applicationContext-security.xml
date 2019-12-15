@@ -35,8 +35,8 @@
                 class="com.coolplay.user.security.security.HttpAuthenticationEntryPoint">
     </beans:bean>
 
-    <beans:bean id="multiBodyFilter"
-                class="com.coolplay.user.security.security.MultiBodyFilter"/>
+    <!--<beans:bean id="multiBodyFilter"
+                class="com.coolplay.user.security.security.MultiBodyFilter"/>-->
 
     <beans:bean id="loggerFilter"
                 class="com.coolplay.user.security.security.LoggerFilter"/>
