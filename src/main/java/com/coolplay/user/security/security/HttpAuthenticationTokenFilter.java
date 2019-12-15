@@ -1,7 +1,11 @@
 package com.coolplay.user.security.security;
 
+import com.alibaba.fastjson.JSON;
+import com.coolplay.user.common.utils.WechatUtils;
 import com.coolplay.user.security.utils.TokenUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +25,8 @@ import java.io.IOException;
  * Created by majiancheng on 2019/9/15.
  */
 public class HttpAuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
+
+    private final static Logger logger = LoggerFactory.getLogger(HttpAuthenticationTokenFilter.class);
 
     @Value("${security.token.header}")
     private String tokenHeader;
@@ -61,6 +67,8 @@ public class HttpAuthenticationTokenFilter extends UsernamePasswordAuthenticatio
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
+
+        logger.info("前端请求参数信息:{}", JSON.toJSONString(request.getParameterMap()));
         chain.doFilter(request, response);
     }
 
