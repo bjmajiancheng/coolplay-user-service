@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Date;
 
@@ -26,9 +27,9 @@ public class HttpHeaderFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) req;
 
-        System.out.println(String.format("前端 请求时间:%s, 请求链接:%s, 请求参数:%s.",
+        System.out.println(String.format("前端 请求时间:%s, 请求链接:%s, 请求参数:%s, 请求body:%s.",
                 DateUtil.DateToString(new Date(), DateStyle.YYYY_MM_DD_HH_MM_SS), httpRequest.getRequestURL(),
-                JSON.toJSONString(httpRequest.getParameterMap())));
+                JSON.toJSONString(httpRequest.getParameterMap()), readAsChars(httpRequest)));
         chain.doFilter(req, res);
     }
 
@@ -38,4 +39,27 @@ public class HttpHeaderFilter implements Filter {
     public void destroy() {
     }
 
+    public static String readAsChars(HttpServletRequest request) {
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            br = request.getReader();
+            String str;
+            while ((str = br.readLine()) != null) {
+                sb.append(str);
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (null != br) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sb.toString();
+    }
 }
