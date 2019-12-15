@@ -38,6 +38,9 @@
     <beans:bean id="multiBodyFilter"
                 class="com.coolplay.user.security.security.MultiBodyFilter"/>
 
+    <beans:bean id="loggerFilter"
+                class="com.coolplay.user.security.security.LoggerFilter"/>
+
     <!-- 自定义登录失败handler -->
     <beans:bean id="osHttpAuthenticationFailureHandler"
                 class="com.coolplay.user.security.security.HttpAuthenticationFailureHandler">
