@@ -1,5 +1,6 @@
 package com.coolplay.user.security.security;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
@@ -21,6 +22,9 @@ public class SecurityInterceptor extends AbstractSecurityInterceptor implements
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
         FilterInvocation fi = new FilterInvocation(request, response, chain);
+
+        System.out.println("222222222" + JSON.toJSONString(request.getParameterMap()));
+
         invoke(fi);
     }
 

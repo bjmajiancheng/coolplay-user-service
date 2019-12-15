@@ -68,7 +68,6 @@ public class HttpAuthenticationTokenFilter extends UsernamePasswordAuthenticatio
             }
         }
 
-        logger.info("前端请求参数信息:{}", JSON.toJSONString(request.getParameterMap()));
         chain.doFilter(request, response);
     }
 
