@@ -125,6 +125,9 @@ public class CoolplayBaseModel extends Sortable {
 	private Integer type = 0;//查询类型, 1:基地列表, 2:地图列表; 展示结果, 1:基地; 2:俱乐部
 
 	@Transient
+	private Integer showType = 0;//展示类型, 1:俱乐部, 2:基地
+
+	@Transient
 	private String companyName = "";//企业名称
 
 	@Transient
@@ -393,6 +396,14 @@ public class CoolplayBaseModel extends Sortable {
 
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public Integer getShowType() {
+		return showType;
+	}
+
+	public void setShowType(Integer showType) {
+		this.showType = showType;
 	}
 
 	public String getCompanyName() {

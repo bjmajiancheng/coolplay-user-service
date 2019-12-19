@@ -52,73 +52,85 @@ public class CoolplayBaseController {
             coolplayBaseModel.setIsClose(0);
             coolplayBaseModel.setIsDel(0);
 
-            coolplayBaseModel.setCompanyId(coolplayBaseModel.getCompanyId());
-            coolplayBaseModel.setId(coolplayBaseModel.getBaseId());
-
             BigDecimal currPosX = coolplayBaseModel.getPosX() == null ? BigDecimal.ZERO : coolplayBaseModel.getPosX();
             BigDecimal currPosY = coolplayBaseModel.getPosY() == null ? BigDecimal.ZERO : coolplayBaseModel.getPosY();
 
             coolplayBaseModel.initPageInfo();
-            PageInfo<CoolplayBaseModel> pageInfo = coolplayBaseService
-                    .selectByFilterAndPage(coolplayBaseModel, coolplayBaseModel.getPageNum(),
-                            coolplayBaseModel.getPageSize());
-            if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
-                List<Integer> companyIds = new ArrayList<Integer>();
-                List<Integer> baseIds = new ArrayList<Integer>();
-                for (CoolplayBaseModel tmpCoolplayBase : pageInfo.getList()) {
-                    if (!companyIds.contains(tmpCoolplayBase.getCompanyId())) {
-                        companyIds.add(tmpCoolplayBase.getCompanyId());
+            List<CoolplayBaseModel> coolplayBaseModels = new ArrayList<CoolplayBaseModel>();
+
+            long total = 0;
+
+            //展示类型为基地
+            if(coolplayBaseModel.getShowType() == 0 || coolplayBaseModel.getShowType() == 2) {
+                PageInfo<CoolplayBaseModel> pageInfo = coolplayBaseService
+                        .selectByFilterAndPage(coolplayBaseModel, coolplayBaseModel.getPageNum(),
+                                coolplayBaseModel.getPageSize());
+                if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
+                    List<Integer> companyIds = new ArrayList<Integer>();
+                    List<Integer> baseIds = new ArrayList<Integer>();
+                    for (CoolplayBaseModel tmpCoolplayBase : pageInfo.getList()) {
+                        if (!companyIds.contains(tmpCoolplayBase.getCompanyId())) {
+                            companyIds.add(tmpCoolplayBase.getCompanyId());
+                        }
+
+                        baseIds.add(tmpCoolplayBase.getId());
                     }
 
-                    baseIds.add(tmpCoolplayBase.getId());
+                    Map<Integer, CompanyModel> companyMap = companyService.findMapByCompanyIds(companyIds);
+                    Map<Integer, List<LabelModel>> labelMap = labelService.findMapByBaseIds(baseIds);
+
+                    for (CoolplayBaseModel tmpCoolplayBase : pageInfo.getList()) {
+                        CompanyModel companyModel = companyMap.get(tmpCoolplayBase.getCompanyId());
+                        if (companyModel != null) {
+                            tmpCoolplayBase.setCompanyName(companyModel.getCompanyName());
+                        }
+
+                        if (CollectionUtils.isNotEmpty(labelMap.get(tmpCoolplayBase.getId()))) {
+                            tmpCoolplayBase.setLabelList(labelMap.get(tmpCoolplayBase.getId()));
+                        }
+                        tmpCoolplayBase.setDistinct(DistanceUtil
+                                .getDistance(currPosX, currPosY, tmpCoolplayBase.getPosX(), tmpCoolplayBase.getPosY()));
+
+                        tmpCoolplayBase.setType(1);
+                    }
                 }
 
-                Map<Integer, CompanyModel> companyMap = companyService.findMapByCompanyIds(companyIds);
-                Map<Integer, List<LabelModel>> labelMap = labelService.findMapByBaseIds(baseIds);
-
-                for (CoolplayBaseModel tmpCoolplayBase : pageInfo.getList()) {
-                    CompanyModel companyModel = companyMap.get(tmpCoolplayBase.getCompanyId());
-                    if (companyModel != null) {
-                        tmpCoolplayBase.setCompanyName(companyModel.getCompanyName());
-                    }
-
-                    if (CollectionUtils.isNotEmpty(labelMap.get(tmpCoolplayBase.getId()))) {
-                        tmpCoolplayBase.setLabelList(labelMap.get(tmpCoolplayBase.getId()));
-                    }
-                    tmpCoolplayBase.setDistinct(DistanceUtil
-                            .getDistance(currPosX, currPosY, tmpCoolplayBase.getPosX(), tmpCoolplayBase.getPosY()));
-
-                    tmpCoolplayBase.setType(1);
-                }
+                coolplayBaseModels.addAll(pageInfo.getList());
+                total = total + pageInfo.getTotal();
             }
 
-            CompanyModel companyModel = new CompanyModel();
-            companyModel.setCompanyName(coolplayBaseModel.getQueryStr());
-            companyModel.setStatus(1);
-            companyModel.setReviewStatus(1);
-            companyModel.setIsDel(0);
-            companyModel.setId(coolplayBaseModel.getCompanyId());
-            PageInfo<CompanyModel> companyModelPageInfo = companyService
-                    .selectByFilterAndPage(companyModel, coolplayBaseModel.getPageNum(), coolplayBaseModel.getPageSize());
-            List<CoolplayBaseModel> coolplayBaseModels = pageInfo.getList();
-            if(CollectionUtils.isNotEmpty(companyModelPageInfo.getList())) {
-                for(CompanyModel tmpCompanyModel : companyModelPageInfo.getList()) {
-                    CoolplayBaseModel tmpCoolplayBase = new CoolplayBaseModel();
-                    tmpCoolplayBase.setId(tmpCompanyModel.getId());
-                    tmpCoolplayBase.setCompanyName(tmpCompanyModel.getCompanyName());
-                    tmpCoolplayBase.setBaseName("");
-                    tmpCoolplayBase.setPosX(tmpCompanyModel.getPosX());
-                    tmpCoolplayBase.setPosY(tmpCompanyModel.getPosY());
-                    tmpCoolplayBase.setDistinct(DistanceUtil
-                            .getDistance(currPosX, currPosY, tmpCoolplayBase.getPosX(), tmpCoolplayBase.getPosY()));
-                    tmpCoolplayBase.setBackgroudImg("");
-                    tmpCoolplayBase.setType(2);
 
-                    coolplayBaseModels.add(tmpCoolplayBase);
+            //展示类型为俱乐部
+            if(coolplayBaseModel.getShowType() == 0 || coolplayBaseModel.getShowType() == 2) {
+                CompanyModel companyModel = new CompanyModel();
+                companyModel.setCompanyName(coolplayBaseModel.getQueryStr());
+                companyModel.setStatus(1);
+                companyModel.setReviewStatus(1);
+                companyModel.setIsDel(0);
+                PageInfo<CompanyModel> companyModelPageInfo = companyService
+                        .selectByFilterAndPage(companyModel, coolplayBaseModel.getPageNum(), coolplayBaseModel.getPageSize());
+                if(CollectionUtils.isNotEmpty(companyModelPageInfo.getList())) {
+                    for(CompanyModel tmpCompanyModel : companyModelPageInfo.getList()) {
+                        CoolplayBaseModel tmpCoolplayBase = new CoolplayBaseModel();
+                        tmpCoolplayBase.setId(tmpCompanyModel.getId());
+                        tmpCoolplayBase.setCompanyName(tmpCompanyModel.getCompanyName());
+                        tmpCoolplayBase.setBaseName("");
+                        tmpCoolplayBase.setPosX(tmpCompanyModel.getPosX());
+                        tmpCoolplayBase.setPosY(tmpCompanyModel.getPosY());
+                        tmpCoolplayBase.setDistinct(DistanceUtil
+                                .getDistance(currPosX, currPosY, tmpCoolplayBase.getPosX(), tmpCoolplayBase.getPosY()));
+                        tmpCoolplayBase.setBackgroudImg("");
+                        tmpCoolplayBase.setType(2);
+
+                        coolplayBaseModels.add(tmpCoolplayBase);
+                    }
                 }
+
+                total = total + companyModelPageInfo.getTotal();
             }
 
-            pageInfo.setTotal(pageInfo.getTotal() + companyModelPageInfo.getTotal());
+            PageInfo<CoolplayBaseModel> pageInfo = new PageInfo<>(coolplayBaseModels);
+            pageInfo.setTotal(total);
 
             return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
 
