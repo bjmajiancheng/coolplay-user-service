@@ -432,7 +432,12 @@ public class UserController {
             userPassMappingModel.setPasswordEncode(passwordEncode);
             userPassMappingService.insert(userPassMappingModel);
 
-            return ResponseUtil.success("注册成功");
+            UserModel userDetailInfo = getUserDetailInfo(userModel.getId());
+            //ResponseEntity.ok(HttpResponseUtil.success(userDetailInfo));
+
+            return ResponseUtil.success(userDetailInfo);
+
+            //return ResponseUtil.success("注册成功");
 
         } catch (Exception e) {
             e.printStackTrace();
