@@ -101,7 +101,7 @@ public class CoolplayBaseController {
 
 
             //展示类型为俱乐部
-            if(coolplayBaseModel.getShowType() == 0 || coolplayBaseModel.getShowType() == 2) {
+            if(coolplayBaseModel.getShowType() == 0 || coolplayBaseModel.getShowType() == 1) {
                 CompanyModel companyModel = new CompanyModel();
                 companyModel.setCompanyName(coolplayBaseModel.getQueryStr());
                 companyModel.setStatus(1);
