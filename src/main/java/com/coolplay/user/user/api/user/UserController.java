@@ -619,8 +619,10 @@ public class UserController {
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public Result logout() {
         try {
-            Integer userId = SecurityUtil.getCurrentUserId();
-            coolplayUserCache.removeUserFromCacheByUserId(userId);
+            /*Integer userId = SecurityUtil.getCurrentUserId();*/
+            SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+            coolplayUserCache.removeUserFromCache(securityUser.getUserName());
+            //coolplayUserCache.removeUserFromCacheByUserId(userId);
             return ResponseUtil.success();
 
         } catch (Exception e) {
