@@ -135,6 +135,12 @@
 		WHERE mobile_phone = #{mobilePhone}
 	</select>
 
+	<select id="findUserByMobilePhoneAndId" resultMap="User">
+		SELECT <include refid="passwordColumns"/> FROM d_user
+		WHERE mobile_phone = #{mobilePhone} AND id != #{id}
+	</select>
+
+
 	<select id="findUserByThirdInfo" resultMap="User">
 		SELECT <include refid="passwordColumns"/> FROM d_user
 		WHERE ${columnName} = #{thirdId}

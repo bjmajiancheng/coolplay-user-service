@@ -44,6 +44,8 @@ public interface IUserService extends IBaseService<UserModel> {
 
     public UserModel findUserByMobilePhone(String mobilePhone);
 
+    public UserModel findUserByMobilePhoneAndId(String mobilePhone, Integer id);
+
     public UserModel findUserByThirdInfo(String thirdId, Integer thirdType);
 
     public UserModel findById(Integer id);

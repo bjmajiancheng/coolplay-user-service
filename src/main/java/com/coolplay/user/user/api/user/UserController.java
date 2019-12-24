@@ -475,7 +475,7 @@ public class UserController {
                 return ResponseUtil.error("验证码不存在或已过期");
             }
 
-            UserModel validateUserModel = userService.findUserByMobilePhone(userModel.getMobilePhone());
+            UserModel validateUserModel = userService.findUserByMobilePhoneAndId(userModel.getMobilePhone(), userModel.getId());
             if(validateUserModel != null) {
                 return ResponseUtil.error("该手机号已注册, 请更换手机号。");
             }

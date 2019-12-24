@@ -138,6 +138,14 @@ public class UserServiceImpl extends BaseService<UserModel> implements IUserServ
         return userMapper.findUserByMobilePhone(mobilePhone);
     }
 
+    public UserModel findUserByMobilePhoneAndId(String mobilePhone, Integer id) {
+        if(StringUtils.isEmpty(mobilePhone) || id == null) {
+            return null;
+        }
+
+        return userMapper.findUserByMobilePhoneAndId(mobilePhone, id);
+    }
+
 
     public UserModel findUserByThirdInfo(String thirdId, Integer thirdType) {
         if(StringUtils.isEmpty(thirdId) || thirdType == null) {

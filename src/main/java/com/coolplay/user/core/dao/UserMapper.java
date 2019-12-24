@@ -34,6 +34,8 @@ public interface UserMapper extends Mapper<UserModel> {
 
 	public UserModel findUserByMobilePhone(@Param("mobilePhone")String mobilePhone);
 
+	public UserModel findUserByMobilePhoneAndId(@Param("mobilePhone")String mobilePhone, @Param("id")Integer id);
+
 	public UserModel findUserByThirdInfo(@Param("thirdId")String thirdId, @Param("columnName")String columnName);
 
 	public List<Integer> findByLabelName(@Param("labelName")String labelName);
