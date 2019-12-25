@@ -187,9 +187,9 @@ public class CommonController {
                 verifyCode = String.valueOf(obj);
             }
 
-            if(StringUtils.isNotEmpty(verifyCode)) {
+            /*if(StringUtils.isNotEmpty(verifyCode)) {
                 return ResponseUtil.error("验证码还在有效期内,请输入之前验证码。");
-            }
+            }*/
 
 
             verifyCode = String.valueOf(new Random().nextInt(8999) + 1000);
