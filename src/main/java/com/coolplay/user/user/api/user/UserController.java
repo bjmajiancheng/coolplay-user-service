@@ -392,7 +392,7 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public Result register(@RequestParam("mobilePhone") String mobilePhone,
+    public Result register(HttpServletRequest request, @RequestParam("mobilePhone") String mobilePhone,
             @RequestParam("verifyCode") String verifyCode, @RequestParam("password") String password) {
 
         try {
@@ -418,7 +418,6 @@ public class UserController {
             String passwordEncode = SecurityUtil.encodeString(password);
             userModel.setPassword(passwordEncode);
             userModel.setUserName(mobilePhone);
-            //userModel.setNickName(mobilePhone.substring(3, 7));
             userModel.setAccountNonLocked(true);
             userModel.setAccountNonExpired(true);
             userModel.setCredentialsNonExpired(true);
@@ -433,11 +432,39 @@ public class UserController {
             userPassMappingService.insert(userPassMappingModel);
 
             UserModel userDetailInfo = getUserDetailInfo(userModel.getId());
-            //ResponseEntity.ok(HttpResponseUtil.success(userDetailInfo));
+
+
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                    userModel.getUserName(), userPassMappingModel.getPassword());
+            usernamePasswordAuthenticationToken.setDetails(new HttpAuthenticationDetails());
+
+            Authentication authentication = null;
+            try {
+                authentication = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+                if (authentication == null) {
+                    return HttpResponseUtil.error("未检测到验证信息");
+                }
+            } catch (InternalAuthenticationServiceException failed) {
+                logger.error("An internal error occurred while trying to authenticate the user.", failed);
+                return HttpResponseUtil.error(failed.getMessage());
+            } catch (AuthenticationException failed) {
+                return HttpResponseUtil.error(failed.getMessage());
+            }
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetails userDetails = (UserDetails) redisCache
+                    .get(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName());
+            if (userDetails == null) {
+                userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
+                redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
+            }
+            String token = this.tokenUtils.generateToken(userDetails);
+            userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
+                    RequestUtil.getIpAddress(request));
+
+            userDetailInfo.setToken(token);
 
             return ResponseUtil.success(userDetailInfo);
-
-            //return ResponseUtil.success("注册成功");
 
         } catch (Exception e) {
             e.printStackTrace();
