@@ -56,6 +56,7 @@ public class HttpAuthenticationTokenFilter extends UsernamePasswordAuthenticatio
         if (StringUtils.isNotEmpty(authToken)) {
             username = this.tokenUtils.getUsernameFromToken(authToken);
         }
+        System.out.println("当前用户token: " + authToken + ", userName:" + String.valueOf(username));
         if (username != null && !this.tokenUtils.isTokenExpired(authToken)
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userCache.getUserFromCache(username);
