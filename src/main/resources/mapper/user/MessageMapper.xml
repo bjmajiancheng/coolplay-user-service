@@ -35,6 +35,12 @@
 			<if test="messageUrl != null">
 				AND message_url = #{messageUrl}
 			</if>
+			<if test="userId != null">
+				AND user_id = #{userId}
+			</if>
+			<if test="isRead != null">
+				AND is_read = #{isRead}
+			</if>
 	    </where>
 	</sql>
 

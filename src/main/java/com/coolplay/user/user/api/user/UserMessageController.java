@@ -21,6 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by majiancheng on 2019/10/31.
  */
@@ -200,5 +205,31 @@ public class UserMessageController {
         }
     }
 
+    /**
+     * 用户当前是否有未读消息
+     *
+     * @param userId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/userMessageInfo", method = RequestMethod.POST)
+    public Result userMessageInfo(@RequestParam("userId") Integer userId) {
+        try {
+            Map<String, Object> param = new HashMap<String, Object>();
+            param.put("userId", userId);
+            param.put("isRead", 0);
+            List<MessageModel> messageModels = messageService.find(param);
+            int hasUnreadMsg = 0;
+            if(CollectionUtils.isNotEmpty(messageModels)) {
+                hasUnreadMsg = 1;
+            }
+
+
+            return ResponseUtil.success(Collections.singletonMap("hasUnreadMsg", hasUnreadMsg));
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
 
 }
