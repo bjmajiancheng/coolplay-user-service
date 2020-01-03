@@ -268,6 +268,7 @@ public class CommonController {
                     redisCache.set(String.format(SecurityConstant.WEATHER_DATA_KEY, lat, lon), weatherData, 12 * 60 * 60);
                 } else {
                     logger.info("获取天气数据异常, 返回结果:[{}].", content);
+                    System.out.println("获取天气数据异常, 返回结果:" + content);
                     return ResponseUtil.error("获取天气数据异常, 请稍后重试。");
                 }
             }
