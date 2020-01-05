@@ -1,6 +1,7 @@
 package com.coolplay.user.user.api.user;
 
 import com.alibaba.fastjson.JSON;
+import com.coolplay.user.common.utils.JPushUtil;
 import com.coolplay.user.common.utils.PageConvertUtil;
 import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
@@ -47,6 +48,9 @@ public class UserMessageController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private JPushUtil jPushUtil;
 
     /**
      * 消息列表
@@ -140,7 +144,10 @@ public class UserMessageController {
                     tmpMessage.setMessageType(2);
                     tmpMessage.setUserId(reviewMessageDto.getApplicationUserId());
 
-                    int saveCnt = messageService.updateNotNull(tmpMessage);
+                    int saveCnt = messageService.saveNotNull(tmpMessage);
+
+                    //极光推送消息
+                    jPushUtil.sendMessage(reviewMessageDto.getApplicationUserId(), tmpMessage.getMessageName(), tmpMessage.getMessageContent());
                 } else if(ReviewMessageDto.INVITE_CIRCLE.equals(reviewMessageDto.getType())) {
                     Integer reviewStatus = 1;
                     if(isAgree == 1) {
@@ -165,7 +172,10 @@ public class UserMessageController {
                     tmpMessage.setMessageType(2);
                     tmpMessage.setUserId(reviewMessageDto.getApplicationUserId());
 
-                    int saveCnt = messageService.updateNotNull(tmpMessage);
+                    int saveCnt = messageService.saveNotNull(tmpMessage);
+
+                    //极光推送消息
+                    jPushUtil.sendMessage(reviewMessageDto.getApplicationUserId(), tmpMessage.getMessageName(), tmpMessage.getMessageContent());
                 }
             }
 

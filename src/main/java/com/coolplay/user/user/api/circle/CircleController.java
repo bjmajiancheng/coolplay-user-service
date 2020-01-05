@@ -2,6 +2,7 @@ package com.coolplay.user.user.api.circle;
 
 import com.alibaba.fastjson.JSON;
 import com.coolplay.user.common.constant.CommonConstant;
+import com.coolplay.user.common.utils.JPushUtil;
 import com.coolplay.user.common.utils.PageConvertUtil;
 import com.coolplay.user.common.utils.ResponseUtil;
 import com.coolplay.user.common.utils.Result;
@@ -78,6 +79,9 @@ public class CircleController {
 
     @Autowired
     private IIndexSaveService indexSaveService;
+
+    @Autowired
+    private JPushUtil jPushUtil;
 
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
@@ -258,6 +262,9 @@ public class CircleController {
                 reviewMessageDto.setUserId(currUserId);
                 messageModel.setMessageUrl(JSON.toJSONString(reviewMessageDto));
                 messageService.saveNotNull(messageModel);
+
+                //极光推送消息
+                jPushUtil.sendMessage(adminUserId, messageModel.getMessageName(), messageModel.getMessageContent());
             }
 
             return ResponseUtil.success("申请加入圈子成功");
@@ -732,6 +739,9 @@ public class CircleController {
 
                 saveCnt = messageService.saveNotNull(messageModel);
 
+                //极光推送消息
+                jPushUtil.sendMessage(userId, messageModel.getMessageName(), messageModel.getMessageContent());
+
             } else { //普通成员邀请加入圈子
                 Map<Integer, UserModel> userModelMap = userService
                         .findUserMapByUserIds(Arrays.asList(new Integer[] { SecurityUtil.getCurrentUserId(), userId }));
@@ -756,6 +766,9 @@ public class CircleController {
                     messageModel.setMessageUrl(JSON.toJSONString(reviewMessageDto));
 
                     int saveCnt = messageService.saveNotNull(messageModel);
+
+                    //极光推送消息
+                    jPushUtil.sendMessage(adminUserId, messageModel.getMessageName(), messageModel.getMessageContent());
                 }
 
                 CircleMemberReviewModel circleMemberReviewModel = new CircleMemberReviewModel();

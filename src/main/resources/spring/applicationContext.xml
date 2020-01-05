@@ -17,5 +17,16 @@
     <!-- 获取bean工具注入 -->
     <bean id="springContextUtil" class="com.coolplay.user.common.utils.SpringContextUtil" lazy-init="false"/>
 
+    <!-- 极光推送客户端 -->
+    <bean id="jPushClient" class="cn.jpush.api.JPushClient">
+        <constructor-arg name="masterSecret" value="${jpush.masterSecret}"/>
+        <constructor-arg name="appKey" value="${jpush.appKey}"/>
+    </bean>
+
+    <bean id="jPushUtil" class="com.coolplay.user.common.utils.JPushUtil">
+        <constructor-arg name="jPushClient" ref="jPushClient" />
+        <constructor-arg name="apnsProduction" value="${jpush.apnsProduction}" />
+    </bean>
+
     <context:annotation-config />
 </beans>
