@@ -252,6 +252,10 @@ public class CommonController {
     @ResponseBody
     @RequestMapping(value = "/weatherData", method = RequestMethod.POST)
     public Result weatherData(@RequestParam("lat") String lat, @RequestParam("lon")String lon) {
+        if("0".equals(lat) || "0".equals(lon)) {
+            return ResponseUtil.error("请求经纬度无效, 请选用有效的值.");
+        }
+
         try {
             String weatherData = (String) redisCache.get(String.format(SecurityConstant.WEATHER_DATA_KEY, lat, lon));
             if(StringUtils.isEmpty(weatherData)) {
@@ -292,6 +296,10 @@ public class CommonController {
     @ResponseBody
     @RequestMapping(value = "/weatherPictureData", method = RequestMethod.POST)
     public Result weatherPictureData(@RequestParam("lat") String lat, @RequestParam("lon")String lon) {
+        if("0".equals(lat) || "0".equals(lon)) {
+            return ResponseUtil.error("请求经纬度无效, 请选用有效的值.");
+        }
+
         try {
             String weatherData = (String) redisCache.get(String.format(SecurityConstant.WEATHER_PICTURE_DATA_KEY, lat, lon));
             if(StringUtils.isEmpty(weatherData)) {
