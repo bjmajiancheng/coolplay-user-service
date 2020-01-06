@@ -115,7 +115,7 @@ public class UserController {
             }*/
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
+            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                     RequestUtil.getIpAddress(request));
@@ -188,7 +188,7 @@ public class UserController {
             }*/
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
+            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                     RequestUtil.getIpAddress(request));
@@ -285,7 +285,7 @@ public class UserController {
             }*/
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
+            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                     RequestUtil.getIpAddress(request));
@@ -378,7 +378,7 @@ public class UserController {
             }*/
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
+            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                     RequestUtil.getIpAddress(request));
@@ -471,7 +471,7 @@ public class UserController {
                 redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
             }*/
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
+            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                     RequestUtil.getIpAddress(request));
