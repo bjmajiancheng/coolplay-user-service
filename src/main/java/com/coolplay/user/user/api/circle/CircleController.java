@@ -118,6 +118,7 @@ public class CircleController {
 
                 List<Integer> userCollectCircleIds = userCollectService
                         .findCircleIdsByUserIdAndCircleIds(SecurityUtil.getCurrentUserId(), circleIds);
+                Map<Integer, List<Integer>> circleMemberMap = circleMemberService.findMapByCircleIds(circleIds);
 
                 for (CircleModel tmpCircleModel : circleModels) {
                     UserModel userModel = userMap.get(tmpCircleModel.getUserId());
@@ -143,6 +144,13 @@ public class CircleController {
                     Integer reviewMemberCnt = reviewMemberCntMap.get(tmpCircleModel.getId());
                     if (reviewMemberCnt != null) {
                         tmpCircleModel.setReviewMemberCnt(reviewMemberCnt);
+                    }
+
+                    List<Integer> memberUserIds = circleMemberMap.get(tmpCircleModel.getId());
+                    if(CollectionUtils.isNotEmpty(memberUserIds)) {
+                        tmpCircleModel.setMemberCnt(memberUserIds.size());
+                    } else {
+                        tmpCircleModel.setMemberCnt(0);
                     }
                 }
             }
@@ -894,6 +902,8 @@ public class CircleController {
 
                 Map<Integer, UserModel> userMap = userService.findUserMapByUserIds(userIds);
                 Map<Integer, List<LabelModel>> labelMap = labelService.findMapByCircleIds(circleIds);
+                Map<Integer, List<Integer>> circleMemberMap = circleMemberService.findMapByCircleIds(circleIds);
+
                 for (CircleModel tmpCircle : circleModels) {
                     UserModel userModel = userMap.get(tmpCircle.getUserId());
                     if (userModel != null) {
@@ -905,6 +915,13 @@ public class CircleController {
                     }
                     if (CollectionUtils.isNotEmpty(labelMap.get(tmpCircle.getId()))) {
                         tmpCircle.setLabelList(labelMap.get(tmpCircle.getId()));
+                    }
+
+                    List<Integer> memberUserIds = circleMemberMap.get(tmpCircle.getId());
+                    if(CollectionUtils.isNotEmpty(memberUserIds)) {
+                        tmpCircle.setMemberCnt(memberUserIds.size());
+                    } else {
+                        tmpCircle.setMemberCnt(0);
                     }
                 }
             }

@@ -67,6 +67,8 @@ public class UserMessageController {
             messageModel.setUserId(SecurityUtil.getCurrentUserId());
             messageModel.setSort_("c_time_desc");
 
+            int updateCnt = messageService.updateIsRead(SecurityUtil.getCurrentUserId(), 1);
+
             PageInfo<MessageModel> pageInfo = messageService
                     .selectByFilterAndPage(messageModel, messageModel.getPageNum(), messageModel.getPageSize());
 

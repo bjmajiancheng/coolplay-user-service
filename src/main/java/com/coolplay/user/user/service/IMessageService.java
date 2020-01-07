@@ -31,4 +31,5 @@ public interface IMessageService extends IBaseService<MessageModel> {
 
 	public List<MessageModel> selectByFilter(MessageModel messageModel);
 
+	public int updateIsRead(Integer userId, int isRead);
 }

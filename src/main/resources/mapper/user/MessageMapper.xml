@@ -58,6 +58,10 @@
 		        id = #{id} 
 	    ]]>
 	</select>
+
+	<update id="updateIsRead">
+		UPDATE d_message SET is_read = #{isRead} WHERE user_id = #{userId}
+	</update>
 	
 </mapper>
 

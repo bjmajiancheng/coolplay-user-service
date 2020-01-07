@@ -26,4 +26,5 @@ public interface MessageMapper extends Mapper<MessageModel> {
 
 	public MessageModel findById(@Param("id") Integer id);
 
+	public int updateIsRead(@Param("userId")Integer userId, @Param("isRead")int isRead);
 }

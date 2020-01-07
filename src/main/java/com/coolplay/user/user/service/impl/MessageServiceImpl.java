@@ -73,4 +73,8 @@ public class MessageServiceImpl extends BaseService<MessageModel> implements IMe
 		}
 		return getMapper().selectByExample(example);
 	}
+
+	public int updateIsRead(Integer userId, int isRead) {
+		return messageMapper.updateIsRead(userId, isRead);
+	}
 }
