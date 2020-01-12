@@ -129,7 +129,7 @@
     <beans:bean id="messageSource"
                 class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <beans:property name="basename"
-                        value="classpath:/config/properties/messages_zh_CN"/>
+                        value="classpath:/properties/messages_zh_CN"/>
     </beans:bean>
 
     <!-- 自定义验证成功后处理的拦截器 -->

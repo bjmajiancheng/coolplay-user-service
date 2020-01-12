@@ -794,6 +794,11 @@ public class UserController {
                 return ResponseUtil.error("验证码不存在或已过期");
             }
 
+            UserModel validateUserModel = userService.findUserByMobilePhoneAndId(mobilePhone, id);
+            if(validateUserModel != null) {
+                return ResponseUtil.error("该手机号已注册, 请更换手机号。");
+            }
+
             UserModel userInfo = userService.findUserByUserId(id);
             if (userInfo == null) {
                 return ResponseUtil.error("账户不存在");
@@ -801,6 +806,7 @@ public class UserController {
 
             UserModel userModel = new UserModel();
             userModel.setId(id);
+            userModel.setUserName(mobilePhone);
             userModel.setMobilePhone(mobilePhone);
             int updateCnt = userService.updateNotNull(userModel);
 
@@ -894,6 +900,10 @@ public class UserController {
             }
             if(CollectionUtils.isNotEmpty(userIds)) {
                 allUserIds.addAll(userIds);
+            }
+
+            if(CollectionUtils.isEmpty(allUserIds)) {
+                allUserIds = Collections.singleton(0);
             }
 
             PageInfo<UserModel> pageInfo = this.userService.selectByUserIds(new ArrayList<Integer>(allUserIds), userModel.getPageNum(), userModel.getPageSize());

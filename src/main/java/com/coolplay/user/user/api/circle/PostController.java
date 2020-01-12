@@ -75,6 +75,8 @@ public class PostController {
         postModel.initPageInfo();
 
         try {
+
+            postModel.setSort_("ctime_desc");
             PageInfo<PostModel> pageInfo = this.postService.selectByFilterAndPage(postModel, postModel.getPageNum(), postModel.getPageSize());
             if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
                 List<Integer> postIds = new ArrayList<Integer>();
@@ -159,6 +161,8 @@ public class PostController {
     public Result postDetail(HttpServletResponse response, @RequestParam("id") Integer id) {
 
         try {
+            int updateCnt = postService.columnPlusNumber(id, "share_cnt", 1);
+
             return this.detail(response, id);
         } catch(Exception e) {
             e.printStackTrace();
@@ -265,6 +269,10 @@ public class PostController {
     public Result savePost(@RequestBody PostModel postModel) {
 
         try {
+            if(CollectionUtils.isEmpty(postModel.getCircleIds())) {
+                return ResponseUtil.error("请最少选择一个圈子。");
+            }
+
             if (CollectionUtils.isNotEmpty(postModel.getImgUrlList())) {
                 StringBuffer sb = new StringBuffer();
                 for (String imageUrl : postModel.getImgUrlList()) {
