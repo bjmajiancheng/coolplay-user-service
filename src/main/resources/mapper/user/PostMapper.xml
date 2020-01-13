@@ -88,7 +88,7 @@
 	</select>
 
 	<select id="findPostIdsByLabelName" resultType="java.lang.Integer">
-		select c.id from d_circle c inner join d_post_label pl on c.id = pl.circle_id inner join d_label l on l.id = pl.label_id and l.cat_id = 5 and l.label_name like '${labelName}'
+		select c.id from d_circle c inner join d_post_label pl on c.id = pl.post_id inner join d_label l on l.id = pl.label_id and l.cat_id = 5 and l.label_name like '${labelName}'
 	</select>
 	
 </mapper>
