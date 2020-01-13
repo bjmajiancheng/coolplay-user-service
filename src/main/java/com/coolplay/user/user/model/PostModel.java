@@ -126,6 +126,9 @@ public class PostModel extends Sortable {
 	@Transient
 	private List<CircleModel> circleList = new ArrayList<CircleModel>();
 
+	@Transient
+	private List<Integer> ids;
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -386,6 +389,14 @@ public class PostModel extends Sortable {
 
 	public List<CircleModel> getCircleList() {
 		return circleList;
+	}
+
+	public void setIds(List<Integer> ids) {
+		this.ids = ids;
+	}
+
+	public List<Integer> getIds() {
+		return ids;
 	}
 }
 

@@ -51,4 +51,6 @@ public interface ICircleService extends IBaseService<CircleModel> {
 	public List<Integer> findByUserId(Integer currentUserId);
 
 	public Map<Integer,List<CircleModel>> findMapByPostIds(List<Integer> postIds);
+
+	public List<Integer> findCircleIdsByLabelName(String labelName);
 }

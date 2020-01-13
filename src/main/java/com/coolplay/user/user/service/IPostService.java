@@ -49,4 +49,5 @@ public interface IPostService extends IBaseService<PostModel> {
      */
 	public Map<Integer, PostModel> findMapByIds(List<Integer> ids);
 
+	public List<Integer> findPostIdsByLabelName(String labelName);
 }

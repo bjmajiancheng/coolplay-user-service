@@ -16,6 +16,7 @@ import com.wutuobang.search.bean.EsPostBean;
 import com.wutuobang.search.constant.Constant;
 import com.wutuobang.search.service.IIndexSaveService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -77,6 +78,14 @@ public class PostController {
         try {
 
             postModel.setSort_("ctime_desc");
+
+            List<Integer> ids = postService.findPostIdsByLabelName("%"+postModel.getSearchKeyword()+"%");
+            if(CollectionUtils.isEmpty(ids) && StringUtils.isNotEmpty(postModel.getSearchKeyword())) {
+                ids = Collections.singletonList(0);
+            }
+
+            postModel.setIds(ids);
+
             PageInfo<PostModel> pageInfo = this.postService.selectByFilterAndPage(postModel, postModel.getPageNum(), postModel.getPageSize());
             if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
                 List<Integer> postIds = new ArrayList<Integer>();

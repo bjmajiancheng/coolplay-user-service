@@ -93,6 +93,14 @@ public class CircleController {
             circleModel.setStatus(1);
             circleModel.setCircleType(1);
             circleModel.initPageInfo();
+
+            List<Integer> ids = circleService.findCircleIdsByLabelName("%" + circleModel.getQueryStr() + "%");
+            if(CollectionUtils.isEmpty(ids) && StringUtils.isNotEmpty(circleModel.getQueryStr())) {
+                ids = Collections.singletonList(0);
+            }
+
+            circleModel.setIds(ids);
+
             PageInfo<CircleModel> pageInfo = circleService
                     .selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
 

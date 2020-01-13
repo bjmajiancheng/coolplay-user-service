@@ -72,6 +72,10 @@ public class PostServiceImpl extends BaseService<PostModel> implements IPostServ
 			criteria.andEqualTo("userId", postModel.getUserId());
 		}
 
+		if(CollectionUtils.isNotEmpty(postModel.getIds())) {
+			criteria.andIn("id", postModel.getIds());
+		}
+
 		criteria.andEqualTo("isDel", 0);
 
 		if(StringUtils.isNotEmpty(postModel.getSortWithOutOrderBy())) {
@@ -118,5 +122,10 @@ public class PostServiceImpl extends BaseService<PostModel> implements IPostServ
 		}
 
 		return postMap;
+	}
+
+
+	public List<Integer> findPostIdsByLabelName(String labelName) {
+		return postMapper.findPostIdsByLabelName(labelName);
 	}
 }

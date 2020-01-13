@@ -236,4 +236,13 @@ public class CircleServiceImpl extends BaseService<CircleModel> implements ICirc
 
         return circleMap;
     }
+
+
+    public List<Integer> findCircleIdsByLabelName(String labelName) {
+        if(StringUtils.isEmpty(labelName)) {
+            return Collections.singletonList(0);
+        }
+
+        return circleMapper.findCircleIdsByLabelName(labelName);
+    }
 }

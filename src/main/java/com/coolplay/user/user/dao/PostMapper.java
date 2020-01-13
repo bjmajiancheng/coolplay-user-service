@@ -43,4 +43,6 @@ public interface PostMapper extends Mapper<PostModel> {
 	 * @return
      */
 	public List<PostModel> findByIds(@Param("ids") List<Integer> ids);
+
+	public List<Integer> findPostIdsByLabelName(@Param("labelName")String labelName);
 }
