@@ -77,7 +77,7 @@ public class PostController {
 
         try {
 
-            postModel.setSort_("ctime_desc");
+            postModel.setSort_("c_time_desc");
 
             List<Integer> ids = postService.findPostIdsByLabelName("%"+postModel.getSearchKeyword()+"%");
             if(CollectionUtils.isEmpty(ids) && StringUtils.isNotEmpty(postModel.getSearchKeyword())) {
