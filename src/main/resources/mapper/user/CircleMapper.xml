@@ -98,7 +98,7 @@
 	</select>
 
 	<select id="findCircleIdsByLabelName" resultType="java.lang.Integer">
-		select c.id from d_circle c inner join d_circle_label cl on c.id = cl.circle_id inner join d_label l on l.id = cl.label_id and l.cat_id = 3 and l.label_name like ${labelName}
+		select c.id from d_circle c inner join d_circle_label cl on c.id = cl.circle_id inner join d_label l on l.id = cl.label_id and l.cat_id = 3 and l.label_name like '${labelName}'
 	</select>
 
 </mapper>
