@@ -17,5 +17,7 @@ public class SecurityConstant {
 
     public static final String WEATHER_PICTURE_DATA_KEY = "coolplay_user_service_weather_picture_%s_%s";
 
+    public static final String WEATHER_CITY_DATA_KEY = "coolplay_user_service_city_%s";
+
     public final static int THREE_MINUTES_EXPIRE_SECOND = 3 * 60;
 }

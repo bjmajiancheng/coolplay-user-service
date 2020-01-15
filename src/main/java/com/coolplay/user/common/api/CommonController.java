@@ -257,7 +257,10 @@ public class CommonController {
         }
 
         try {
-            String weatherData = (String) redisCache.get(String.format(SecurityConstant.WEATHER_DATA_KEY, lat, lon));
+            String cityKey = MapUtil.getCoordinate(lon, lat);
+
+            //String weatherData = (String) redisCache.get(String.format(SecurityConstant.WEATHER_DATA_KEY, lat, lon));
+            String weatherData = (String) redisCache.get(String.format(SecurityConstant.WEATHER_CITY_DATA_KEY, cityKey));
             if(StringUtils.isEmpty(weatherData)) {
                 HttpClientResult result = HttpClientUtil.doGet(String.format("%s?lat=%s&lon=%s", weatherUrl, lat, lon));
 
@@ -269,7 +272,7 @@ public class CommonController {
                         && "success".equals(String.valueOf(contentMap.get("responseCode")))) {
                     weatherData = String.valueOf(contentMap.get("data"));
 
-                    redisCache.set(String.format(SecurityConstant.WEATHER_DATA_KEY, lat, lon), weatherData, 12 * 60 * 60);
+                    redisCache.set(String.format(SecurityConstant.WEATHER_CITY_DATA_KEY, cityKey), weatherData, 12 * 60 * 60);
                 } else {
                     logger.info("获取天气数据异常, 返回结果:[{}].", content);
                     System.out.println("获取天气数据异常, 返回结果:" + content);
