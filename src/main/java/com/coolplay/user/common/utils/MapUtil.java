@@ -27,6 +27,9 @@ public class MapUtil {
     private static final String key = "8cd0ea9ca69f8e9e6a61d84c5ca3436f";
 
     public static String getCoordinate(String lng, String lat) throws IOException {
+        if("0.000000".equals(lng) || "0.000000".equals(lat)) {
+            return "";
+        }
 
         StringBuilder resultData = new StringBuilder();
         StringBuilder https = new StringBuilder("http://restapi.amap.com/v3/geocode/regeo?key=");
