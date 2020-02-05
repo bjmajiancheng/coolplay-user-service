@@ -524,6 +524,7 @@ public class UserController {
 
             int updateCnt = userService.updateNotNull(userModel);
 
+            coolplayUserCache.removeUserFromCacheByUserId(userModel.getId());
 
             return ResponseUtil.success("补全信息成功");
         } catch(Exception e) {
@@ -575,6 +576,8 @@ public class UserController {
             userPassMappingModel.setPassword(password);
             userPassMappingModel.setPasswordEncode(passwordEncode);
             userPassMappingService.insert(userPassMappingModel);
+
+            coolplayUserCache.removeUserFromCacheByUserId(userInfo.getId());
 
             return ResponseUtil.success("修改密码成功");
 
@@ -629,6 +632,7 @@ public class UserController {
             userPassMappingModel.setPasswordEncode(passwordEncode);
             userPassMappingService.insert(userPassMappingModel);
 
+            coolplayUserCache.removeUserFromCacheByUserId(userInfo.getId());
             return ResponseUtil.success("修改密码成功");
 
         } catch (Exception e) {
