@@ -73,7 +73,11 @@ public class PostServiceImpl extends BaseService<PostModel> implements IPostServ
 		}
 
 		if(CollectionUtils.isNotEmpty(postModel.getIds())) {
-			criteria.andIn("id", postModel.getIds());
+			/*criteria.andIn("id", postModel.getIds());*/
+			Example.Criteria idsCriteria = example.or();
+			idsCriteria.andIn("id", postModel.getIds());
+			idsCriteria.andEqualTo("isDel", 0);
+
 		}
 
 		criteria.andEqualTo("isDel", 0);
