@@ -494,6 +494,41 @@ public class CircleController {
     }
 
     /**
+     * 发布圈子公告
+     *
+     * @param updateCircleModel
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/publishPublic", method = RequestMethod.POST)
+    public Result publishPublic(@RequestBody CircleModel updateCircleModel) {
+        try {
+            CircleModel circleModel = circleService.findById(updateCircleModel.getId());
+            if (circleModel.getUserId() != SecurityUtil.getCurrentUserId()) {
+                return ResponseUtil.error("当前用户不是圈主, 无法发布公告信息");
+            }
+
+
+            if (StringUtils.isNotEmpty(updateCircleModel.getPublicContent())) {
+                CirclePublicModel circlePublicModel = new CirclePublicModel();
+
+                circlePublicModel.setCircleId(updateCircleModel.getId());
+                circlePublicModel.setPublicContent(updateCircleModel.getPublicContent());
+                int saveCnt = circlePublicService.saveNotNull(circlePublicModel);
+            } else {
+                return ResponseUtil.error("公告信息为空, 请重新操作");
+            }
+
+            return ResponseUtil.success();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
+    /**
      * 圈子明细信息
      *
      * @param id
