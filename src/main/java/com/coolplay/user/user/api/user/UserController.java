@@ -526,6 +526,11 @@ public class UserController {
 
             coolplayUserCache.removeUserFromCacheByUserId(userModel.getId());
 
+            //添加缓存信息
+            UserModel userInfo = userService.findUserByUserId(userModel.getId());
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userInfo.getUserName());
+            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userInfo.getUserName(), userDetails, 30 * 24 * 60 * 60);
+
             return ResponseUtil.success("补全信息成功");
         } catch(Exception e) {
             e.printStackTrace();
@@ -578,6 +583,10 @@ public class UserController {
             userPassMappingService.insert(userPassMappingModel);
 
             coolplayUserCache.removeUserFromCacheByUserId(userInfo.getId());
+
+            //添加缓存信息
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userInfo.getUserName());
+            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userInfo.getUserName(), userDetails, 30 * 24 * 60 * 60);
 
             return ResponseUtil.success("修改密码成功");
 
@@ -633,6 +642,10 @@ public class UserController {
             userPassMappingService.insert(userPassMappingModel);
 
             coolplayUserCache.removeUserFromCacheByUserId(userInfo.getId());
+
+            //添加缓存信息
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userInfo.getUserName());
+            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userInfo.getUserName(), userDetails, 30 * 24 * 60 * 60);
             return ResponseUtil.success("修改密码成功");
 
         } catch (Exception e) {

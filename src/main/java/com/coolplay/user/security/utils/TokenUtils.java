@@ -20,11 +20,11 @@ public class TokenUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(TokenUtils.class);
 
-    @Value("${security.token.secret}")
-    private String secret;
+    //@Value("${security.token.secret}")
+    private String secret = "coolplay_user!@#$";
 
-    @Value("${security.token.expiration}")
-    private Long expiration;
+    //@Value("${security.token.expiration}")
+    private Long expiration = 2592000L;
 
 
     public String getUsernameFromToken(String token) {
@@ -148,6 +148,11 @@ public class TokenUtils {
         final String username = this.getUsernameFromToken(token);
         final Date created = this.getCreatedDateFromToken(token);
         return (username.equals(user.getUsername()) && !(this.isTokenExpired(token)) && !(this.isCreatedBeforeLastPasswordReset(created, user.getLastPasswordReset())));
+    }
+
+    public static void main(String[] args) {
+        boolean flag = new TokenUtils().isTokenExpired("eyJhbGciOiJIUzUxMiJ9.eyJjcmVhdGVkIjoxNTgxMzMwNjE3MjAzLCJleHAiOjE1ODM5MjI2MTcsInVzZXIiOiIxNTExMDIwOTA4MyJ9.gaw2mYlhJLlzYLbWXXQtiHxLqKNuUJxYVbUJ72PG59CYwrCCZ2Wz11eoWnms9-BfK2IenMpp7ojU4-AL0AfovQ");
+        System.out.print(flag);
     }
 
 }
