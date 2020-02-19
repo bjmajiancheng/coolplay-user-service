@@ -29,4 +29,6 @@ public interface CircleMapper extends Mapper<CircleModel> {
 	public List<CircleModel> findByPostIds(@Param("postIds")List<Integer> postIds);
 
 	public List<Integer> findCircleIdsByLabelName(@Param("labelName")String labelName);
+
+	public List<CircleModel> findByIds(@Param("ids")List<Integer> ids);
 }

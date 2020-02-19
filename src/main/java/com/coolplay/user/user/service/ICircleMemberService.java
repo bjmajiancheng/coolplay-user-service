@@ -65,4 +65,12 @@ public interface ICircleMemberService extends IBaseService<CircleMemberModel> {
 	public int delByCircleIdAndMemberUserId(Integer circleId, Integer memberUserId);
 
 	public List<Integer> findMemberUserIdsByCircleId(Integer circleId);
+
+	/**
+	 * 获取圈子成员集合, 包含管理员和圈主
+	 *
+	 * @param circleIds
+	 * @return
+     */
+	public Map<Integer, Set<Integer>> findMemberMapByCircleIds(List<Integer> circleIds);
 }
