@@ -50,4 +50,14 @@ public interface IPostService extends IBaseService<PostModel> {
 	public Map<Integer, PostModel> findMapByIds(List<Integer> ids);
 
 	public List<Integer> findPostIdsByLabelName(String labelName);
+
+	/**
+	 * 获取帖子集合信息
+	 *
+	 * @param postModel
+	 * @param pageNum
+	 * @param pageSize
+     * @return
+     */
+	public PageInfo<PostModel> findPageByPostModel(PostModel postModel, Integer pageNum, Integer pageSize);
 }

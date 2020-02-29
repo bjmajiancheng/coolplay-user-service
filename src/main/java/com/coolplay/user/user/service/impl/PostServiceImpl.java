@@ -88,6 +88,34 @@ public class PostServiceImpl extends BaseService<PostModel> implements IPostServ
 		return getMapper().selectByExample(example);
 	}
 
+	/**
+	 * 获取帖子集合信息
+	 *
+	 * @param postModel
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 */
+	public PageInfo<PostModel> findPageByPostModel(PostModel postModel, Integer pageNum, Integer pageSize) {
+		if(postModel == null) {
+			return new PageInfo<PostModel>();
+		}
+
+		if(StringUtils.isNotEmpty(postModel.getSearchKeyword())) {
+			postModel.setPostContent("%"+ postModel.getSearchKeyword() +"%");
+		}
+		postModel.setIsDel(0);
+		int count = postMapper.findCntByPostModel(postModel);
+
+		List<PostModel> list = postMapper.findPageByPostModel(postModel, (pageNum - 1) * pageSize, pageSize);
+
+
+		PageInfo<PostModel> pageInfo = new PageInfo<PostModel>(list);
+		pageInfo.setTotal(count);
+
+		return pageInfo;
+	}
+
 
 	@Override
 	public int columnPlusNumber(Integer id, String columnName, Integer number) {

@@ -45,4 +45,22 @@ public interface PostMapper extends Mapper<PostModel> {
 	public List<PostModel> findByIds(@Param("ids") List<Integer> ids);
 
 	public List<Integer> findPostIdsByLabelName(@Param("labelName")String labelName);
+
+	/**
+	 * 获取帖子总数
+	 *
+	 * @param postModel
+	 * @return
+     */
+	public int findCntByPostModel(PostModel postModel);
+
+	/**
+	 * 获取帖子分页数
+	 *
+	 * @param postModel
+	 * @param pageNum
+	 * @param pageSize
+     * @return
+     */
+	public List<PostModel> findPageByPostModel(PostModel postModel, @Param("limit")Integer pageNum, @Param("offset")Integer pageSize);
 }

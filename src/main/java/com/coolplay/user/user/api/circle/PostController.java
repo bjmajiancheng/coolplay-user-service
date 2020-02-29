@@ -84,9 +84,14 @@ public class PostController {
                 ids = Collections.singletonList(0);
             }
 
+
             postModel.setIds(ids);
 
-            PageInfo<PostModel> pageInfo = this.postService.selectByFilterAndPage(postModel, postModel.getPageNum(), postModel.getPageSize());
+            //PageInfo<PostModel> pageInfo = this.postService.selectByFilterAndPage(postModel, postModel.getPageNum(), postModel.getPageSize());
+
+            //循环获取
+            PageInfo<PostModel> pageInfo = this.postService.findPageByPostModel(postModel, postModel.getPageNum(), postModel.getPageSize());
+
             if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
                 List<Integer> postIds = new ArrayList<Integer>();
                 List<Integer> userIds = new ArrayList<Integer>();
