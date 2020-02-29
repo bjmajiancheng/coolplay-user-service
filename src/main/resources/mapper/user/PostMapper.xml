@@ -96,12 +96,12 @@
 		INNER JOIN d_post_label pl on p.id = pl.post_id
 		INNER JOIN d_label l on pl.label_id = l.id
 		where p.is_del = 0
-		<if test="postContent != null">
-			AND (p.post_content like '${postContent}'
-			OR l.label_name like '${postContent}')
+		<if test="postModel.postContent != null">
+			AND (p.post_content like '${postModel.postContent}'
+			OR l.label_name like '${postModel.postContent}')
 		</if>
-		<if test="userId != null">
-			AND p.user_id = #{userId}
+		<if test="postModel.userId != null">
+			AND p.user_id = #{postModel.userId}
 		</if>
 	</select>
 
@@ -110,12 +110,12 @@
 		INNER JOIN d_post_label pl on p.id = pl.post_id
 		INNER JOIN d_label l on pl.label_id = l.id
 		WHERE p.is_del = 0
-		<if test="postContent != null">
-			AND (p.post_content like '${postContent}'
-			OR l.label_name like '${postContent}')
+		<if test="postModel.postContent != null">
+			AND (p.post_content like '${postModel.postContent}'
+			OR l.label_name like '${postModel.postContent}')
 		</if>
-		<if test="userId != null">
-			AND p.user_id = #{userId}
+		<if test="postModel.userId != null">
+			AND p.user_id = #{postModel.userId}
 		</if>
 		ORDER BY p.is_top DESC, p.top_time DESC
 		limit #{limit}, #{offset}

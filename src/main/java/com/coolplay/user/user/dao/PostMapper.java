@@ -52,7 +52,7 @@ public interface PostMapper extends Mapper<PostModel> {
 	 * @param postModel
 	 * @return
      */
-	public int findCntByPostModel(PostModel postModel);
+	public int findCntByPostModel(@Param("postModel")PostModel postModel);
 
 	/**
 	 * 获取帖子分页数
@@ -62,5 +62,5 @@ public interface PostMapper extends Mapper<PostModel> {
 	 * @param pageSize
      * @return
      */
-	public List<PostModel> findPageByPostModel(PostModel postModel, @Param("limit")Integer pageNum, @Param("offset")Integer pageSize);
+	public List<PostModel> findPageByPostModel(@Param("postModel")PostModel postModel, @Param("limit")Integer pageNum, @Param("offset")Integer pageSize);
 }
