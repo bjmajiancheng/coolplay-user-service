@@ -95,7 +95,7 @@
 		select count(1) from d_post p
 		INNER JOIN d_post_label pl on p.id = pl.post_id
 		INNER JOIN d_label l on pl.label_id = l.id
-		where is_del = 0
+		where p.is_del = 0
 		<if test="postContent != null">
 			AND (p.post_content like '${postContent}'
 			OR l.label_name like '${postContent}')
@@ -109,7 +109,7 @@
 		select p.* from d_post p
 		INNER JOIN d_post_label pl on p.id = pl.post_id
 		INNER JOIN d_label l on pl.label_id = l.id
-		WHERE is_del = 0
+		WHERE p.is_del = 0
 		<if test="postContent != null">
 			AND (p.post_content like '${postContent}'
 			OR l.label_name like '${postContent}')
