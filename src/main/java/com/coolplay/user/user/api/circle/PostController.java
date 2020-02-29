@@ -89,7 +89,7 @@ public class PostController {
 
             //PageInfo<PostModel> pageInfo = this.postService.selectByFilterAndPage(postModel, postModel.getPageNum(), postModel.getPageSize());
 
-            //循环获取
+            //获取帖子分页数据
             PageInfo<PostModel> pageInfo = this.postService.findPageByPostModel(postModel, postModel.getPageNum(), postModel.getPageSize());
 
             if (CollectionUtils.isNotEmpty(pageInfo.getList())) {
