@@ -111,8 +111,8 @@
 		INNER JOIN d_label l on pl.label_id = l.id
 		WHERE is_del = 0
 		<if test="postContent != null">
-			AND (p.post_content like ${postContent}
-			OR l.label_name like ${postContent})
+			AND (p.post_content like '${postContent}'
+			OR l.label_name like '${postContent}')
 		</if>
 		<if test="userId != null">
 			AND p.user_id = #{userId}
