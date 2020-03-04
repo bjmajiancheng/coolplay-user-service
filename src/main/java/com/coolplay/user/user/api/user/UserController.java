@@ -115,7 +115,8 @@ public class UserController {
             }*/
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
+            redisCache
+                    .set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                     RequestUtil.getIpAddress(request));
@@ -188,7 +189,8 @@ public class UserController {
             }*/
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
+            redisCache
+                    .set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                     RequestUtil.getIpAddress(request));
@@ -202,6 +204,81 @@ public class UserController {
             e.printStackTrace();
 
             return ResponseEntity.ok(ResponseUtil.error("系统异常, 请稍后重试。"));
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/newLoginByVerifyCode", method = RequestMethod.POST)
+    public Result newLoginByVerifyCode(HttpServletRequest request, @RequestParam("mobilePhone") String mobilePhone,
+            @RequestParam("verifyCode") String verifyCode) throws AuthenticationException {
+
+        try {
+            if (StringUtils.isEmpty(verifyCode)) {
+                return ResponseUtil.error("请输入验证码。");
+            }
+
+            if (StringUtils
+                    .isNotEmpty((String) redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + mobilePhone))) {
+                if (!((String) redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + mobilePhone))
+                        .equals(verifyCode)) {
+                    return ResponseUtil.error("验证码不正确。");
+                }
+            } else {
+                return ResponseUtil.error("验证码不存在或已过期。");
+            }
+
+            UserModel userModel = userService.findUserByMobilePhone(mobilePhone);
+            if (userModel == null) {
+                return ResponseUtil.error("用户不存在。");
+            }
+
+            UserPassMappingModel userPassMappingModel = userPassMappingService
+                    .findByPasswordEncode(userModel.getPassword());
+            if (userPassMappingModel == null) {
+                return ResponseUtil.error("系统异常, 请稍后重试。");
+            }
+
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                    userModel.getUserName(), userPassMappingModel.getPassword());
+            usernamePasswordAuthenticationToken.setDetails(new HttpAuthenticationDetails());
+
+            Authentication authentication = null;
+            try {
+                authentication = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+                if (authentication == null) {
+                    return ResponseUtil.error("未检测到验证信息");
+                }
+            } catch (InternalAuthenticationServiceException failed) {
+                logger.error("An internal error occurred while trying to authenticate the user.", failed);
+                return ResponseUtil.error(failed.getMessage());
+            } catch (AuthenticationException failed) {
+                return ResponseUtil.error(failed.getMessage());
+            }
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            /*UserDetails userDetails = (UserDetails) redisCache
+                    .get(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName());
+            if (userDetails == null) {
+                userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
+                redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
+            }*/
+
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
+            redisCache
+                    .set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
+            String token = this.tokenUtils.generateToken(userDetails);
+            userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
+                    RequestUtil.getIpAddress(request));
+
+            UserModel userDetailInfo = getUserDetailInfo(userModel.getId());
+            userDetailInfo.setToken(token);
+
+            return ResponseUtil.success(userDetailInfo);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
         }
     }
 
@@ -285,7 +362,8 @@ public class UserController {
             }*/
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
+            redisCache
+                    .set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                     RequestUtil.getIpAddress(request));
@@ -313,7 +391,8 @@ public class UserController {
     public ResponseEntity<?> loginByQQ(HttpServletRequest request,
             @RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {
         if (StringUtils.isEmpty(authenticationRequest.getOpenId()) || StringUtils
-                .isEmpty(authenticationRequest.getNickname()) || StringUtils.isEmpty(authenticationRequest.getHeadpic())) {
+                .isEmpty(authenticationRequest.getNickname()) || StringUtils
+                .isEmpty(authenticationRequest.getHeadpic())) {
             return ResponseEntity.ok(HttpResponseUtil.error("请输入第三方登录信息"));
         }
 
@@ -378,7 +457,8 @@ public class UserController {
             }*/
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
+            redisCache
+                    .set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                     RequestUtil.getIpAddress(request));
@@ -445,7 +525,6 @@ public class UserController {
 
             UserModel userDetailInfo = getUserDetailInfo(userModel.getId());
 
-
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     userModel.getUserName(), userPassMappingModel.getPassword());
             usernamePasswordAuthenticationToken.setDetails(new HttpAuthenticationDetails());
@@ -471,7 +550,8 @@ public class UserController {
                 redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 10 * 12 * 30 * 24 * 60 * 60);
             }*/
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userModel.getUserName());
-            redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
+            redisCache
+                    .set(SecurityConstant.USER_CACHE_PREFIX + userModel.getUserName(), userDetails, 30 * 24 * 60 * 60);
             String token = this.tokenUtils.generateToken(userDetails);
             userService.updateLastLoginInfoByUserName(userModel.getUserName(), new Date(),
                     RequestUtil.getIpAddress(request));
@@ -506,8 +586,8 @@ public class UserController {
             if (StringUtils.isEmpty(userModel.getVerifyCode())) {
                 return ResponseUtil.error("请输入验证码");
             }
-            if (StringUtils
-                    .isNotEmpty((String) redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + userModel.getMobilePhone()))) {
+            if (StringUtils.isNotEmpty(
+                    (String) redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + userModel.getMobilePhone()))) {
                 if (!((String) redisCache.get(SecurityConstant.MOBILE_VERIFY_CODE_PREFIX + userModel.getMobilePhone()))
                         .equals(userModel.getVerifyCode())) {
                     return ResponseUtil.error("验证码不正确");
@@ -516,8 +596,9 @@ public class UserController {
                 return ResponseUtil.error("验证码不存在或已过期");
             }
 
-            UserModel validateUserModel = userService.findUserByMobilePhoneAndId(userModel.getMobilePhone(), userModel.getId());
-            if(validateUserModel != null) {
+            UserModel validateUserModel = userService
+                    .findUserByMobilePhoneAndId(userModel.getMobilePhone(), userModel.getId());
+            if (validateUserModel != null) {
                 return ResponseUtil.error("该手机号已注册, 请更换手机号。");
             }
             userModel.setUserName(userModel.getMobilePhone());
@@ -532,7 +613,7 @@ public class UserController {
             redisCache.set(SecurityConstant.USER_CACHE_PREFIX + userInfo.getUserName(), userDetails, 30 * 24 * 60 * 60);
 
             return ResponseUtil.success("补全信息成功");
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseUtil.error("系统异常, 请稍后重试。");
         }
@@ -740,10 +821,10 @@ public class UserController {
 
             int delCnt = userLabelService.delByUserId(userModel.getId());
 
-            if(CollectionUtils.isNotEmpty(userModel.getLabelList())) {
-                for(LabelModel labelModel : userModel.getLabelList()) {
+            if (CollectionUtils.isNotEmpty(userModel.getLabelList())) {
+                for (LabelModel labelModel : userModel.getLabelList()) {
                     Integer labelId = labelModel.getId();
-                    if(labelId == null || labelId == 0) {
+                    if (labelId == null || labelId == 0) {
                         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
 
                         LabelModel saveLabelModel = new LabelModel();
@@ -812,7 +893,7 @@ public class UserController {
             }
 
             UserModel validateUserModel = userService.findUserByMobilePhoneAndId(mobilePhone, id);
-            if(validateUserModel != null) {
+            if (validateUserModel != null) {
                 return ResponseUtil.error("该手机号已注册, 请更换手机号。");
             }
 
@@ -912,21 +993,23 @@ public class UserController {
             List<Integer> userIds = userService.findByNickName("%" + userModel.getQueryStr() + "%");
 
             Set<Integer> allUserIds = new HashSet<Integer>();
-            if(CollectionUtils.isNotEmpty(labelUserIds)) {
+            if (CollectionUtils.isNotEmpty(labelUserIds)) {
                 allUserIds.addAll(labelUserIds);
             }
-            if(CollectionUtils.isNotEmpty(userIds)) {
+            if (CollectionUtils.isNotEmpty(userIds)) {
                 allUserIds.addAll(userIds);
             }
 
-            if(CollectionUtils.isEmpty(allUserIds)) {
+            if (CollectionUtils.isEmpty(allUserIds)) {
                 allUserIds = Collections.singleton(0);
             }
 
-            PageInfo<UserModel> pageInfo = this.userService.selectByUserIds(new ArrayList<Integer>(allUserIds), userModel.getPageNum(), userModel.getPageSize());
+            PageInfo<UserModel> pageInfo = this.userService
+                    .selectByUserIds(new ArrayList<Integer>(allUserIds), userModel.getPageNum(),
+                            userModel.getPageSize());
 
             return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");
@@ -937,12 +1020,12 @@ public class UserController {
     @RequestMapping(value = "/labelList", method = RequestMethod.POST)
     public Result labelList() {
 
-        try{
-            List<LabelModel> labelModels = labelService.findUserAvailableLabel(SecurityUtil.getCurrentUserId(),
-                    CommonConstant.USER_LABEL_CATEGORY);
+        try {
+            List<LabelModel> labelModels = labelService
+                    .findUserAvailableLabel(SecurityUtil.getCurrentUserId(), CommonConstant.USER_LABEL_CATEGORY);
 
             return ResponseUtil.success(Collections.singletonMap("labelList", labelModels));
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseUtil.error("系统异常, 请稍后重试。");

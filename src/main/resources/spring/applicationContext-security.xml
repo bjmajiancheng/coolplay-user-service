@@ -78,6 +78,7 @@
         <intercept-url pattern="/api/index/**" access="permitAll"/>
         <intercept-url pattern="/api/user/loginByMobilePhone" access="permitAll"/>
         <intercept-url pattern="/api/user/loginByVerifyCode" access="permitAll"/>
+        <intercept-url pattern="/api/user/newLoginByVerifyCode" access="permitAll"/>
         <intercept-url pattern="/api/user/loginByWechat" access="permitAll"/>
         <intercept-url pattern="/api/user/loginByQQ" access="permitAll"/>
         <intercept-url pattern="/api/user/register" access="permitAll"/>
