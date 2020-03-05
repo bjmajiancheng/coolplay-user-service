@@ -117,7 +117,7 @@
 		<if test="postModel.userId != null">
 			AND p.user_id = #{postModel.userId}
 		</if>
-		ORDER BY p.is_top DESC, p.top_time DESC
+		ORDER BY p.is_top DESC, p.top_time DESC, p.c_time DESC
 		limit #{limit}, #{offset}
 	</select>
 	
