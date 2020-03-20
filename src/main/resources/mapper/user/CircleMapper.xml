@@ -123,7 +123,7 @@
 		</if>
 	</select>
 
-	<select id="findPageByCircleModel" resultMap="CompanyCircle">
+	<select id="findPageByCircleModel" resultMap="Circle">
 		select c.* from d_circle c
 		INNER JOIN d_circle_label cl on c.id = cl.circle_id
 		INNER JOIN d_label l on cl.label_id = l.id
