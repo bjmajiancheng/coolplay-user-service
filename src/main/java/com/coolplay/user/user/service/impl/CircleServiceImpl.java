@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.coolplay.user.user.model.CircleAdminModel;
 import com.coolplay.user.user.model.CircleMemberModel;
+import com.coolplay.user.user.model.PostModel;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -244,5 +245,32 @@ public class CircleServiceImpl extends BaseService<CircleModel> implements ICirc
         }
 
         return circleMapper.findCircleIdsByLabelName(labelName);
+    }
+
+    /**
+     * 根据圈子信息获取分页数据
+     *
+     * @param circleModel
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public PageInfo<CircleModel> findPageByCircleModel(CircleModel circleModel, Integer pageNum, Integer pageSize) {
+        if(circleModel == null) {
+            return new PageInfo<CircleModel>();
+        }
+
+        if(StringUtils.isNotEmpty(circleModel.getQueryStr())) {
+            circleModel.setCircleName("%"+ circleModel.getQueryStr() +"%");
+        }
+        int count = circleMapper.findCntByCircleModel(circleModel);
+
+        List<CircleModel> list = circleMapper.findPageByCircleModel(circleModel, (pageNum - 1) * pageSize, pageSize);
+
+
+        PageInfo<CircleModel> pageInfo = new PageInfo<CircleModel>(list);
+        pageInfo.setTotal(count);
+
+        return pageInfo;
     }
 }

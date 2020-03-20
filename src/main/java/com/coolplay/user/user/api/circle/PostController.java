@@ -77,17 +77,14 @@ public class PostController {
 
         try {
 
-            postModel.setSort_("c_time_desc");
+            /*postModel.setSort_("c_time_desc");
 
             List<Integer> ids = postService.findPostIdsByLabelName("%"+postModel.getSearchKeyword()+"%");
             if(CollectionUtils.isEmpty(ids) && StringUtils.isNotEmpty(postModel.getSearchKeyword())) {
                 ids = Collections.singletonList(0);
             }
-
-
             postModel.setIds(ids);
-
-            //PageInfo<PostModel> pageInfo = this.postService.selectByFilterAndPage(postModel, postModel.getPageNum(), postModel.getPageSize());
+            PageInfo<PostModel> pageInfo = this.postService.selectByFilterAndPage(postModel, postModel.getPageNum(), postModel.getPageSize());*/
 
             //获取帖子分页数据
             PageInfo<PostModel> pageInfo = this.postService.findPageByPostModel(postModel, postModel.getPageNum(), postModel.getPageSize());

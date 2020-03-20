@@ -53,4 +53,14 @@ public interface ICircleService extends IBaseService<CircleModel> {
 	public Map<Integer,List<CircleModel>> findMapByPostIds(List<Integer> postIds);
 
 	public List<Integer> findCircleIdsByLabelName(String labelName);
+
+	/**
+	 * 根据圈子信息获取分页数据
+	 *
+	 * @param circleModel
+	 * @param pageNum
+	 * @param pageSize
+     * @return
+     */
+	public PageInfo<CircleModel> findPageByCircleModel(CircleModel circleModel, Integer pageNum, Integer pageSize);
 }

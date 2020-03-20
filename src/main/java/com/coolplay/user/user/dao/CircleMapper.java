@@ -31,4 +31,8 @@ public interface CircleMapper extends Mapper<CircleModel> {
 	public List<Integer> findCircleIdsByLabelName(@Param("labelName")String labelName);
 
 	public List<CircleModel> findByIds(@Param("ids")List<Integer> ids);
+
+	public int findCntByCircleModel(@Param("circleModel")CircleModel circleModel);
+
+	List<CircleModel> findPageByCircleModel(@Param("circleModel")CircleModel circleModel, @Param("limit")int limit, @Param("offset")int offset);
 }

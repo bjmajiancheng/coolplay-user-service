@@ -88,7 +88,7 @@ public class CircleController {
     public Result list(@RequestBody CircleModel circleModel) {
 
         try {
-            circleModel.setDisabled(0);
+            /*circleModel.setDisabled(0);
             circleModel.setReviewStatus(1);
             circleModel.setStatus(1);
             circleModel.setCircleType(1);
@@ -102,7 +102,9 @@ public class CircleController {
             circleModel.setIds(ids);
 
             PageInfo<CircleModel> pageInfo = circleService
-                    .selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
+                    .selectByFilterAndPage(circleModel, circleModel.getPageNum(), circleModel.getPageSize());*/
+
+            PageInfo<CircleModel> pageInfo = this.circleService.findPageByCircleModel(circleModel, circleModel.getPageNum(), circleModel.getPageSize());
 
             List<CircleModel> circleModels = pageInfo.getList();
             if (CollectionUtils.isNotEmpty(circleModels)) {
