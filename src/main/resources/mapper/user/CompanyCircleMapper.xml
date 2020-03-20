@@ -48,35 +48,5 @@
 		WHERE id = #{id}
 	</select>
 
-	<select id="findCntByCircleModel" resultType="java.lang.Integer">
-		select count(1) from d_circle c
-		INNER JOIN d_circle_label cl on c.id = cl.circle_id
-		INNER JOIN d_label l on cl.label_id = l.id
-		where c.disabled = 0 AND c.review_status = 1 AND c.status = 1 AND c.circle_type = 1
-		<if test="circleModel.circleName != null">
-			AND (c.circle_name like '${circleModel.circleName}'
-			OR l.label_name like '${circleModel.circleName}')
-		</if>
-		<if test="circleModel.userId != null">
-			AND c.user_id = #{circleModel.userId}
-		</if>
-	</select>
-
-	<select id="findPageByCircleModel" resultMap="CompanyCircle">
-		select c.* from d_circle c
-		INNER JOIN d_circle_label cl on c.id = cl.circle_id
-		INNER JOIN d_label l on cl.label_id = l.id
-		where c.disabled = 0 AND c.review_status = 1 AND c.status = 1 AND c.circle_type = 1
-		<if test="circleModel.circleName != null">
-			AND (c.circle_name like '${circleModel.circleName}'
-			OR l.label_name like '${circleModel.circleName}')
-		</if>
-		<if test="circleModel.userId != null">
-			AND c.user_id = #{circleModel.userId}
-		</if>
-		ORDER BY c.c_time DESC
-		limit #{limit}, #{offset}
-	</select>
-
 </mapper>
 
