@@ -48,7 +48,7 @@
 		WHERE id = #{id}
 	</select>
 
-	<select id="findCntByCircleModel" resultType="java.lang.INteger">
+	<select id="findCntByCircleModel" resultType="java.lang.Integer">
 		select count(1) from d_circle c
 		INNER JOIN d_circle_label cl on c.id = cl.circle_id
 		INNER JOIN d_label l on cl.label_id = l.id
