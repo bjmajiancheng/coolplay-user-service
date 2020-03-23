@@ -349,7 +349,7 @@ public class PostController {
             esPostBean.setCtimeStamp((int)(new Date().getTime() / 1000));
             esPostBean.setLocation(location);
             esPostBean.setLabelNames(labelNames);
-            indexSaveService.upsertIndexData("es_post", esPostBean.getId(), JSON.toJSONString(esPostBean));
+            /*indexSaveService.upsertIndexData("es_post", esPostBean.getId(), JSON.toJSONString(esPostBean));*/
 
 
             /*if (CollectionUtils.isNotEmpty(postModel.getLabelIds())) {

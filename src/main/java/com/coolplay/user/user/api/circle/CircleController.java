@@ -371,7 +371,7 @@ public class CircleController {
             esCircleBean.setUserId(circleModel.getUserId());
             esCircleBean.setCtimeStamp((int)(new Date().getTime() / 1000));
             esCircleBean.setLabelNames(labelNames);
-            indexSaveService.upsertIndexData("es_circle", esCircleBean.getId(), JSON.toJSONString(esCircleBean));
+            /*indexSaveService.upsertIndexData("es_circle", esCircleBean.getId(), JSON.toJSONString(esCircleBean));*/
 
             return ResponseUtil.success();
 
@@ -484,7 +484,7 @@ public class CircleController {
             esCircleBean.setUserId(circleModel.getUserId());
             esCircleBean.setCtimeStamp((int)(new Date().getTime() / 1000));
             esCircleBean.setLabelNames(labelNames);
-            indexSaveService.upsertIndexData("es_circle", esCircleBean.getId(), JSON.toJSONString(esCircleBean));
+            /*indexSaveService.upsertIndexData("es_circle", esCircleBean.getId(), JSON.toJSONString(esCircleBean));*/
 
             return ResponseUtil.success();
 

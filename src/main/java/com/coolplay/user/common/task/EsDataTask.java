@@ -102,7 +102,7 @@ public class EsDataTask {
 
             if(CollectionUtils.isNotEmpty(esBaseBeans)) {
                 for(EsBaseBean esBaseBean : esBaseBeans) {
-                    indexSaveService.upsertIndexData("es_base", esBaseBean.getId(), JSON.toJSONString(esBaseBean));
+                    /*indexSaveService.upsertIndexData("es_base", esBaseBean.getId(), JSON.toJSONString(esBaseBean));*/
                 }
             }
         } catch(Exception e) {
