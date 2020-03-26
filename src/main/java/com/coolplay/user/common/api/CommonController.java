@@ -445,6 +445,25 @@ public class CommonController {
     }
 
     /**
+     * 帮助详细信息
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/helpDetail", method = RequestMethod.POST)
+    public Result helpDetail(@RequestParam("helpId") Integer helpId) {
+        try {
+            HelpModel helpModel = helpService.findById(helpId);
+
+            return ResponseUtil.success(Collections.singletonMap("helpModel", helpModel));
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return ResponseUtil.error("系统异常, 请稍后重试。");
+        }
+    }
+
+    /**
      * 初始化天气信息
      *
      * @return
