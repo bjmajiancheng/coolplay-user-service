@@ -66,7 +66,7 @@
     <jjwt.version>0.6.0</jjwt.version>
     <mapper.version>4.1.5</mapper.version>
     <javax.validation.version>1.1.0.Final</javax.validation.version>
-    <fasterxml.jackson.version>2.7.4</fasterxml.jackson.version>
+    <fasterxml.jackson.version>2.12.1</fasterxml.jackson.version>
   </properties>
 
   <dependencies>
