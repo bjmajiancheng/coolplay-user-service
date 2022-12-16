@@ -39,7 +39,7 @@
     <servlet-version>3.1.0</servlet-version>
     <junit-version>4.12</junit-version>
     <!-- spring版本 -->
-    <springframework-version>4.3.7.RELEASE</springframework-version>
+    <springframework-version>5.2.20.RELEASE</springframework-version>
     <!-- security版本号 -->
     <spring.security.version>3.2.9.RELEASE</spring.security.version>
     <mybatis-version>3.4.1</mybatis-version>
